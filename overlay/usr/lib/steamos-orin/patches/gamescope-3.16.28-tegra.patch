@@ -1,0 +1,51 @@
+diff --git a/src/rendervulkan.cpp b/src/rendervulkan.cpp
+index 1db9a46..e44458c 100644
+--- a/src/rendervulkan.cpp
++++ b/src/rendervulkan.cpp
+@@ -473,10 +473,6 @@ bool CVulkanDevice::createDevice()
+ 		};
+ 		vk.GetPhysicalDeviceProperties2( physDev(), &props2 );
+ 
+-		if ( !GetBackend()->UsesVulkanSwapchain() && !drmProps.hasPrimary ) {
+-			vk_log.errorf( "physical device has no primary node" );
+-			return false;
+-		}
+ 		if ( !drmProps.hasRender ) {
+ 			vk_log.errorf( "physical device has no render node" );
+ 			return false;
+@@ -491,6 +487,24 @@ bool CVulkanDevice::createDevice()
+ 		assert(drmDev->available_nodes & (1 << DRM_NODE_RENDER));
+ 		const char *drmRenderName = drmDev->nodes[DRM_NODE_RENDER];
+ 
++		// steamos-orin: NVIDIA Tegra (nvgpu) reports only a render node via
++		// VK_EXT_physical_device_drm. Take the primary node of the same DRM device.
++		if ( !drmProps.hasPrimary && ( drmDev->available_nodes & ( 1 << DRM_NODE_PRIMARY ) ) ) {
++			struct stat primaryStat;
++			if ( stat( drmDev->nodes[DRM_NODE_PRIMARY], &primaryStat ) == 0 ) {
++				drmProps.hasPrimary = VK_TRUE;
++				drmProps.primaryMajor = major( primaryStat.st_rdev );
++				drmProps.primaryMinor = minor( primaryStat.st_rdev );
++				vk_log.infof( "physical device has no primary node; using %s from the same DRM device",
++					drmDev->nodes[DRM_NODE_PRIMARY] );
++			}
++		}
++		if ( !GetBackend()->UsesVulkanSwapchain() && !drmProps.hasPrimary ) {
++			vk_log.errorf( "physical device has no primary node" );
++			drmFreeDevice(&drmDev);
++			return false;
++		}
++
+ 		m_drmRendererFd = open( drmRenderName, O_RDWR | O_CLOEXEC );
+ 		drmFreeDevice(&drmDev);
+ 		if ( m_drmRendererFd < 0 ) {
+@@ -635,7 +649,9 @@ bool CVulkanDevice::createDevice()
+ 
+ 	VkPhysicalDeviceFeatures2 features2 = {
+ 		.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2,
+-		.pNext = &presentIdFeatures,
++		// steamos-orin: only request presentId/presentWait when their extensions are enabled
++		// (swapchain backends); NVIDIA Tegra does not expose them.
++		.pNext = GetBackend()->UsesVulkanSwapchain() ? (void *)&presentIdFeatures : (void *)&features13,
+ 		.features = {
+ 			.shaderInt16 = m_bSupportsFp16,
+ 		},

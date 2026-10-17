@@ -1,26 +1,88 @@
 #!/bin/bash
 # P2 helper: build gamescope natively ON THE ORIN (Ubuntu 24.04 arm64 has no package).
 # Usage: sudo /usr/lib/steamos-orin/build-gamescope [git-tag]   (default 3.16.28)
-# Best effort: dependency list follows gamescope's meson.build; adjust if it changes.
+#
+# gamescope 3.16.28 bundles wlroots 0.20, which needs newer libraries than noble ships:
+#   wayland-server >= 1.24 (noble 1.22), wayland-protocols >= 1.47 (1.45),
+#   libdrm >= 2.4.129 (2.4.125), xkbcommon >= 1.8.0 (1.6.0), pixman >= 0.46.0 (0.42.2).
+# Those are built into an isolated prefix ($PREFIX, default /opt/gamescope) and found via
+# rpath, so the system packages are left untouched. libdisplay-info and libliftoff come
+# from gamescope's own subprojects.
+# patches/gamescope-<tag>-tegra.patch (if present) makes it start on NVIDIA Tegra (nvgpu):
+#   * Vulkan reports only a render node: take the primary node of the same DRM device;
+#   * don't request presentId/presentWait features unless their extensions are enabled.
+# Env: PREFIX (default /opt/gamescope), JOBS (default 4; 8 GB RAM), NICE (default 15).
 set -euo pipefail
 TAG="${1:-3.16.28}"
+PREFIX="${PREFIX:-/opt/gamescope}"
+JOBS="${JOBS:-4}"
+NICE="${NICE:-15}"
+SRC=/usr/local/src/gamescope-deps
+PATCHDIR="$(dirname "$(readlink -f "$0")")/patches"
 [[ $EUID -eq 0 ]] || { echo "run with sudo"; exit 1; }
+export DEBIAN_FRONTEND=noninteractive
 apt-get update
+# libxcb-errors-dev is not in noble (wlroots treats it as optional)
 apt-get install -y --no-install-recommends git meson ninja-build cmake pkg-config g++ \
   glslang-tools hwdata libbenchmark-dev libcap-dev libdisplay-info-dev libdrm-dev \
   libeis-dev libinput-dev libluajit-5.1-dev libpipewire-0.3-dev libpixman-1-dev libsdl2-dev \
   libseat-dev libudev-dev libvulkan-dev libwayland-dev libx11-dev libx11-xcb-dev libxcb-composite0-dev \
-  libxcb-ewmh-dev libxcb-icccm4-dev libxcb-res0-dev libxcb-errors-dev libxcomposite-dev libxcursor-dev \
+  libxcb-ewmh-dev libxcb-icccm4-dev libxcb-res0-dev libxcomposite-dev libxcursor-dev \
   libxdamage-dev libxext-dev libxfixes-dev libxkbcommon-dev libxmu-dev libxrender-dev libxres-dev \
   libxtst-dev libxxf86vm-dev libavif-dev libdecor-0-dev libglm-dev libstb-dev wayland-protocols \
-  xwayland libgbm-dev libegl-dev
+  xwayland libgbm-dev libegl-dev vulkan-tools libexpat1-dev libxcb-xkb-dev catch2
+
+mkdir -p "$SRC" "$PREFIX"
+export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig:$PREFIX/share/pkgconfig"
+export PATH="$PREFIX/bin:$PATH" LD_LIBRARY_PATH="$PREFIX/lib" LDFLAGS="-Wl,-rpath,$PREFIX/lib"
+
+# build_dep NAME GIT-URL TAG [meson options...]; skipped if already built (resumable)
+build_dep() {
+    local name=$1 url=$2 tag=$3; shift 3
+    if [[ -e "$SRC/.done-$name-$tag" ]]; then echo "=== $name $tag already built"; return; fi
+    echo "=== $name $tag"
+    rm -rf "${SRC:?}/$name"
+    git clone --depth 1 --branch "$tag" "$url" "$SRC/$name"
+    (cd "$SRC/$name" &&
+        nice -n "$NICE" meson setup build --prefix="$PREFIX" --libdir=lib --buildtype=release "$@" &&
+        nice -n "$NICE" ninja -C build -j"$JOBS" &&
+        ninja -C build install)
+    touch "$SRC/.done-$name-$tag"
+}
+build_dep wayland https://gitlab.freedesktop.org/wayland/wayland.git 1.24.0 \
+    -Ddocumentation=false -Dtests=false -Ddtd_validation=false
+build_dep wayland-protocols https://gitlab.freedesktop.org/wayland/wayland-protocols.git 1.47 -Dtests=false
+build_dep pixman https://gitlab.freedesktop.org/pixman/pixman.git pixman-0.46.4 -Dtests=disabled -Ddemos=disabled
+build_dep libdrm https://gitlab.freedesktop.org/mesa/drm.git libdrm-2.4.129 \
+    -Dtests=false -Dman-pages=disabled -Dvalgrind=disabled -Dcairo-tests=disabled \
+    -Dintel=disabled -Dradeon=disabled -Damdgpu=disabled -Dnouveau=disabled -Dvmwgfx=disabled \
+    -Dfreedreno=disabled -Dvc4=disabled -Detnaviv=disabled -Dexynos=disabled -Domap=disabled
+build_dep xkbcommon https://github.com/xkbcommon/libxkbcommon.git xkbcommon-1.8.1 \
+    -Denable-docs=false -Denable-tools=false -Denable-x11=true -Denable-wayland=false \
+    -Denable-xkbregistry=false -Denable-bash-completion=false
+
 src=/usr/local/src/gamescope
 rm -rf "$src"
-git clone --depth 1 --branch "$TAG" --recurse-submodules https://github.com/ValveSoftware/gamescope.git "$src"
+git clone --depth 1 --branch "$TAG" --recurse-submodules --shallow-submodules \
+    https://github.com/ValveSoftware/gamescope.git "$src"
 cd "$src"
-meson setup build --prefix=/usr/local --buildtype=release -Denable_openvr_support=false -Dpipewire=enabled
-ninja -C build
+if [[ -f "$PATCHDIR/gamescope-$TAG-tegra.patch" ]]; then
+    git apply "$PATCHDIR/gamescope-$TAG-tegra.patch"
+    echo "applied gamescope-$TAG-tegra.patch"
+fi
+nice -n "$NICE" meson setup build --prefix="$PREFIX" --libdir=lib --buildtype=release \
+    -Denable_openvr_support=false -Dpipewire=enabled
+nice -n "$NICE" ninja -C build -j"$JOBS"
 ninja -C build install
-setcap 'CAP_SYS_NICE=eip' /usr/local/bin/gamescope || true
-/usr/local/bin/gamescope --version || true
-echo "gamescope installed to /usr/local/bin. Test with: steamos-session-select steam-gamescope"
+setcap 'CAP_SYS_NICE=eip' "$PREFIX/bin/gamescope" || true
+# gamescope starts its child via gamescopereaper (looked up in PATH): link all helpers
+for b in gamescope gamescopectl gamescopereaper gamescopestream gamescope-type; do
+    [[ -e "$PREFIX/bin/$b" ]] && ln -sfn "$PREFIX/bin/$b" "/usr/local/bin/$b"
+done
+# Vulkan loader does not search /opt: expose the gamescope WSI layer via /usr/local/share
+mkdir -p /usr/local/share/vulkan/implicit_layer.d
+for j in "$PREFIX"/share/vulkan/implicit_layer.d/*.json; do
+    [[ -e "$j" ]] && ln -sfn "$j" /usr/local/share/vulkan/implicit_layer.d/
+done
+"$PREFIX/bin/gamescope" --version || true
+echo "gamescope installed to $PREFIX (symlinks in /usr/local/bin). Test with: steamos-session-select steam-gamescope"
