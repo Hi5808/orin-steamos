@@ -22,7 +22,7 @@ pkgs=(
   steam-devices vulkan-tools mesa-utils
   libgtk2.0-0t64 libvdpau1 libvpx9 ibus libxtst6 libnm0 libgl1 libegl1
   pipewire pipewire-pulse wireplumber bluez
-  systemd-zram-generator earlyoom
+  systemd-zram-generator earlyoom systemd-timesyncd
 )
 [[ $DESKTOP == xfce ]] && pkgs+=(xfce4 xfce4-terminal thunar)
 # gamescope: Ubuntu noble has no arm64 gamescope package; it is built on the device

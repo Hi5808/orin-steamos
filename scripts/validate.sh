@@ -17,6 +17,11 @@ done
 for u in sddm ssh avahi-daemon steamos-orin-firstboot steamos-orin-maxn-super earlyoom steamos-orin-oom-tagger steamos-orin-swapfile; do
   chk "service enabled: $u" bash -c "chroot '$R' systemctl is-enabled $u.service | grep -q enabled"
 done
+for u in systemd-timesyncd systemd-time-wait-sync; do
+  chk "service enabled: $u" bash -c "chroot '$R' systemctl is-enabled $u.service | grep -q enabled"
+done
+chk "firstboot ordered after time-sync.target" grep -q '^After=.*time-sync.target' "$R/etc/systemd/system/steamos-orin-firstboot.service"
+chk "timesync clock file seeded (no 1970 boots)" test -e "$R/var/lib/systemd/timesync/clock"
 chk "tailscaled NOT enabled" bash -c "! chroot '$R' systemctl is-enabled tailscaled.service 2>/dev/null | grep -q '^enabled'"
 chk "tailscale has no state/auth" bash -c "[ ! -s '$R/var/lib/tailscale/tailscaled.state' ]"
 chk "display-manager -> sddm" bash -c "readlink '$R/etc/systemd/system/display-manager.service' | grep -q sddm"

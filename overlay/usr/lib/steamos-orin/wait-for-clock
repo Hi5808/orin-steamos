@@ -1,0 +1,14 @@
+#!/bin/bash
+# Wait (up to $1 seconds, default 90) until the system clock is plausible, i.e. NTP has
+# synchronized or the year is >= 2025. TLS downloads fail with a 1970 clock.
+# Exit 0 when the clock is good, 1 on timeout (callers may still try).
+set -u
+timeout="${1:-90}"
+deadline=$(( $(date +%s) + timeout ))
+while :; do
+    if [[ "$(timedatectl show -p NTPSynchronized --value 2>/dev/null)" == yes ]] || (( $(date +%Y) >= 2025 )); then
+        exit 0
+    fi
+    (( $(date +%s) >= deadline )) && exit 1
+    sleep 2
+done

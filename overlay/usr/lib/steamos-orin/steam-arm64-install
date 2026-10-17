@@ -28,6 +28,9 @@ fi
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
 
+# TLS fails with the dev kit's 1970 boot clock: give NTP a moment first
+/usr/lib/steamos-orin/wait-for-clock 60 || log "warning: clock not synchronized ($(date -Is)); trying anyway"
+
 log "fetching manifest"
 curl -fsSL --retry 5 --retry-delay 5 -o "$tmp/manifest.vdf" "$MANIFEST_URL"
 
