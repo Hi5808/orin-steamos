@@ -4,6 +4,9 @@ set -uo pipefail
 # shellcheck source=/dev/null
 [[ -r /etc/default/steamos-orin ]] && . /etc/default/steamos-orin
 
+# Under gamescope (Xwayland with DRI3) CEF GPU compositing works; X11 Game Mode keeps the stopgap
+if [[ -n "${GAMESCOPE_WAYLAND_DISPLAY:-}" ]]; then STEAM_EXTRA_ARGS="${GAMESCOPE_STEAM_EXTRA_ARGS-${STEAM_EXTRA_ARGS:-}}"; fi
+
 STEAMROOT="${STEAMROOT:-$HOME/.local/share/Steam}"
 export LD_LIBRARY_PATH="$STEAMROOT/steamrtarm64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 mkdir -p "$STEAMROOT/logs"

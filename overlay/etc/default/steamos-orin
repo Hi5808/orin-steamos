@@ -3,6 +3,8 @@
 # GLXBadPixmap/BadDrawable ("dri3 extension not supported", Xorg "No path to DRM device"),
 # which leaves Big Picture black. Software compositing for the UI only; games are unaffected.
 STEAM_EXTRA_ARGS="-cef-disable-gpu-compositing"
+# Steam args inside the gamescope session (its Xwayland has DRI3, so GPU CEF compositing works)
+GAMESCOPE_STEAM_EXTRA_ARGS=""
 # Desktop session used by "Switch to Desktop"
 DESKTOP_SESSION_FILE="xfce.desktop"
 # Session used for Game Mode ("steam-gamemode.desktop" = X11 kiosk, P1;
