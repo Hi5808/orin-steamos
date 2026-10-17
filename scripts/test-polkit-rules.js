@@ -23,6 +23,8 @@ const cases = [
   ['org.freedesktop.policykit.exec', 'steamos', { program: '/usr/bin/steamos-polkit-helpers/steamos-reboot-now' }, false, false, null],
   ['org.freedesktop.policykit.exec', 'other', { program: '/usr/bin/steamos-polkit-helpers/steamos-set-session' }, false, false, null],
   ['org.freedesktop.policykit.exec', 'steamos', { program: '/usr/bin/bash' }, false, false, null],
+  ['org.freedesktop.policykit.exec', 'steamos', { program: '/usr/bin/steamos-polkit-helpers/steamos-update' }, true, true, 'yes'],
+  ['org.freedesktop.policykit.exec', 'steamos', { program: '/usr/bin/steamos-polkit-helpers/jupiter-biosupdate' }, true, true, 'yes'],
   ['org.freedesktop.NetworkManager.network-control', 'steamos', {}, true, true, 'yes'],
   ['org.freedesktop.udisks2.modify-device', 'steamos', {}, true, true, null],
 ];

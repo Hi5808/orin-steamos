@@ -29,7 +29,9 @@ polkit.addRule(function(action, subject) {
             "/usr/bin/steamos-polkit-helpers/steamos-set-session",
             "/usr/bin/steamos-polkit-helpers/steamos-poweroff-now",
             "/usr/bin/steamos-polkit-helpers/steamos-reboot-now",
-            "/usr/bin/steamos-polkit-helpers/steamos-suspend-now"
+            "/usr/bin/steamos-polkit-helpers/steamos-suspend-now",
+            "/usr/bin/steamos-polkit-helpers/steamos-update",
+            "/usr/bin/steamos-polkit-helpers/jupiter-biosupdate"
         ];
         if (allowed.indexOf(action.lookup("program")) >= 0) {
             return polkit.Result.YES;

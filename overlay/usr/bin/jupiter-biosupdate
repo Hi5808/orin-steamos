@@ -1,0 +1,5 @@
+#!/bin/bash
+# Stub: Steam Deck ("Jupiter") BIOS updater that Steam (-steamos3) probes. A Jetson
+# has no Deck BIOS; report that nothing needs updating.
+echo "No BIOS update applicable (Jetson Orin Nano)"
+exit 0

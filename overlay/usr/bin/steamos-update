@@ -1,0 +1,6 @@
+#!/bin/bash
+# Stub for SteamOS's OS updater, which Steam (-steamos3) calls from Settings > System.
+# This image has no A/B OS updates yet (planned: RAUC). Exit code 7 is what SteamOS's
+# steamos-update returns for "no update available", so Steam's updater UI settles.
+echo "No OS update available (orin-steamos: OS updates are not implemented yet)"
+exit 7

@@ -77,6 +77,8 @@ chk "session scripts never make the desktop sticky automatically" bash -c "! gre
 chk "service enabled: steamos-orin-session-reset" bash -c "chroot '$R' systemctl is-enabled steamos-orin-session-reset.service | grep -q enabled"
 chk "oneshot desktop: set-session marks + boot reset removes" bash -c "d=\$(mktemp -d); printf '# steamos-orin: oneshot\n[Autologin]\nSession=xfce.desktop\n' > \$d/c; sed 's#/etc/sddm.conf.d/zz-steamos-autologin.conf#'\$d'/c#' '$R/usr/lib/steamos-orin/session-reset-boot' | bash >/dev/null; r=0; [ -e \$d/c ] && r=1; rm -rf \$d; exit \$r"
 chk "Return to Gaming Mode launcher on the Desktop" test -x "$R/home/steamos/Desktop/steamos-return-to-gamemode.desktop"
+chk "steamos-update stub reports 'no update' (exit 7)" bash -c "'$R/usr/bin/steamos-update' check >/dev/null; [ \$? -eq 7 ]"
+chk "jupiter-biosupdate stub exits 0" "$R/usr/bin/jupiter-biosupdate"
 chk "session-select: plasma=one-time desktop, desktop/plasma-persistent=persistent" bash -c "grep -q '^    plasma)' '$R/usr/bin/steamos-session-select' && grep -q 'plasma-persistent' '$R/usr/bin/steamos-session-select'"
 chk "zram-generator config" test -f "$R/etc/systemd/zram-generator.conf"
 # --- OOM hardening ---
@@ -102,6 +104,7 @@ if command -v shellcheck >/dev/null; then
      "$R"/usr/lib/steamos-orin/steam-* "$R/usr/lib/steamos-orin/set-maxn-super" \
      "$R"/usr/lib/steamos-orin/{firstboot-setup,oneshot-desktop,session-reset-boot,session-oneshot-reset,wait-for-clock} \
      "$R/usr/bin/steamos-session-select" "$R"/usr/bin/steamos-polkit-helpers/* \
+     "$R/usr/bin/steamos-update" "$R/usr/bin/jupiter-biosupdate" \
      "$R/usr/lib/steamos-orin/make-swapfile" "$R/usr/bin/steamos-game-oom"
 fi
 echo; echo "validate: $pass passed, $fail failed"
