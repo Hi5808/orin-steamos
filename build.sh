@@ -3,7 +3,7 @@
 # on JetPack 7.2.1 / Jetson Linux r39.2.1. Runs on an x86_64 Linux build host.
 # It never touches a Jetson; flashing is a separate manual step (see FLASH.md).
 #
-# Usage: sudo ./build.sh [all|release|fetch|extract|binaries|customize|user|steam|tune|validate|package]
+# Usage: sudo ./build.sh [all|release|fetch|extract|binaries|customize|modules|user|steam|tune|validate|package]
 #   all      (default) fetch -> validate. Leaves a flash-ready tree in work/Linux_for_Tegra
 #   release  all + package (a .tar.zst of the tree in output/, needs about 4 GB more)
 # The steamos sudo password is generated here at build time and written to output/SECRETS.txt (0600).
@@ -26,7 +26,7 @@ preflight() {
     local free_gb; free_gb=$(df -BG --output=avail "$HERE" | tail -1 | tr -dc 0-9)
     (( free_gb >= MIN_FREE_GB )) || die "need ${MIN_FREE_GB}G free in $HERE, have ${free_gb}G" ;;
   esac
-  for t in curl lbzip2 sha1sum tar zstd openssl python3; do command -v $t >/dev/null || die "missing $t (see README-BUILD.md)"; done
+  for t in curl lbzip2 sha1sum sha256sum tar xz zstd openssl python3; do command -v $t >/dev/null || die "missing $t (see README-BUILD.md)"; done
   # NVIDIA's apply_binaries.sh / l4t_create_default_user.sh require exactly this path.
   # Ubuntu <=24.04: package qemu-user-static. Ubuntu >=25.04 / Debian 13: qemu-user (+ qemu-user-binfmt),
   # which provides /usr/bin/qemu-aarch64-static as a symlink to the static qemu-aarch64.
@@ -111,6 +111,26 @@ ssh_keys_file() {
   die "no SSH public key: set SSH_AUTHORIZED_KEYS=/path/key.pub (or ALLOW_NO_SSH_KEY=1)"
 }
 
+modules() {
+  if [[ $WITH_INPUT_MODULES != 1 ]]; then log "input modules: skipped (WITH_INPUT_MODULES=0)"; return; fi
+  log "build uinput + hid-steam/playstation/nintendo/sony modules (linux-$KSRC_VERSION sources)"
+  local tarball="$DL/linux-$KSRC_VERSION.tar.xz" src="$ROOTFS/tmp/kmod-src" p="linux-$KSRC_VERSION"
+  mkdir -p "$DL"
+  [[ -s $tarball ]] || curl -fSL --retry 3 -o "$tarball" "$KSRC_URL"
+  echo "$KSRC_SHA256  $tarball" | sha256sum -c - || die "kernel source sha256 mismatch"
+  $SUDO rm -rf "$src"; $SUDO mkdir -p "$src"
+  $SUDO tar -xJf "$tarball" -C "$src" --strip-components=1 \
+    "$p/drivers/input/misc/uinput.c" "$p/drivers/input/input-compat.h" "$p/drivers/hid/hid-ids.h" \
+    "$p/drivers/hid/hid-steam.c" "$p/drivers/hid/hid-playstation.c" \
+    "$p/drivers/hid/hid-nintendo.c" "$p/drivers/hid/hid-sony.c"
+  trap umount_chroot EXIT
+  mount_chroot
+  $SUDO install -m755 "$HERE/scripts/chroot-build-modules.sh" "$ROOTFS/tmp/"
+  in_chroot /bin/bash /tmp/chroot-build-modules.sh
+  $SUDO rm -rf "$src" "$ROOTFS/tmp/chroot-build-modules.sh"
+  umount_chroot; trap - EXIT
+}
+
 user() {
   log "create default user '$STEAM_USER' (l4t_create_default_user.sh)"
   local keys; keys="$(ssh_keys_file)"
@@ -184,7 +204,7 @@ tune() {
   fi
 }
 
-validate() { log "validate"; $SUDO env PREINSTALL_STEAM="$PREINSTALL_STEAM" "$HERE/scripts/validate.sh" "$ROOTFS"; }
+validate() { log "validate"; $SUDO env WITH_INPUT_MODULES="$WITH_INPUT_MODULES" "$HERE/scripts/validate.sh" "$ROOTFS"; }
 
 package() {
   log "package Linux_for_Tegra"
@@ -207,8 +227,8 @@ done_msg() {
 stage="${1:-all}"
 preflight "$stage"
 case "$stage" in
-  all) fetch; extract; binaries; customize; user; steam; tune; validate; done_msg ;;
-  release) fetch; extract; binaries; customize; user; steam; tune; validate; package; done_msg ;;
-  fetch|extract|binaries|customize|user|steam|tune|validate|package) "$stage" ;;
+  all) fetch; extract; binaries; customize; modules; user; steam; tune; validate; done_msg ;;
+  release) fetch; extract; binaries; customize; modules; user; steam; tune; validate; package; done_msg ;;
+  fetch|extract|binaries|customize|modules|user|steam|tune|validate|package) "$stage" ;;
   *) die "unknown stage $stage" ;;
 esac

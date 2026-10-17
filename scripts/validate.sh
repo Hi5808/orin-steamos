@@ -52,6 +52,13 @@ chk "udev rules parse (udevadm verify)" bash -c "chroot '$R' udevadm verify /etc
 if command -v node >/dev/null; then chk "polkit rules behave (mock polkit test)" node "$HERE/scripts/test-polkit-rules.js" "$R/etc/polkit-1/rules.d/49-steamos-orin.rules"
 else chk "polkit rules file present" test -s "$R/etc/polkit-1/rules.d/49-steamos-orin.rules"; fi
 chk "uinput autoload" grep -qx uinput "$R/etc/modules-load.d/steamos-orin.conf"
+if [[ ${WITH_INPUT_MODULES:-1} == 1 ]]; then
+  KREL="$(find "$R/lib/modules" -mindepth 1 -maxdepth 1 -printf "%f\n" | sort -V | tail -1)"
+  for m in uinput hid-steam hid-playstation hid-nintendo hid-sony; do
+    chk "kernel module $m built for $KREL (vermagic)" bash -c "chroot '$R' modinfo -k '$KREL' -F vermagic $m | grep -q '^$KREL '"
+  done
+  chk "hid-steam alias registered (Valve 28DE)" bash -c "grep -qi 'hid_steam' '$R/lib/modules/$KREL/modules.alias'"
+fi
 chk "steam-devices udev rules" bash -c "ls '$R'/usr/lib/udev/rules.d/*steam* >/dev/null"
 chk "quiet boot in extlinux" grep -q 'quiet' "$R/boot/extlinux/extlinux.conf"
 if [[ $(sed -n 's/^PREINSTALL_STEAM=\([01]\).*/\1/p' "$R/etc/steamos-orin/build-info" 2>/dev/null) == 1 ]]; then
