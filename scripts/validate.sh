@@ -80,6 +80,7 @@ chk "Return to Gaming Mode launcher on the Desktop" test -x "$R/home/steamos/Des
 chk "steamos-update stub reports 'no update' (exit 7)" bash -c "'$R/usr/bin/steamos-update' check >/dev/null; [ \$? -eq 7 ]"
 chk "jupiter-biosupdate stub exits 0" "$R/usr/bin/jupiter-biosupdate"
 chk "session-select: plasma=one-time desktop, desktop/plasma-persistent=persistent" bash -c "grep -q '^    plasma)' '$R/usr/bin/steamos-session-select' && grep -q 'plasma-persistent' '$R/usr/bin/steamos-session-select'"
+chk "wireplumber: ALSA sinks never suspend (0.4 lua + 0.5 conf)" bash -c "grep -q 'session.suspend-timeout-seconds\"\] = 0' '$R/etc/wireplumber/main.lua.d/51-steamos-orin-no-suspend.lua' && grep -q 'session.suspend-timeout-seconds = 0' '$R/etc/wireplumber/wireplumber.conf.d/51-steamos-orin-no-suspend.conf'"
 chk "zram-generator config" test -f "$R/etc/systemd/zram-generator.conf"
 # --- OOM hardening ---
 chk "swap unit enabled: var-swap-swapfile.swap" bash -c "chroot '$R' systemctl is-enabled var-swap-swapfile.swap | grep -q enabled"
