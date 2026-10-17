@@ -3,7 +3,7 @@
 # Game Mode stack on top of NVIDIA's Ubuntu 24.04 sample rootfs.
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive LC_ALL=C.UTF-8
-: "${DESKTOP:=xfce}" "${WITH_GAMESCOPE:=1}" "${WITH_TAILSCALE:=1}"
+: "${DESKTOP:=xfce}" "${WITH_GAMESCOPE:=1}" "${WITH_TAILSCALE:=1}" "${PURGE_DESKTOP_EXTRAS:=1}"
 
 # Don't start daemons inside the chroot
 printf '#!/bin/sh\nexit 101\n' > /usr/sbin/policy-rc.d
@@ -59,6 +59,25 @@ fi
 # don't act on the same pressure event (see /etc/default/earlyoom for the reasoning).
 systemctl disable systemd-oomd.service systemd-oomd.socket 2>/dev/null || true
 systemctl mask systemd-oomd.service systemd-oomd.socket
+
+# --- Image cleanups (deep scan 2026-10-17) ---
+# NVIDIA's nvidia-l4t-firstboot creates a 2 GiB /swapfile (priority -2) and an fstab line at
+# first boot. We already have zram + /var/swap/swapfile, so keep it from ever running.
+systemctl mask nvfb-swapfile.service
+sed -i '\#^/swapfile[[:space:]]#d' /etc/fstab; rm -f /swapfile
+# Services a game console does not need listening on the network
+systemctl mask iperf3.service saned.socket saned.service 2>/dev/null || true
+# NetworkManager owns networking; networkd-wait-online only times out (90 s) at boot
+systemctl mask systemd-networkd-wait-online.service
+# netplan warns when its files are world-readable
+chmod 600 /etc/netplan/*.yaml 2>/dev/null || true
+# Desktop extras that only cost RAM / boot time here
+if [[ ${PURGE_DESKTOP_EXTRAS:-1} == 1 ]]; then
+  for p in snapd gnome-remote-desktop deja-dup; do
+    dpkg-query -W -f='${Status}' "$p" 2>/dev/null | grep -q 'install ok installed' && { apt-get purge -y "$p" || echo "warning: could not purge $p"; }
+  done
+  rm -rf /snap /var/snap /var/lib/snapd /var/cache/snapd
+fi
 
 apt-get clean
 rm -rf /var/lib/apt/lists/*

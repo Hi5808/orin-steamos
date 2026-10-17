@@ -84,6 +84,7 @@ customize() {
   mount_chroot
   $SUDO install -m755 "$HERE/scripts/chroot-customize.sh" "$ROOTFS/tmp/"
   in_chroot DESKTOP="$DESKTOP" WITH_GAMESCOPE="$WITH_GAMESCOPE" WITH_TAILSCALE="$WITH_TAILSCALE" \
+    PURGE_DESKTOP_EXTRAS="$PURGE_DESKTOP_EXTRAS" \
     /bin/bash /tmp/chroot-customize.sh
   log "copy overlay"
   $SUDO cp -a --no-preserve=ownership "$HERE/overlay/." "$ROOTFS/"

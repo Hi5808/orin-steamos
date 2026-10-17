@@ -22,6 +22,11 @@ for u in systemd-timesyncd systemd-time-wait-sync; do
 done
 chk "firstboot ordered after time-sync.target" grep -q '^After=.*time-sync.target' "$R/etc/systemd/system/steamos-orin-firstboot.service"
 chk "timesync clock file seeded (no 1970 boots)" test -e "$R/var/lib/systemd/timesync/clock"
+for u in nvfb-swapfile.service iperf3.service saned.socket systemd-networkd-wait-online.service; do
+  chk "masked: $u" bash -c "chroot '$R' systemctl is-enabled $u 2>/dev/null | grep -qx masked"
+done
+chk "no stock /swapfile in image or fstab" bash -c "[ ! -e '$R/swapfile' ] && ! grep -q '^/swapfile' '$R/etc/fstab'"
+chk "netplan files mode 600" bash -c "for f in '$R'/etc/netplan/*.yaml; do [ -e \"\$f\" ] || continue; [ \$(stat -c %a \"\$f\") = 600 ] || exit 1; done"
 chk "tailscaled NOT enabled" bash -c "! chroot '$R' systemctl is-enabled tailscaled.service 2>/dev/null | grep -q '^enabled'"
 chk "tailscale has no state/auth" bash -c "[ ! -s '$R/var/lib/tailscale/tailscaled.state' ]"
 chk "display-manager -> sddm" bash -c "readlink '$R/etc/systemd/system/display-manager.service' | grep -q sddm"
