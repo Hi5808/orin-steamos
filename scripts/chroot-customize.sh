@@ -63,7 +63,12 @@ systemctl mask systemd-oomd.service systemd-oomd.socket
 # --- Image cleanups (deep scan 2026-10-17) ---
 # NVIDIA's nvidia-l4t-firstboot creates a 2 GiB /swapfile (priority -2) and an fstab line at
 # first boot. We already have zram + /var/swap/swapfile, so keep it from ever running.
-systemctl mask nvfb-swapfile.service
+# The unit is a dpkg conffile in /etc/systemd/system, so it can't be masked: disable it and
+# add a drop-in condition that is never true (survives package upgrades re-enabling it).
+systemctl disable nvfb-swapfile.service 2>/dev/null || true
+install -d /etc/systemd/system/nvfb-swapfile.service.d
+printf '# orin-steamos: zram + /var/swap/swapfile replace NVIDIA'"'"'s 2 GiB /swapfile\n[Unit]\nConditionPathExists=/etc/steamos-orin/enable-nvfb-swapfile\n' \
+  > /etc/systemd/system/nvfb-swapfile.service.d/10-steamos-orin-disable.conf
 sed -i '\#^/swapfile[[:space:]]#d' /etc/fstab; rm -f /swapfile
 # Services a game console does not need listening on the network
 systemctl mask iperf3.service saned.socket saned.service 2>/dev/null || true

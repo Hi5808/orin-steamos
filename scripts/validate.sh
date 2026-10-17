@@ -22,7 +22,8 @@ for u in systemd-timesyncd systemd-time-wait-sync; do
 done
 chk "firstboot ordered after time-sync.target" grep -q '^After=.*time-sync.target' "$R/etc/systemd/system/steamos-orin-firstboot.service"
 chk "timesync clock file seeded (no 1970 boots)" test -e "$R/var/lib/systemd/timesync/clock"
-for u in nvfb-swapfile.service iperf3.service saned.socket systemd-networkd-wait-online.service; do
+chk "nvfb-swapfile disabled + never-true condition drop-in" bash -c "! chroot '$R' systemctl is-enabled nvfb-swapfile.service 2>/dev/null | grep -qx enabled && grep -q enable-nvfb-swapfile '$R/etc/systemd/system/nvfb-swapfile.service.d/10-steamos-orin-disable.conf'"
+for u in iperf3.service saned.socket systemd-networkd-wait-online.service; do
   chk "masked: $u" bash -c "chroot '$R' systemctl is-enabled $u 2>/dev/null | grep -qx masked"
 done
 chk "no stock /swapfile in image or fstab" bash -c "[ ! -e '$R/swapfile' ] && ! grep -q '^/swapfile' '$R/etc/fstab'"
