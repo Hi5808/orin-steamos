@@ -1,0 +1,11 @@
+[Unit]
+Description=SteamOS-Orin: set nvpmodel MAXN_SUPER
+After=nvpmodel.service
+ConditionPathExists=/usr/sbin/nvpmodel
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/steamos-orin/set-maxn-super
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,16 @@
+# Controller access for the logged-in seat user (Steam Input needs hidraw + uinput).
+# Complements Valve's steam-devices rules when that package is installed.
+KERNEL=="uinput", SUBSYSTEM=="misc", TAG+="uaccess", OPTIONS+="static_node=uinput"
+# Valve (Steam Controller, Steam Deck, Steam Controller 2) - USB and Bluetooth hidraw
+SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", TAG+="uaccess"
+KERNEL=="hidraw*", ATTRS{idVendor}=="28de", TAG+="uaccess"
+KERNEL=="hidraw*", KERNELS=="*28DE:*", TAG+="uaccess"
+# Sony DualShock 4 / DualSense
+KERNEL=="hidraw*", ATTRS{idVendor}=="054c", TAG+="uaccess"
+KERNEL=="hidraw*", KERNELS=="*054C:*", TAG+="uaccess"
+# Microsoft Xbox controllers
+KERNEL=="hidraw*", ATTRS{idVendor}=="045e", TAG+="uaccess"
+KERNEL=="hidraw*", KERNELS=="*045E:*", TAG+="uaccess"
+# Nintendo Switch Pro / Joy-Con
+KERNEL=="hidraw*", ATTRS{idVendor}=="057e", TAG+="uaccess"
+KERNEL=="hidraw*", KERNELS=="*057E:*", TAG+="uaccess"

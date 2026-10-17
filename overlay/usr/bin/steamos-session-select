@@ -1,0 +1,26 @@
+#!/bin/bash
+# SteamOS-compatible session switcher for Jetson Orin.
+# Steam (-steamos3) calls "steamos-session-select plasma" for "Switch to Desktop";
+# the desktop shortcut calls "steamos-session-select gamescope" to return.
+set -euo pipefail
+# shellcheck source=/dev/null
+[[ -r /etc/default/steamos-orin ]] && . /etc/default/steamos-orin
+
+req="${1:-gamescope}"
+case "$req" in
+    plasma|plasma-persistent|desktop|xfce) target="${DESKTOP_SESSION_FILE:-xfce.desktop}" ;;
+    gamescope|gamemode|game)               target="${GAMEMODE_SESSION_FILE:-steam-gamemode.desktop}" ;;
+    steam-gamescope)                       target="steam-gamescope.desktop" ;;
+    *) echo "!! Unrecognized session '$req'" >&2; exit 1 ;;
+esac
+
+# Ask Steam to exit cleanly first (ignore if it is not running)
+if [[ $EUID -ne 0 ]] && pgrep -u "$USER" -x steam >/dev/null 2>&1; then
+    "$HOME/.local/share/Steam/steamrtarm64/steam" -shutdown >/dev/null 2>&1 || true
+    for _ in $(seq 1 20); do pgrep -u "$USER" -x steam >/dev/null || break; sleep 0.5; done
+fi
+
+if [[ $EUID -eq 0 ]]; then
+    exec /usr/bin/steamos-polkit-helpers/steamos-set-session "$target"
+fi
+exec pkexec --disable-internal-agent /usr/bin/steamos-polkit-helpers/steamos-set-session "$target"

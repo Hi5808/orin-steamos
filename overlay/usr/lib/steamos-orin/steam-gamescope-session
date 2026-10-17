@@ -1,0 +1,34 @@
+#!/bin/bash
+# EXPERIMENTAL (P2): gamescope Game Mode session. NOT the default session.
+# On Orin, nvidia-drm exposes a single usable plane (NVIDIA forum, r39.2), so
+# gamescope's DRM backend may fail or need composite-only mode. See the log.
+set -uo pipefail
+# shellcheck source=/dev/null
+[[ -r /etc/default/steamos-orin ]] && . /etc/default/steamos-orin
+LOG="$HOME/.local/share/steamos-orin/gamescope-session.log"
+mkdir -p "$(dirname "$LOG")"
+exec >>"$LOG" 2>&1
+echo "=== gamescope session start $(date -Is)"
+export XDG_SESSION_TYPE=x11
+
+if [[ ! -x "$HOME/.local/share/Steam/steamrtarm64/steam" ]]; then
+    /usr/lib/steamos-orin/steam-arm64-install || exec /usr/bin/steamos-session-select gamemode
+fi
+
+if ! command -v gamescope >/dev/null; then
+    echo "gamescope not installed (run: sudo /usr/lib/steamos-orin/build-gamescope)"
+    exec /usr/bin/steamos-session-select gamemode
+fi
+
+# shellcheck disable=SC2086
+gamescope --backend "${GAMESCOPE_BACKEND:-drm}" \
+    -W "${GAMESCOPE_OUTPUT_W:-1920}" -H "${GAMESCOPE_OUTPUT_H:-1080}" \
+    -w 1280 -h 720 -f -e --xwayland-count 2 \
+    ${GAMESCOPE_EXTRA_ARGS:-} \
+    -- /usr/lib/steamos-orin/steam-launch
+rc=$?
+echo "gamescope exited rc=$rc"
+# gamescope failed to start (KMS/plane problems etc.): go back to the X11 Game Mode
+if (( rc != 0 )); then
+    exec /usr/bin/steamos-session-select gamemode
+fi

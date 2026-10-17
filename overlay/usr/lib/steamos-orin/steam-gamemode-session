@@ -1,0 +1,61 @@
+#!/bin/bash
+# X11 kiosk session: Steam Game Mode with restart-on-exit (SteamOS-style, P1).
+set -uo pipefail
+# shellcheck source=/dev/null
+[[ -r /etc/default/steamos-orin ]] && . /etc/default/steamos-orin
+STEAMROOT="${STEAMROOT:-$HOME/.local/share/Steam}"
+LIMIT="${STEAM_CRASH_LIMIT:-5}"
+WINDOW="${STEAM_CRASH_WINDOW:-120}"
+LOG="$HOME/.local/share/steamos-orin/session.log"
+mkdir -p "$(dirname "$LOG")"
+exec >>"$LOG" 2>&1
+echo "=== Game Mode session start $(date -Is)"
+
+# No blanking/DPMS; Steam manages its own idle behaviour
+xset s off -dpms s noblank 2>/dev/null || true
+xsetroot -solid black 2>/dev/null || true
+command -v unclutter >/dev/null && unclutter -idle 3 -root &
+
+# Minimal WM so games can go fullscreen / take focus
+command -v openbox >/dev/null && openbox --config-file /usr/lib/steamos-orin/openbox-gamemode.xml &
+
+# First boot: make sure the ARM64 client is present (firstboot service may have done it)
+if [[ ! -x "$STEAMROOT/steamrtarm64/steam" ]]; then
+    if command -v zenity >/dev/null; then
+        /usr/lib/steamos-orin/steam-arm64-install 2>&1 | \
+            zenity --progress --pulsate --auto-close --no-cancel \
+                   --title="SteamOS" --text="Downloading Steam (first boot)..." || true
+    else
+        /usr/lib/steamos-orin/steam-arm64-install || true
+    fi
+fi
+
+if [[ ! -x "$STEAMROOT/steamrtarm64/steam" ]]; then
+    echo "Steam install failed; switching to desktop"
+    if command -v zenity >/dev/null; then
+        zenity --error --timeout=15 \
+            --text="Steam could not be downloaded (network?). Switching to desktop." || true
+    fi
+    exec /usr/bin/steamos-session-select desktop
+fi
+
+crashes=()
+while true; do
+    start=$(date +%s)
+    /usr/lib/steamos-orin/steam-launch
+    rc=$?
+    now=$(date +%s)
+    echo "steam exited rc=$rc after $((now-start))s"
+    # 0 = clean exit, 42 = bootstrapper "restart me"; anything else counts as a crash
+    if [[ $rc -ne 0 && $rc -ne 42 ]]; then
+        crashes+=("$now")
+        recent=()
+        for t in "${crashes[@]}"; do (( now - t < WINDOW )) && recent+=("$t"); done
+        crashes=("${recent[@]}")
+        if (( ${#crashes[@]} >= LIMIT )); then
+            echo "too many crashes; falling back to desktop"
+            exec /usr/bin/steamos-session-select desktop
+        fi
+        sleep 2
+    fi
+done

@@ -1,0 +1,11 @@
+# steamos-orin: earlyoom is the only userspace OOM killer (systemd-oomd is masked).
+# Why earlyoom rather than systemd-oomd: Steam starts games as children of the
+# client inside the same session cgroup, and oomd kills whole cgroups, so it would
+# take Steam (or the whole session) down with the game. earlyoom picks one process,
+# guided by --prefer/--avoid and each process's oom_score_adj (set by steamos-orin-oom-tagger).
+#
+# It acts when available RAM <= 6% AND free swap (zram + swapfile) <= 15% (SIGTERM),
+# and sends SIGKILL at 3% / 5%. These are starting values; tune them after the P0 tests.
+# Note: systemd splits this variable on spaces and does not honor quotes, so the
+# regexes must not contain spaces or quotes.
+EARLYOOM_ARGS="-m 6,3 -s 15,5 -r 3600 --prefer ^(wine.*|wineserver|.*[.]exe|.{12}[.]ex|.{13}[.]e|.{14}[.]|FEX.*|steamwebhelper)$ --avoid ^(Xorg|Xwayland|gamescope.*|steam|sddm.*|sshd|systemd.*|dbus-.*|openbox|pipewire.*|wireplumber|earlyoom|NetworkManager|tailscaled|avahi-daemon)$"

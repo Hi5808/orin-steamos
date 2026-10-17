@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Steam Game Mode
+Comment=Steam Big Picture (gamepadui) kiosk, SteamOS-style
+Exec=/usr/lib/steamos-orin/steam-gamemode-session
+DesktopNames=SteamGameMode

@@ -1,0 +1,14 @@
+#!/bin/bash
+# Launch the native ARM64 Steam client in SteamOS Game Mode (gamepadui).
+set -uo pipefail
+# shellcheck source=/dev/null
+[[ -r /etc/default/steamos-orin ]] && . /etc/default/steamos-orin
+
+STEAMROOT="${STEAMROOT:-$HOME/.local/share/Steam}"
+export LD_LIBRARY_PATH="$STEAMROOT/steamrtarm64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+mkdir -p "$STEAMROOT/logs"
+# OOM policy: Steam client -200 (games and steamwebhelper are raised by steamos-orin-oom-tagger)
+choom -n -200 -p $$ >/dev/null 2>&1 || true
+
+# shellcheck disable=SC2086  # STEAM_EXTRA_ARGS is intentionally word-split
+exec "$STEAMROOT/steamrtarm64/steam" -steamos3 -gamepadui ${STEAM_EXTRA_ARGS:-} "$@"

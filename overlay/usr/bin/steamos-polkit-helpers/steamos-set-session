@@ -1,0 +1,18 @@
+#!/bin/bash
+# Root helper: set the SDDM autologin session and restart SDDM.
+set -euo pipefail
+session="${1:?usage: steamos-set-session <name.desktop>}"
+if [[ ! "$session" =~ ^[A-Za-z0-9._-]+\.desktop$ ]]; then
+    echo "invalid session name" >&2; exit 1
+fi
+if [[ ! -f "/usr/share/xsessions/$session" && ! -f "/usr/share/wayland-sessions/$session" ]]; then
+    echo "session $session not installed" >&2; exit 1
+fi
+user="$(sed -n 's/^User=//p' /etc/sddm.conf.d/10-steamos.conf | head -1)"
+conf=/etc/sddm.conf.d/zz-steamos-autologin.conf
+tmp="$(mktemp "$conf.XXXX")"
+printf '[Autologin]\nUser=%s\nSession=%s\nRelogin=true\n' "${user:-steamos}" "$session" > "$tmp"
+chmod 644 "$tmp"
+mv -f "$tmp" "$conf"
+# Restart detached so we are not killed with the session we are ending
+systemd-run --no-block --collect --unit=steamos-restart-sddm systemctl restart sddm.service

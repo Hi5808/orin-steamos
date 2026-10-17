@@ -1,0 +1,13 @@
+[Unit]
+Description=steamos-orin: oom_score_adj policy for Steam, games and the session
+After=systemd-user-sessions.service
+
+[Service]
+ExecStart=/usr/lib/steamos-orin/oom-tagger
+Restart=always
+RestartSec=5
+OOMScoreAdjust=-900
+Nice=10
+
+[Install]
+WantedBy=multi-user.target

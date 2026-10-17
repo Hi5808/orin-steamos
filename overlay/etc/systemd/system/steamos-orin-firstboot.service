@@ -1,0 +1,17 @@
+[Unit]
+Description=SteamOS-Orin: download the native ARM64 Steam client (first boot)
+Wants=network-online.target
+After=network-online.target
+ConditionPathExists=!/home/steamos/.local/share/Steam/.steamos-orin-installed
+
+[Service]
+Type=oneshot
+User=steamos
+Environment=HOME=/home/steamos
+ExecStart=/usr/lib/steamos-orin/steam-arm64-install
+Restart=on-failure
+RestartSec=30
+TimeoutStartSec=30min
+
+[Install]
+WantedBy=multi-user.target

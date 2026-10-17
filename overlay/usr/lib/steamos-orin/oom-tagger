@@ -1,0 +1,74 @@
+#!/usr/bin/python3
+"""steamos-orin-oom-tagger: set oom_score_adj for the Game Mode user's processes.
+
+  gamescope / Xwayland     -500   (the display; Xorg already gets -500 from sddm.service)
+  steam client             -200
+  steamwebhelper           +300   (Steam restarts it)
+  games                    +500   (wine/proton/FEX/*.exe, or any process with SteamAppId/SteamGameId set)
+  other processes at -500   0     (inherited from sddm; desktop apps shouldn't be protected)
+
+Rescans /proc every INTERVAL seconds. --dry-run prints decisions and writes nothing.
+"""
+import os, pwd, re, sys, time
+
+USER = os.environ.get("STEAM_USER", "steamos")
+INTERVAL = float(os.environ.get("OOM_TAGGER_INTERVAL", "3"))
+GAME_RE = re.compile(r"^(wine.*|wineserver|.*\.exe|.{12}\.ex|.{13}\.e|.{14}\.|FEX.*)$", re.I)  # comm is truncated to 15 chars
+
+def target(comm, environ):
+    if comm in ("Xwayland",) or comm.startswith("gamescope"):
+        return -500
+    if comm == "steam":
+        return -200
+    if comm == "steamwebhelper":
+        return 300
+    if GAME_RE.match(comm):
+        return 500
+    for k in (b"SteamAppId=", b"SteamGameId="):
+        for e in environ:
+            if e.startswith(k) and e[len(k):] not in (b"", b"0"):
+                return 500
+    return None
+
+def scan(uid, dry):
+    out = []
+    for pid in os.listdir("/proc"):
+        if not pid.isdigit():
+            continue
+        p = "/proc/" + pid
+        try:
+            if os.stat(p).st_uid != uid:
+                continue
+            comm = open(p + "/comm").read().strip()
+            cur = int(open(p + "/oom_score_adj").read())
+            try:
+                env = open(p + "/environ", "rb").read().split(b"\0")
+            except OSError:
+                env = []
+            t = target(comm, env)
+            if t is None:
+                t = 0 if cur == -500 else None
+            if t is None or t == cur:
+                continue
+            out.append((int(pid), comm, cur, t))
+            if not dry:
+                with open(p + "/oom_score_adj", "w") as f:
+                    f.write(str(t))
+        except (OSError, ValueError):
+            continue  # process exited or kernel thread
+    return out
+
+def main():
+    dry = "--dry-run" in sys.argv
+    uid = int(sys.argv[sys.argv.index("--uid") + 1]) if "--uid" in sys.argv else pwd.getpwnam(USER).pw_uid
+    once = "--once" in sys.argv or dry
+    while True:
+        for pid, comm, cur, t in scan(uid, dry):
+            if dry or t >= 300:
+                print(f"oom_score_adj {comm}[{pid}] {cur} -> {t}", flush=True)
+        if once:
+            return
+        time.sleep(INTERVAL)
+
+if __name__ == "__main__":
+    main()

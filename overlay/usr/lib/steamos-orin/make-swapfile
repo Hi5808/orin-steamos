@@ -1,0 +1,22 @@
+#!/bin/bash
+# First boot: create a 4 GiB NVMe swapfile. It is activated by var-swap-swapfile.swap at
+# priority 10, below zram (100), so it is only used once zram is full. It is not shipped in the image.
+set -euo pipefail
+SWAPFILE="${SWAPFILE:-/var/swap/swapfile}"
+SIZE_MB="${SWAP_SIZE_MB:-4096}"
+[[ -e $SWAPFILE ]] && exit 0
+dir="$(dirname "$SWAPFILE")"
+mkdir -p "$dir"; chmod 700 "$dir"
+fstype="$(stat -f -c %T "$dir")"
+avail_mb=$(( $(df --output=avail -k "$dir" | tail -1) / 1024 ))
+if (( avail_mb < SIZE_MB + 2048 )); then
+  echo "make-swapfile: only ${avail_mb} MiB free on $dir; skipping"; exit 0
+fi
+tmp="$SWAPFILE.tmp"
+rm -f "$tmp"
+if [[ $fstype == btrfs ]]; then touch "$tmp"; chattr +C "$tmp"; fi
+fallocate -l "${SIZE_MB}M" "$tmp" 2>/dev/null || dd if=/dev/zero of="$tmp" bs=1M count="$SIZE_MB" status=none
+chmod 600 "$tmp"
+mkswap -L steamos-swap "$tmp" >/dev/null
+mv "$tmp" "$SWAPFILE"
+echo "make-swapfile: created $SWAPFILE (${SIZE_MB} MiB)"

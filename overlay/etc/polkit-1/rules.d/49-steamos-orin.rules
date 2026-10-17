@@ -1,0 +1,37 @@
+// SteamOS-style privileges for the Game Mode user (no password prompts in Game Mode).
+polkit.addRule(function(action, subject) {
+    if (subject.user !== "steamos" || !subject.local || !subject.active) {
+        return polkit.Result.NOT_HANDLED;
+    }
+    // Steam power menu: shutdown / restart / sleep through logind
+    var power = [
+        "org.freedesktop.login1.power-off",
+        "org.freedesktop.login1.power-off-multiple-sessions",
+        "org.freedesktop.login1.reboot",
+        "org.freedesktop.login1.reboot-multiple-sessions",
+        "org.freedesktop.login1.suspend",
+        "org.freedesktop.login1.suspend-multiple-sessions",
+        "org.freedesktop.login1.set-reboot-to-firmware-setup"
+    ];
+    if (power.indexOf(action.id) >= 0) {
+        return polkit.Result.YES;
+    }
+    // Session switching and power helpers (exact programs only)
+    if (action.id === "org.freedesktop.policykit.exec") {
+        var allowed = [
+            "/usr/bin/steamos-polkit-helpers/steamos-set-session",
+            "/usr/bin/steamos-polkit-helpers/steamos-poweroff-now",
+            "/usr/bin/steamos-polkit-helpers/steamos-reboot-now",
+            "/usr/bin/steamos-polkit-helpers/steamos-suspend-now"
+        ];
+        if (allowed.indexOf(action.lookup("program")) >= 0) {
+            return polkit.Result.YES;
+        }
+    }
+    // Network and Bluetooth management from Steam's settings
+    if (action.id.indexOf("org.freedesktop.NetworkManager.") === 0 ||
+        action.id.indexOf("org.bluez.") === 0) {
+        return polkit.Result.YES;
+    }
+    return polkit.Result.NOT_HANDLED;
+});

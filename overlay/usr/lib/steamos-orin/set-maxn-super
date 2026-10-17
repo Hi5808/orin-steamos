@@ -1,0 +1,16 @@
+#!/bin/bash
+# Select the MAXN_SUPER nvpmodel mode (Orin Nano Super) at boot, if available.
+set -uo pipefail
+conf=/etc/nvpmodel.conf
+[[ -r $conf ]] || { echo "no $conf"; exit 0; }
+id="$(sed -n 's/.*POWER_MODEL ID=\([0-9]\+\) NAME=MAXN_SUPER.*/\1/p' "$conf" | head -1)"
+if [[ -z "$id" ]]; then
+    echo "MAXN_SUPER not defined in $conf (non-Super flash?); leaving power mode alone"
+    exit 0
+fi
+cur="$(nvpmodel -q 2>/dev/null | sed -n 's/^\([0-9]\+\)$/\1/p' | tail -1)"
+if [[ "$cur" == "$id" ]]; then
+    echo "already in MAXN_SUPER ($id)"; exit 0
+fi
+# Answer "no" to any reboot prompt; the mode applies now or on next boot
+echo NO | nvpmodel -m "$id" || true

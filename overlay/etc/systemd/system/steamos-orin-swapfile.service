@@ -1,0 +1,14 @@
+[Unit]
+Description=steamos-orin: create NVMe swapfile on first boot
+DefaultDependencies=no
+After=local-fs.target
+Before=var-swap-swapfile.swap swap.target shutdown.target
+Conflicts=shutdown.target
+ConditionPathExists=!/var/swap/swapfile
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/steamos-orin/make-swapfile
+
+[Install]
+WantedBy=swap.target

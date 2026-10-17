@@ -1,0 +1,81 @@
+#!/bin/bash
+# Fetch and install Valve's native ARM64 Steam client (public beta) for the
+# current user. Steam binaries are downloaded on the device from Valve's CDN;
+# nothing from Valve is shipped in this image.
+# Approach follows the community installers (UbuntuAsahi/steam-arm64, ROCKNIX).
+set -euo pipefail
+
+MANIFEST_URL="https://client-update.steamstatic.com/steam_client_publicbeta_linuxarm64"
+CDN="https://client-update.steamstatic.com"
+STEAMROOT="${STEAMROOT:-$HOME/.local/share/Steam}"
+LOCK="$HOME/.cache/steam-arm64-install.lock"
+STAMP="$STEAMROOT/.steamos-orin-installed"
+
+log() { echo "[steam-arm64-install] $*" >&2; }
+
+if [[ $EUID -eq 0 ]]; then
+    log "must run as the Steam user, not root"; exit 1
+fi
+
+mkdir -p "$(dirname "$LOCK")"
+exec 9>"$LOCK"
+flock 9
+
+if [[ -x "$STEAMROOT/steamrtarm64/steam" && -f "$STAMP" ]]; then
+    log "already installed"; exit 0
+fi
+
+tmp="$(mktemp -d)"
+trap 'rm -rf "$tmp"' EXIT
+
+log "fetching manifest"
+curl -fsSL --retry 5 --retry-delay 5 -o "$tmp/manifest.vdf" "$MANIFEST_URL"
+
+# Pull "file" and "sha2" from the bins_linuxarm64_linuxarm64 block
+read -r file sha2 < <(awk '
+    /"bins_linuxarm64_linuxarm64"/ {blk=1; next}
+    blk && /}/ {exit}
+    blk && $1=="\"file\"" {gsub(/"/,"",$2); f=$2}
+    blk && $1=="\"sha2\"" {gsub(/"/,"",$2); s=$2}
+    END {print f, s}' "$tmp/manifest.vdf")
+
+if [[ -z "${file:-}" ]]; then
+    log "could not find bins_linuxarm64_linuxarm64 in manifest"; exit 1
+fi
+
+log "downloading $file"
+curl -fSL --retry 5 --retry-delay 5 -o "$tmp/bins.zip" "$CDN/$file"
+if [[ -n "${sha2:-}" ]]; then
+    echo "$sha2  $tmp/bins.zip" | sha256sum -c --quiet - || { log "sha256 mismatch"; exit 1; }
+fi
+
+mkdir -p "$STEAMROOT"
+unzip -o -qq "$tmp/bins.zip" -d "$STEAMROOT"
+# Some entries in Valve's zip use Windows path separators ("steamrtarm64\libs\x.so");
+# move them to the real directory layout.
+while IFS= read -r -d '' f; do
+    rel="${f#"$STEAMROOT"/}"
+    dest="$STEAMROOT/${rel//\\//}"
+    mkdir -p "$(dirname "$dest")"
+    mv -f "$f" "$dest"
+done < <(find "$STEAMROOT" -maxdepth 1 -name '*\\*' ! -type d -print0)
+# Directory entries with backslashes are empty placeholders once files are moved
+find "$STEAMROOT" -maxdepth 1 -name '*\\*' -type d -empty -delete
+
+# Opt into the public beta (the ARM64 client only exists there today)
+mkdir -p "$STEAMROOT/package"
+echo publicbeta > "$STEAMROOT/package/beta"
+
+chmod -R u+rwx "$STEAMROOT/steamrtarm64/"
+ln -sfn "$STEAMROOT/steamrtarm64" "$STEAMROOT/steamrt64"
+touch "$STEAMROOT/.steam-enable-steamrt64-client"
+
+# Same symlink layout SteamOS' RUNSTEAM.sh creates
+mkdir -p "$HOME/.steam"
+ln -sTfn "$STEAMROOT" "$HOME/.steam/steam"
+ln -sTfn "$STEAMROOT" "$HOME/.steam/root"
+ln -sTfn "$STEAMROOT/linuxarm64" "$HOME/.steam/sdkarm64"
+ln -sTfn "$STEAMROOT/steamrtarm64" "$HOME/.steam/binarm64"
+
+touch "$STAMP"
+log "installed; Steam will self-update on first launch"

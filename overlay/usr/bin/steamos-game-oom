@@ -1,0 +1,6 @@
+#!/bin/bash
+# Optional Steam launch option for a game: "steamos-game-oom %command%".
+# Marks the game (and its children) as the first thing to kill under OOM, right
+# from launch (steamos-orin-oom-tagger does the same within a few seconds anyway).
+choom -n 500 -p $$ >/dev/null 2>&1 || true
+exec "$@"

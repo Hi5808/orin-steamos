@@ -1,0 +1,13 @@
+[Unit]
+Description=steamos-orin NVMe swapfile (lower priority than zram)
+Requires=steamos-orin-swapfile.service
+After=steamos-orin-swapfile.service
+# Skipped (not failed) if first boot had too little free space to create it
+ConditionPathExists=/var/swap/swapfile
+
+[Swap]
+What=/var/swap/swapfile
+Priority=10
+
+[Install]
+WantedBy=swap.target
