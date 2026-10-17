@@ -3,7 +3,7 @@
 # on JetPack 7.2.1 / Jetson Linux r39.2.1. Runs on an x86_64 Linux build host.
 # It never touches a Jetson; flashing is a separate manual step (see FLASH.md).
 #
-# Usage: sudo ./build.sh [all|release|fetch|extract|binaries|customize|user|tune|validate|package]
+# Usage: sudo ./build.sh [all|release|fetch|extract|binaries|customize|user|steam|tune|validate|package]
 #   all      (default) fetch -> validate. Leaves a flash-ready tree in work/Linux_for_Tegra
 #   release  all + package (a .tar.zst of the tree in output/, needs about 4 GB more)
 # The steamos sudo password is generated here at build time and written to output/SECRETS.txt (0600).
@@ -149,6 +149,30 @@ user() {
   fi
 }
 
+steam() {
+  local info="$ROOTFS/etc/steamos-orin/build-info"
+  $SUDO install -d "$ROOTFS/etc/steamos-orin"
+  printf 'BUILD_DATE=%s\nL4T_RELEASE=%s\nPREINSTALL_STEAM=%s\n' "$(date -u +%FT%TZ)" "$L4T_RELEASE" "$PREINSTALL_STEAM" \
+    | $SUDO tee "$info" >/dev/null
+  if [[ $PREINSTALL_STEAM != 1 ]]; then
+    log "Steam: not preinstalled (PREINSTALL_STEAM=0); the device downloads it on first boot"
+    return
+  fi
+  log "Steam: preinstall Valve's ARM64 client bootstrap from Valve's CDN (PREINSTALL_STEAM=1)"
+  echo "    This image then contains Valve software: for your own use, do not redistribute it."
+  trap umount_chroot EXIT
+  mount_chroot
+  # Same script the device runs on first boot (manifest + sha256 check + backslash-path fix),
+  # run as the Steam user under qemu-user. Only curl/awk/unzip run; no Steam binary is executed.
+  if ! in_chroot runuser -u "$STEAM_USER" -- env HOME="/home/$STEAM_USER" /usr/lib/steamos-orin/steam-arm64-install; then
+    echo "warning: Steam preinstall failed; the image falls back to downloading Steam on first boot"
+    $SUDO rm -rf "$ROOTFS/home/$STEAM_USER/.local/share/Steam" "$ROOTFS/home/$STEAM_USER/.steam"
+    $SUDO sed -i 's/^PREINSTALL_STEAM=.*/PREINSTALL_STEAM=0 # preinstall failed/' "$info"
+  fi
+  $SUDO rm -f "$ROOTFS/home/$STEAM_USER/.cache/steam-arm64-install.lock"
+  umount_chroot; trap - EXIT
+}
+
 tune() {
   log "quiet boot (extlinux APPEND)"
   local ext="$ROOTFS/boot/extlinux/extlinux.conf"
@@ -160,7 +184,7 @@ tune() {
   fi
 }
 
-validate() { log "validate"; $SUDO "$HERE/scripts/validate.sh" "$ROOTFS"; }
+validate() { log "validate"; $SUDO env PREINSTALL_STEAM="$PREINSTALL_STEAM" "$HERE/scripts/validate.sh" "$ROOTFS"; }
 
 package() {
   log "package Linux_for_Tegra"
@@ -183,8 +207,8 @@ done_msg() {
 stage="${1:-all}"
 preflight "$stage"
 case "$stage" in
-  all) fetch; extract; binaries; customize; user; tune; validate; done_msg ;;
-  release) fetch; extract; binaries; customize; user; tune; validate; package; done_msg ;;
-  fetch|extract|binaries|customize|user|tune|validate|package) "$stage" ;;
+  all) fetch; extract; binaries; customize; user; steam; tune; validate; done_msg ;;
+  release) fetch; extract; binaries; customize; user; steam; tune; validate; package; done_msg ;;
+  fetch|extract|binaries|customize|user|steam|tune|validate|package) "$stage" ;;
   *) die "unknown stage $stage" ;;
 esac

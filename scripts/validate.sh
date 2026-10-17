@@ -54,7 +54,13 @@ else chk "polkit rules file present" test -s "$R/etc/polkit-1/rules.d/49-steamos
 chk "uinput autoload" grep -qx uinput "$R/etc/modules-load.d/steamos-orin.conf"
 chk "steam-devices udev rules" bash -c "ls '$R'/usr/lib/udev/rules.d/*steam* >/dev/null"
 chk "quiet boot in extlinux" grep -q 'quiet' "$R/boot/extlinux/extlinux.conf"
-chk "no Steam binaries shipped" bash -c "! find '$R/home' '$R/opt' -path '*steamrtarm64*' | grep -q ."
+if [[ $(sed -n 's/^PREINSTALL_STEAM=\([01]\).*/\1/p' "$R/etc/steamos-orin/build-info" 2>/dev/null) == 1 ]]; then
+  chk "Steam preinstalled (steamrtarm64/steam + stamp, owned by steamos)" bash -c "[ -x '$R/home/steamos/.local/share/Steam/steamrtarm64/steam' ] && [ -f '$R/home/steamos/.local/share/Steam/.steamos-orin-installed' ] && [ \$(chroot '$R' stat -c %U /home/steamos/.local/share/Steam/steamrtarm64/steam) = steamos ]"
+  chk "Steam preinstall has no backslash paths left" bash -c "! find '$R/home/steamos/.local/share/Steam' -maxdepth 1 -name '*\\\\*' | grep -q ."
+else
+  chk "no Steam binaries shipped (PREINSTALL_STEAM=0)" bash -c "! find '$R/home' '$R/opt' -path '*steamrtarm64*' | grep -q ."
+fi
+chk "no steamrt64 -> steamrtarm64 alias" bash -c "[ ! -L '$R/home/steamos/.local/share/Steam/steamrt64' ]"
 chk "session scripts never make the desktop sticky automatically" bash -c "! grep -n 'steamos-session-select desktop' '$R/usr/lib/steamos-orin/steam-gamemode-session' '$R/usr/lib/steamos-orin/firstboot-setup'"
 chk "service enabled: steamos-orin-session-reset" bash -c "chroot '$R' systemctl is-enabled steamos-orin-session-reset.service | grep -q enabled"
 chk "oneshot desktop: set-session marks + boot reset removes" bash -c "d=\$(mktemp -d); printf '# steamos-orin: oneshot\n[Autologin]\nSession=xfce.desktop\n' > \$d/c; sed 's#/etc/sddm.conf.d/zz-steamos-autologin.conf#'\$d'/c#' '$R/usr/lib/steamos-orin/session-reset-boot' | bash >/dev/null; r=0; [ -e \$d/c ] && r=1; rm -rf \$d; exit \$r"
