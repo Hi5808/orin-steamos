@@ -47,7 +47,7 @@ for f in usr/share/xsessions/steam-gamemode.desktop usr/share/wayland-sessions/s
   else chk "desktop file parses $f" python3 -c "import configparser;c=configparser.ConfigParser(interpolation=None);c.read('$R/$f');assert 'Exec' in c['Desktop Entry']"; fi
 done
 chk "xfce session present" test -f "$R/usr/share/xsessions/xfce.desktop"
-chk "systemd units verify" bash -c "chroot '$R' systemd-analyze verify /etc/systemd/system/steamos-orin-firstboot.service /etc/systemd/system/steamos-orin-maxn-super.service /etc/systemd/system/steamos-orin-oom-tagger.service /etc/systemd/system/steamos-orin-swapfile.service /etc/systemd/system/var-swap-swapfile.swap 2>&1 | grep -vE 'Failed to (connect|open)|not running|loading' | grep -qiE 'error|invalid' && exit 1 || exit 0"
+chk "systemd units verify" bash -c "chroot '$R' systemd-analyze verify /etc/systemd/system/steamos-orin-firstboot.service /etc/systemd/system/steamos-orin-maxn-super.service /etc/systemd/system/steamos-orin-oom-tagger.service /etc/systemd/system/steamos-orin-swapfile.service /etc/systemd/system/steamos-orin-session-reset.service /etc/systemd/system/var-swap-swapfile.swap 2>&1 | grep -vE 'Failed to (connect|open)|not running|loading' | grep -qiE 'error|invalid' && exit 1 || exit 0"
 chk "udev rules parse (udevadm verify)" bash -c "chroot '$R' udevadm verify /etc/udev/rules.d/60-steamos-orin-input.rules"
 if command -v node >/dev/null; then chk "polkit rules behave (mock polkit test)" node "$HERE/scripts/test-polkit-rules.js" "$R/etc/polkit-1/rules.d/49-steamos-orin.rules"
 else chk "polkit rules file present" test -s "$R/etc/polkit-1/rules.d/49-steamos-orin.rules"; fi
@@ -55,7 +55,11 @@ chk "uinput autoload" grep -qx uinput "$R/etc/modules-load.d/steamos-orin.conf"
 chk "steam-devices udev rules" bash -c "ls '$R'/usr/lib/udev/rules.d/*steam* >/dev/null"
 chk "quiet boot in extlinux" grep -q 'quiet' "$R/boot/extlinux/extlinux.conf"
 chk "no Steam binaries shipped" bash -c "! find '$R/home' '$R/opt' -path '*steamrtarm64*' | grep -q ."
-chk "session-select maps plasma->xfce" bash -c "grep -q 'plasma|plasma-persistent|desktop' '$R/usr/bin/steamos-session-select'"
+chk "session scripts never make the desktop sticky automatically" bash -c "! grep -n 'steamos-session-select desktop' '$R/usr/lib/steamos-orin/steam-gamemode-session' '$R/usr/lib/steamos-orin/firstboot-setup'"
+chk "service enabled: steamos-orin-session-reset" bash -c "chroot '$R' systemctl is-enabled steamos-orin-session-reset.service | grep -q enabled"
+chk "oneshot desktop: set-session marks + boot reset removes" bash -c "d=\$(mktemp -d); printf '# steamos-orin: oneshot\n[Autologin]\nSession=xfce.desktop\n' > \$d/c; sed 's#/etc/sddm.conf.d/zz-steamos-autologin.conf#'\$d'/c#' '$R/usr/lib/steamos-orin/session-reset-boot' | bash >/dev/null; r=0; [ -e \$d/c ] && r=1; rm -rf \$d; exit \$r"
+chk "Return to Gaming Mode launcher on the Desktop" test -x "$R/home/steamos/Desktop/steamos-return-to-gamemode.desktop"
+chk "session-select: plasma=one-time desktop, desktop/plasma-persistent=persistent" bash -c "grep -q '^    plasma)' '$R/usr/bin/steamos-session-select' && grep -q 'plasma-persistent' '$R/usr/bin/steamos-session-select'"
 chk "zram-generator config" test -f "$R/etc/systemd/zram-generator.conf"
 # --- OOM hardening ---
 chk "swap unit enabled: var-swap-swapfile.swap" bash -c "chroot '$R' systemctl is-enabled var-swap-swapfile.swap | grep -q enabled"
@@ -78,6 +82,7 @@ chk "p0-checklist reports OOM kills" grep -q 'OOM kills' "$HERE/scripts/p0-check
 if command -v shellcheck >/dev/null; then
   chk "shellcheck overlay + build scripts" shellcheck -x "$HERE/build.sh" "$HERE"/scripts/*.sh \
      "$R"/usr/lib/steamos-orin/steam-* "$R/usr/lib/steamos-orin/set-maxn-super" \
+     "$R"/usr/lib/steamos-orin/{firstboot-setup,oneshot-desktop,session-reset-boot,session-oneshot-reset,wait-for-clock} \
      "$R/usr/bin/steamos-session-select" "$R"/usr/bin/steamos-polkit-helpers/* \
      "$R/usr/lib/steamos-orin/make-swapfile" "$R/usr/bin/steamos-game-oom"
 fi

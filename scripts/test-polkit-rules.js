@@ -18,6 +18,11 @@ const cases = [
   ['org.freedesktop.login1.power-off', 'other', {}, true, true, null],
   ['org.freedesktop.policykit.exec', 'steamos', { program: '/usr/bin/steamos-polkit-helpers/steamos-set-session' }, true, true, 'yes'],
   ['org.freedesktop.policykit.exec', 'steamos', { program: '/usr/bin/bash' }, true, true, null],
+  // SSH / no agent: session switching allowed, other helpers and power actions not
+  ['org.freedesktop.policykit.exec', 'steamos', { program: '/usr/bin/steamos-polkit-helpers/steamos-set-session' }, false, false, 'yes'],
+  ['org.freedesktop.policykit.exec', 'steamos', { program: '/usr/bin/steamos-polkit-helpers/steamos-reboot-now' }, false, false, null],
+  ['org.freedesktop.policykit.exec', 'other', { program: '/usr/bin/steamos-polkit-helpers/steamos-set-session' }, false, false, null],
+  ['org.freedesktop.policykit.exec', 'steamos', { program: '/usr/bin/bash' }, false, false, null],
   ['org.freedesktop.NetworkManager.network-control', 'steamos', {}, true, true, 'yes'],
   ['org.freedesktop.udisks2.modify-device', 'steamos', {}, true, true, null],
 ];

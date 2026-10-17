@@ -1,0 +1,14 @@
+#!/bin/bash
+# Desktop autostart: if this desktop was started as a one-time session, point the next
+# autologin back at Game Mode (no SDDM restart, so the desktop keeps running), and mark
+# the "Return to Gaming Mode" launcher as trusted so XFCE runs it without a prompt.
+set -u
+conf=/etc/sddm.conf.d/zz-steamos-autologin.conf
+if [[ -f $conf ]] && grep -qx '# steamos-orin: oneshot' "$conf"; then
+    pkexec --disable-internal-agent /usr/bin/steamos-polkit-helpers/steamos-set-session \
+        "$(sed -n 's/^Session=//p' /etc/sddm.conf.d/10-steamos.conf | head -1)" persistent --no-restart || true
+fi
+f="$HOME/Desktop/steamos-return-to-gamemode.desktop"
+if [[ -f $f ]] && command -v gio >/dev/null; then
+    gio set -t string "$f" metadata::xfce-exe-checksum "$(sha256sum "$f" | cut -d' ' -f1)" 2>/dev/null || true
+fi

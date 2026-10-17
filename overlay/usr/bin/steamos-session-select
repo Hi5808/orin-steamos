@@ -1,16 +1,24 @@
 #!/bin/bash
 # SteamOS-compatible session switcher for Jetson Orin.
-# Steam (-steamos3) calls "steamos-session-select plasma" for "Switch to Desktop";
-# the desktop shortcut calls "steamos-session-select gamescope" to return.
+#   plasma                       one-time desktop (what Steam's "Switch to Desktop" calls):
+#                                desktop now, Game Mode again after the next reboot (as on SteamOS)
+#   desktop | xfce | plasma-persistent | desktop-persistent
+#                                persistent desktop: every boot goes to the desktop until changed
+#   gamescope | gamemode | game  back to Game Mode (the "Return to Gaming Mode" shortcut)
+#   steam-gamescope              experimental gamescope session (P2)
+# Works from Game Mode, the desktop, or an SSH shell as the Steam user (polkit allows the
+# helper without an authentication agent).
 set -euo pipefail
 # shellcheck source=/dev/null
 [[ -r /etc/default/steamos-orin ]] && . /etc/default/steamos-orin
 
 req="${1:-gamescope}"
+mode=persistent
 case "$req" in
-    plasma|plasma-persistent|desktop|xfce) target="${DESKTOP_SESSION_FILE:-xfce.desktop}" ;;
-    gamescope|gamemode|game)               target="${GAMEMODE_SESSION_FILE:-steam-gamemode.desktop}" ;;
-    steam-gamescope)                       target="steam-gamescope.desktop" ;;
+    plasma)                                               target="${DESKTOP_SESSION_FILE:-xfce.desktop}"; mode=oneshot ;;
+    desktop|xfce|plasma-persistent|desktop-persistent)   target="${DESKTOP_SESSION_FILE:-xfce.desktop}" ;;
+    gamescope|gamemode|game)                              target="${GAMEMODE_SESSION_FILE:-steam-gamemode.desktop}" ;;
+    steam-gamescope)                                      target="steam-gamescope.desktop" ;;
     *) echo "!! Unrecognized session '$req'" >&2; exit 1 ;;
 esac
 
@@ -20,7 +28,6 @@ if [[ $EUID -ne 0 ]] && pgrep -u "$USER" -x steam >/dev/null 2>&1; then
     for _ in $(seq 1 20); do pgrep -u "$USER" -x steam >/dev/null || break; sleep 0.5; done
 fi
 
-if [[ $EUID -eq 0 ]]; then
-    exec /usr/bin/steamos-polkit-helpers/steamos-set-session "$target"
-fi
-exec pkexec --disable-internal-agent /usr/bin/steamos-polkit-helpers/steamos-set-session "$target"
+helper=/usr/bin/steamos-polkit-helpers/steamos-set-session
+if [[ $EUID -eq 0 ]]; then exec "$helper" "$target" "$mode"; fi
+exec pkexec --disable-internal-agent "$helper" "$target" "$mode"

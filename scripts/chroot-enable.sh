@@ -3,7 +3,7 @@
 set -euo pipefail
 : "${HOSTNAME_TARGET:=orin-steamos}"
 systemctl enable ssh.service avahi-daemon.service sddm.service \
-  steamos-orin-firstboot.service steamos-orin-maxn-super.service \
+  steamos-orin-firstboot.service steamos-orin-maxn-super.service steamos-orin-session-reset.service \
   earlyoom.service steamos-orin-oom-tagger.service \
   steamos-orin-swapfile.service var-swap-swapfile.swap \
   systemd-timesyncd.service systemd-time-wait-sync.service

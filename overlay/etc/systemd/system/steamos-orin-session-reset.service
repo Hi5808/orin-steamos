@@ -1,0 +1,10 @@
+[Unit]
+Description=SteamOS-Orin: drop a one-time desktop session override (boot into Game Mode)
+Before=display-manager.service sddm.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/steamos-orin/session-reset-boot
+
+[Install]
+WantedBy=graphical.target

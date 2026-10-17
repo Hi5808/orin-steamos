@@ -1,18 +1,33 @@
 #!/bin/bash
-# Root helper: set the SDDM autologin session and restart SDDM.
+# Root helper: set the SDDM autologin session and (by default) restart SDDM.
+# usage: steamos-set-session <name.desktop> [persistent|oneshot] [--no-restart]
+#  oneshot: the file is marked and removed at the next boot (steamos-orin-session-reset)
+#           and reset to Game Mode as soon as the desktop starts (session-oneshot-reset).
 set -euo pipefail
-session="${1:?usage: steamos-set-session <name.desktop>}"
+session="${1:?usage: steamos-set-session <name.desktop> [persistent|oneshot] [--no-restart]}"
+mode="${2:-persistent}"
+restart=1; [[ "${3:-}" == --no-restart ]] && restart=0
 if [[ ! "$session" =~ ^[A-Za-z0-9._-]+\.desktop$ ]]; then
     echo "invalid session name" >&2; exit 1
 fi
+case "$mode" in persistent|oneshot) ;; *) echo "invalid mode" >&2; exit 1 ;; esac
 if [[ ! -f "/usr/share/xsessions/$session" && ! -f "/usr/share/wayland-sessions/$session" ]]; then
     echo "session $session not installed" >&2; exit 1
 fi
 user="$(sed -n 's/^User=//p' /etc/sddm.conf.d/10-steamos.conf | head -1)"
 conf=/etc/sddm.conf.d/zz-steamos-autologin.conf
-tmp="$(mktemp "$conf.XXXX")"
-printf '[Autologin]\nUser=%s\nSession=%s\nRelogin=true\n' "${user:-steamos}" "$session" > "$tmp"
-chmod 644 "$tmp"
-mv -f "$tmp" "$conf"
+default="$(sed -n 's/^Session=//p' /etc/sddm.conf.d/10-steamos.conf | head -1)"
+if [[ "$mode" == persistent && "$session" == "$default" ]]; then
+    rm -f "$conf"                     # back to the image default: no override file
+else
+    tmp="$(mktemp "$conf.XXXX")"
+    {
+        [[ "$mode" == oneshot ]] && echo "# steamos-orin: oneshot"
+        printf '[Autologin]\nUser=%s\nSession=%s\nRelogin=true\n' "${user:-steamos}" "$session"
+    } > "$tmp"
+    chmod 644 "$tmp"
+    mv -f "$tmp" "$conf"
+fi
+(( restart )) || exit 0
 # Restart detached so we are not killed with the session we are ending
-systemd-run --no-block --collect --unit=steamos-restart-sddm systemctl restart sddm.service
+systemd-run --no-block --collect --unit="steamos-restart-sddm-$$" systemctl restart sddm.service

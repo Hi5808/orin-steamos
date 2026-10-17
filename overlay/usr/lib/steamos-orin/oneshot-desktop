@@ -1,0 +1,10 @@
+#!/bin/bash
+# Replace the current Game Mode X session with the desktop for THIS session only.
+# Nothing is written to SDDM's config: logging out (or rebooting) returns to Game Mode.
+# The persistent switch is "steamos-session-select desktop".
+set -u
+echo "=== one-time desktop $(date -Is) (reason: ${1:-user})"
+pkill -u "$USER" -x openbox 2>/dev/null
+pkill -u "$USER" -x unclutter 2>/dev/null
+if command -v startxfce4 >/dev/null; then exec startxfce4; fi
+exec xterm -fullscreen -T "Desktop unavailable: type 'exit' to return to Game Mode"

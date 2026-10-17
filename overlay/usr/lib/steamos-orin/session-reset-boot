@@ -1,0 +1,7 @@
+#!/bin/bash
+# Boot time (before SDDM): drop a one-time session override so this boot is Game Mode.
+set -eu
+conf=/etc/sddm.conf.d/zz-steamos-autologin.conf
+if [[ -f $conf ]] && grep -qx '# steamos-orin: oneshot' "$conf"; then
+    rm -f "$conf"; echo "removed one-time session override"
+fi

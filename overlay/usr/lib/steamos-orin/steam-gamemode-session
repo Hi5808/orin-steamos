@@ -1,11 +1,15 @@
 #!/bin/bash
 # X11 kiosk session: Steam Game Mode with restart-on-exit (SteamOS-style, P1).
+# Never switches the persistent session to the desktop by itself:
+#  - Steam missing / no network on first boot -> full-screen setup screen (firstboot-setup)
+#  - Steam crash loop                          -> desktop for this session only
 set -uo pipefail
 # shellcheck source=/dev/null
 [[ -r /etc/default/steamos-orin ]] && . /etc/default/steamos-orin
 STEAMROOT="${STEAMROOT:-$HOME/.local/share/Steam}"
 LIMIT="${STEAM_CRASH_LIMIT:-5}"
 WINDOW="${STEAM_CRASH_WINDOW:-120}"
+FIRSTRUN_OK="$STEAMROOT/.steamos-orin-firstrun-ok"
 LOG="$HOME/.local/share/steamos-orin/session.log"
 mkdir -p "$(dirname "$LOG")"
 exec >>"$LOG" 2>&1
@@ -16,28 +20,15 @@ xset s off -dpms s noblank 2>/dev/null || true
 xsetroot -solid black 2>/dev/null || true
 command -v unclutter >/dev/null && unclutter -idle 3 -root &
 
-# Minimal WM so games can go fullscreen / take focus
+# Minimal WM so games can go fullscreen / take focus (also maximizes the setup dialogs)
 command -v openbox >/dev/null && openbox --config-file /usr/lib/steamos-orin/openbox-gamemode.xml &
 
-# First boot: make sure the ARM64 client is present (firstboot service may have done it)
-if [[ ! -x "$STEAMROOT/steamrtarm64/steam" ]]; then
-    if command -v zenity >/dev/null; then
-        /usr/lib/steamos-orin/steam-arm64-install 2>&1 | \
-            zenity --progress --pulsate --auto-close --no-cancel \
-                   --title="SteamOS" --text="Downloading Steam (first boot)..." || true
-    else
-        /usr/lib/steamos-orin/steam-arm64-install || true
-    fi
-fi
-
-if [[ ! -x "$STEAMROOT/steamrtarm64/steam" ]]; then
-    echo "Steam install failed; switching to desktop"
-    if command -v zenity >/dev/null; then
-        zenity --error --timeout=15 \
-            --text="Steam could not be downloaded (network?). Switching to desktop." || true
-    fi
-    exec /usr/bin/steamos-session-select desktop
-fi
+/usr/lib/steamos-orin/firstboot-setup
+case $? in
+    0) ;;
+    10) exec /usr/lib/steamos-orin/oneshot-desktop "chosen on setup screen" ;;
+    *) echo "firstboot-setup failed; trying Steam anyway" ;;
+esac
 
 crashes=()
 while true; do
@@ -46,6 +37,7 @@ while true; do
     rc=$?
     now=$(date +%s)
     echo "steam exited rc=$rc after $((now-start))s"
+    (( now - start >= 120 )) && [[ ! -f $FIRSTRUN_OK ]] && touch "$FIRSTRUN_OK"
     # 0 = clean exit, 42 = bootstrapper "restart me"; anything else counts as a crash
     if [[ $rc -ne 0 && $rc -ne 42 ]]; then
         crashes+=("$now")
@@ -53,8 +45,10 @@ while true; do
         for t in "${crashes[@]}"; do (( now - t < WINDOW )) && recent+=("$t"); done
         crashes=("${recent[@]}")
         if (( ${#crashes[@]} >= LIMIT )); then
-            echo "too many crashes; falling back to desktop"
-            exec /usr/bin/steamos-session-select desktop
+            echo "Steam crashed ${#crashes[@]} times in ${WINDOW}s; desktop for this session only"
+            command -v zenity >/dev/null && zenity --warning --timeout=10 --title="Steam" \
+                --text="Steam keeps crashing. Opening the desktop for this session.\nLog out or reboot to return to Game Mode." 2>/dev/null
+            exec /usr/lib/steamos-orin/oneshot-desktop "crash loop"
         fi
         sleep 2
     fi

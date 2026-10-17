@@ -1,0 +1,74 @@
+#!/bin/bash
+# Full-screen first-boot / "Steam is not ready" screen for the Game Mode session.
+# Runs inside the X11 Game Mode session (openbox maximizes every window, so the
+# dialogs below fill the screen). Keyboard or mouse needed; Steam Input is not running yet.
+#
+# Exit codes: 0 = Steam is ready (or the user chose to start it offline)
+#            10 = the user chose "Use the desktop this time" (one session only)
+set -uo pipefail
+# shellcheck source=/dev/null
+[[ -r /etc/default/steamos-orin ]] && . /etc/default/steamos-orin
+STEAMROOT="${STEAMROOT:-$HOME/.local/share/Steam}"
+FIRSTRUN_OK="$STEAMROOT/.steamos-orin-firstrun-ok"   # written after Steam ran once for >=2 min
+TITLE="SteamOS on Jetson: setup"
+
+log() { echo "[firstboot-setup] $(date -Is) $*"; }
+installed() { [[ -x "$STEAMROOT/steamrtarm64/steam" && -f "$STEAMROOT/.steamos-orin-installed" ]]; }
+online() {
+    [[ "$(nmcli -t networking connectivity check 2>/dev/null)" == full ]] && return 0
+    curl -fsS -m 8 -o /dev/null -I https://client-update.steamstatic.com/ 2>/dev/null
+}
+# Steam needs the network for its first update and first login. After one good run it
+# can start offline (Steam's own offline mode).
+ready() { installed && { [[ -f $FIRSTRUN_OK ]] || online; }; }
+
+term() {
+    if command -v xfce4-terminal >/dev/null; then
+        xfce4-terminal --fullscreen --hide-menubar --hide-toolbar --title="$TITLE" -x "$@"
+    else
+        xterm -fullscreen -fa Monospace -fs 14 -T "$TITLE" -e "$@"
+    fi
+}
+
+install_steam() {
+    log "running steam-arm64-install"
+    /usr/lib/steamos-orin/wait-for-clock 60 || log "clock still not set: $(date -Is)"
+    # Show the installer's log lines as progress text
+    /usr/lib/steamos-orin/steam-arm64-install 2>&1 | tee -a "$HOME/.local/share/steamos-orin/session.log" | \
+        sed -u 's/^\[steam-arm64-install\] */# /' | \
+        zenity --progress --pulsate --auto-close --no-cancel --title="$TITLE" \
+               --text="Downloading Steam from Valve..." 2>/dev/null
+    installed
+}
+
+ready && exit 0
+log "Steam not ready (installed=$(installed && echo yes || echo no), firstrun_ok=$([[ -f $FIRSTRUN_OK ]] && echo yes || echo no))"
+delay=10
+while :; do
+    if online; then
+        if installed || install_steam; then log "Steam ready"; exit 0; fi
+        msg="Steam could not be downloaded. Retrying in ${delay} s."
+    elif installed; then
+        msg="Steam needs the internet once to finish its first update and sign-in.\nNo network yet. Retrying in ${delay} s."
+    else
+        msg="Welcome! Connect to the internet to download Steam.\nEthernet works automatically; for Wi-Fi choose \"Set up Wi-Fi\".\nNo network yet. Retrying in ${delay} s."
+    fi
+    opts=("Retry now" "Set up Wi-Fi")
+    installed && opts+=("Start Steam anyway (offline)")
+    opts+=("Use the desktop this time" "Power off")
+    choice="$(zenity --list --title="$TITLE" --text="$msg" --column="Choose" \
+              --hide-header --timeout="$delay" --width=900 --height=500 "${opts[@]}" 2>/dev/null)"
+    rc=$?
+    case "$rc:$choice" in
+        5:*|1:*|0:"Retry now"|0:)              # timeout, Esc/Cancel or plain retry
+            (( rc == 5 )) && delay=$(( delay * 2 > 120 ? 120 : delay * 2 )) ;;
+        0:"Set up Wi-Fi")
+            term nmtui-connect; delay=10 ;;
+        0:"Start Steam anyway (offline)")
+            log "user chose offline start"; exit 0 ;;
+        0:"Use the desktop this time")
+            log "user chose one-time desktop"; exit 10 ;;
+        0:"Power off")
+            systemctl poweroff ;;
+    esac
+done

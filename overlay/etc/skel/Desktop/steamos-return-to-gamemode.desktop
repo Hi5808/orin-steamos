@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=Return to Game Mode
-Comment=Go back to Steam Game Mode
+Name=Return to Gaming Mode
+Comment=Go back to Steam Game Mode (as on SteamOS)
 Exec=/usr/bin/steamos-session-select gamescope
 Icon=input-gaming
 Terminal=false

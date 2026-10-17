@@ -11,8 +11,9 @@ exec >>"$LOG" 2>&1
 echo "=== gamescope session start $(date -Is)"
 export XDG_SESSION_TYPE=x11
 
+# First boot / Steam missing: the X11 Game Mode session owns the setup screen
 if [[ ! -x "$HOME/.local/share/Steam/steamrtarm64/steam" ]]; then
-    /usr/lib/steamos-orin/steam-arm64-install || exec /usr/bin/steamos-session-select gamemode
+    exec /usr/bin/steamos-session-select gamemode
 fi
 
 if ! command -v gamescope >/dev/null; then

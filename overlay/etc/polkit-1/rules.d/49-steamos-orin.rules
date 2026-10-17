@@ -1,5 +1,12 @@
 // SteamOS-style privileges for the Game Mode user (no password prompts in Game Mode).
 polkit.addRule(function(action, subject) {
+    // Session switching works from any session of the steamos user, including SSH and
+    // non-GUI shells where no polkit authentication agent exists. The helper only accepts
+    // an installed *.desktop session name.
+    if (subject.user === "steamos" && action.id === "org.freedesktop.policykit.exec" &&
+        action.lookup("program") === "/usr/bin/steamos-polkit-helpers/steamos-set-session") {
+        return polkit.Result.YES;
+    }
     if (subject.user !== "steamos" || !subject.local || !subject.active) {
         return polkit.Result.NOT_HANDLED;
     }

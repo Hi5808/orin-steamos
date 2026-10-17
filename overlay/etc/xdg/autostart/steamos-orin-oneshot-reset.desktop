@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=SteamOS one-time desktop reset
+Comment=Return to Game Mode on the next login or boot after a one-time desktop session
+Exec=/usr/lib/steamos-orin/session-oneshot-reset
+OnlyShowIn=XFCE;
+NoDisplay=true
+X-XFCE-Autostart-Override=true
