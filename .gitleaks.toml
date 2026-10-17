@@ -1,0 +1,18 @@
+# gitleaks config: default rules plus project-specific ones.
+[extend]
+useDefault = true
+
+[[rules]]
+id = "ssh-public-key"
+description = "Hardcoded SSH public key (keys must come from SSH_AUTHORIZED_KEYS at build time)"
+regex = '''(ssh-(ed25519|rsa|dss)|ecdsa-sha2-nistp[0-9]+|sk-ssh-ed25519@openssh\.com) AAAA[0-9A-Za-z+/]{40,}'''
+
+[[rules]]
+id = "tailscale-key"
+description = "Tailscale auth/API key"
+regex = '''tskey-[a-z]+-[0-9A-Za-z_-]{10,}'''
+
+[[rules]]
+id = "nm-wifi-psk"
+description = "NetworkManager / wpa_supplicant Wi-Fi PSK"
+regex = '''(?i)^\s*psk\s*=\s*\S{8,}'''
