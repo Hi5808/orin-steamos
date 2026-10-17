@@ -67,7 +67,11 @@ mkdir -p "$STEAMROOT/package"
 echo publicbeta > "$STEAMROOT/package/beta"
 
 chmod -R u+rwx "$STEAMROOT/steamrtarm64/"
-ln -sfn "$STEAMROOT/steamrtarm64" "$STEAMROOT/steamrt64"
+# Do NOT alias steamrt64 -> steamrtarm64. The ARM64 client update ships both a real
+# steamrt64/ (x86-64 files) and steamrtarm64/; with the alias the x86-64 files overwrite
+# the arm64 ones and the bootstrapper loops forever in BVerifyInstalledFiles with no UI.
+# Remove the alias left by older versions of this script.
+if [[ -L "$STEAMROOT/steamrt64" ]]; then rm -f "$STEAMROOT/steamrt64"; fi
 touch "$STEAMROOT/.steam-enable-steamrt64-client"
 
 # Same symlink layout SteamOS' RUNSTEAM.sh creates
