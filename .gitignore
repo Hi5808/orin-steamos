@@ -1,0 +1,15 @@
+# Build products and third-party downloads: never commit these
+/work/
+/output/
+/downloads/
+/logs/
+SECRETS.txt
+*.img
+*.img.raw
+*.tar.*
+*.tbz2
+*.zip
+*.ko
+*.log
+# local overrides
+/config.local.env
