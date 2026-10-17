@@ -1,5 +1,8 @@
-# Extra arguments for the Steam client in Game Mode
-STEAM_EXTRA_ARGS=""
+# Extra arguments for the Steam client in Game Mode.
+# -cef-disable-gpu-compositing: on the Orin's X11/nvgpu stack steamwebhelper (CEF) hits
+# GLXBadPixmap/BadDrawable ("dri3 extension not supported", Xorg "No path to DRM device"),
+# which leaves Big Picture black. Software compositing for the UI only; games are unaffected.
+STEAM_EXTRA_ARGS="-cef-disable-gpu-compositing"
 # Desktop session used by "Switch to Desktop"
 DESKTOP_SESSION_FILE="xfce.desktop"
 # Session used for Game Mode ("steam-gamemode.desktop" = X11 kiosk, P1;
