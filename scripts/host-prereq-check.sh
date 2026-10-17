@@ -11,11 +11,15 @@ if [[ $(uname -m) == x86_64 ]]; then ok "x86_64 host"; else no "host must be x86
 case "${VERSION_ID:-}" in
   20.04|22.04) ok "Ubuntu $VERSION_ID: listed by NVIDIA r39.2 Quick Start -> flash natively" ;;
   24.04)       wa "Ubuntu 24.04: flashing reported OK by Seeed for JP7.2, not in NVIDIA's Quick Start -> container recommended" ;;
-  *)           wa "Ubuntu ${VERSION_ID:-unknown}: NOT a supported flash host -> use the Ubuntu 22.04 container flow in FLASH.md" ;;
+  *)           wa "Ubuntu ${VERSION_ID:-unknown}: NOT a supported flash host -> use sudo ./flash.sh (Ubuntu 22.04 container, docs/FLASH.md)" ;;
 esac
 if command -v docker >/dev/null; then ok "docker: $(docker --version)"
 elif command -v podman >/dev/null; then ok "podman: $(podman --version)"
 else wa "neither docker nor podman installed (needed for the container flow)"; fi
+if command -v exportfs >/dev/null; then ok "host NFS server (nfs-kernel-server) installed"
+else no "host NFS server missing: sudo apt install nfs-kernel-server (flash.sh serves the images from the host)"; fi
+if [[ -f /etc/udev/rules.d/99-jetson-nm-unmanaged.rules ]]; then ok "NetworkManager ignores Jetson USB network (udev rule present)"
+else wa "udev rule 99-jetson-nm-unmanaged.rules missing (flash.sh installs it)"; fi
 free_gb=$(df -BG --output=avail . | tail -1 | tr -dc 0-9)
 # Flash image generation needs extra space beyond the tree (not measured; estimate ~10G)
 if (( free_gb >= 15 )); then ok "free space ${free_gb}G"
