@@ -13,3 +13,8 @@ SECRETS.txt
 *.log
 # local overrides
 /config.local.env
+# never commit keys
+*.pub
+id_*
+*.pem
+*.key
