@@ -103,8 +103,15 @@ line yet `vkCreateDevice` **still** returned `vr -3`. So it is not the WSI layer
 swapchain_maintenance1. vkd3d's own retry ("Disabled extensions that can cause Vulkan device
 creation to fail, retrying") also still fails. No Vulkan validation layer is available in the
 runtime to name the exact rejected feature, and `INITIALIZATION_FAILED` is a driver-internal
-error. Conclusion: a **Tegra driver `vkCreateDevice` bug** — it rejects vkd3d-proton 3.0's full
-feature set despite advertising every feature. DX11/DXVK (leaner set) is the working path.
+error. Installing `vulkan-validationlayers` (1.3.275) and forcing it on for the game
+(`VK_LOADER_LAYERS_ENABLE`, confirmed inserted) did not help: with validation active the game
+crashed **earlier** in the FEX/wine layer (`nested exception on signal stack`, unaligned-atomic
+exceptions) before reaching device creation, and validation cannot flag a driver-internal
+`INITIALIZATION_FAILED` anyway (the features *are* reported supported). Conclusion: a **Tegra
+driver `vkCreateDevice` conformance bug** — it rejects vkd3d-proton 3.0's full feature set
+despite advertising every feature. DX11/DXVK (leaner set) is the working path. Needs NVIDIA /
+a JetPack update. (Board note: `vulkan-validationlayers` left installed — harmless explicit
+layer, not enabled by default.)
 
 Common thread across all three: **the Tegra driver claims support (features/extensions/modes)
 it cannot actually honour at the device/scanout level.**
