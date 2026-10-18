@@ -95,12 +95,16 @@ Separately, DX12 games fail: vkd3d-proton 3.0 `vkCreateDevice` returns
 `VK_ERROR_INITIALIZATION_FAILED (-3)` on the Tegra driver though `vulkaninfo` reports every
 required feature present (bufferDeviceAddress, descriptorIndexing, nullDescriptor,
 robust*Access2, runtimeDescriptorArray, timelineSemaphore, samplerFilterMinmax, sparse…). DXVK
-(DX11) creates a device fine with a leaner set. **Hot lead:** the Proton log shows gamescope's
-WSI layer `[Gamescope WSI] Forcing on VK_EXT_swapchain_maintenance1` immediately before each
-failed `vkCreateDevice`; the driver *does* list `VK_EXT/KHR_swapchain_maintenance1` as device
-extensions. Next test (pending, board offline): disable `VK_LAYER_FROG_gamescope_wsi` (it has a
-`disable_environment`) and retry DX12 — does the device then create? If yes, the WSI layer /
-swapchain_maintenance1 on Tegra is a shared offender with the scanout flicker.
+(DX11) creates a device fine with a leaner set. The Proton log shows gamescope's WSI layer
+`[Gamescope WSI] Forcing on VK_EXT_swapchain_maintenance1` right before each failed
+`vkCreateDevice` — but that lead is **ruled out**: disabling `VK_LAYER_FROG_gamescope_wsi`
+per-game (Proton `user_settings.py` with `DISABLE_GAMESCOPE_WSI=1`) removed the "Forcing on"
+line yet `vkCreateDevice` **still** returned `vr -3`. So it is not the WSI layer or
+swapchain_maintenance1. vkd3d's own retry ("Disabled extensions that can cause Vulkan device
+creation to fail, retrying") also still fails. No Vulkan validation layer is available in the
+runtime to name the exact rejected feature, and `INITIALIZATION_FAILED` is a driver-internal
+error. Conclusion: a **Tegra driver `vkCreateDevice` bug** — it rejects vkd3d-proton 3.0's full
+feature set despite advertising every feature. DX11/DXVK (leaner set) is the working path.
 
 Common thread across all three: **the Tegra driver claims support (features/extensions/modes)
 it cannot actually honour at the device/scanout level.**

@@ -95,5 +95,14 @@ sudo chattr +i "steamapps/common/<game>/config.ini"   # immutable; game + cloud 
 ```
 
 Verified 2026-10-18: Ghosts 'n Goblins Resurrection (appid 1375400) boots to its intro and
-renders under DX11/DXVK after this. (A real fix would be vkd3d-proton gaining support for
-whatever Vulkan feature the Tegra driver is missing — re-test on JetPack updates.)
+renders under DX11/DXVK after this.
+
+**Root cause (confirmed).** With `PROTON_LOG=1 VKD3D_DEBUG=warn`, vkd3d-proton 3.0's
+`vkCreateDevice` returns `VK_ERROR_INITIALIZATION_FAILED (-3)` on the Tegra driver — even after
+vkd3d's own retry that strips known-problematic extensions. Every feature vkd3d needs is
+reported present by `vulkaninfo`, so it is not a missing feature; the driver simply can't create
+a device with the full set vkd3d requests. Ruled out: the gamescope WSI layer forcing
+`VK_EXT_swapchain_maintenance1` (disabling it per-game via Proton `user_settings.py`
+`DISABLE_GAMESCOPE_WSI=1` did not help). DXVK (DX11) requests a leaner set and succeeds — hence
+the DX11 workaround. This is a Tegra Vulkan **driver** bug, same family as the DCE scanout bug
+(see BLACK-SCREEN-LOG.md); re-test on JetPack updates and include in the NVIDIA report.
