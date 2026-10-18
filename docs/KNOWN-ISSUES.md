@@ -67,42 +67,39 @@ Reproduce: Steam Settings → test screensaver. Capturing `gamescopectl screensh
 *clean* composite (so capture never matches the flickering display — the tell that it is scanout,
 not compositing). Watch `dmesg | grep rpcRmApiControl_dce` grow.
 
-## x86-64 games that default to DirectX 12 fail (vkd3d-proton can't create a D3D12 device)
+## DirectX 12 games fail to create a device — FIXED with a vkd3d-proton config
 
-**Symptom.** A game launches through Proton 11 (ARM64) — FEX runs the x86-64 code, the prefix
+**Status: FIXED (2026-10-18)** in the image default (`overlay/etc/default/steamos-orin`).
+
+**Symptom.** A DX12 game launches through Proton 11 (ARM64) — FEX runs the x86-64 code, the prefix
 sets up, wineserver/winedevice start — then the renderer dies with a dialog like
 `D3D12CreateDeviceFailed / Please restart your computer` (seen in Ghosts 'n Goblins Resurrection,
-`renderdevicedx12.cpp`). Proton/FEX work; the **D3D12→Vulkan layer (vkd3d-proton)** cannot create
-a D3D12 device on the Orin's NVIDIA Vulkan driver (595.78).
+`renderdevicedx12.cpp`). vkd3d-proton 3.0's `vkCreateDevice` returns
+`VK_ERROR_INITIALIZATION_FAILED (-3)`, even though `vulkaninfo` reports every feature present.
 
-**Fix (per game): force DirectX 11.** D3D11 goes through DXVK, which works on this driver.
-Capcom **RE Engine** titles (GnG:R, Monster Hunter, RE) keep the API in
-`steamapps/common/<game>/config.ini`:
+**Root cause.** The Orin Tegra Vulkan driver (595.78) **advertises cooperative-matrix /
+ray-tracing / optical-flow capabilities it cannot actually enable** — a Vulkan-spec violation
+(`vkCreateDevice` MUST NOT return `INITIALIZATION_FAILED` for features it reports as supported).
+The log tell is `vkd3d_supports_minimum_coopmat_caps: Missing sufficient features to expose WMMA`.
+Same class of bug as the desktop RTX 50-series coopmat issue (vkd3d-proton #3076). vkd3d's own
+retry (stripping NVX extensions) isn't enough because ray-tracing is still enabled.
 
-```ini
-[Render]
-PCTargetAPIFallback=Enable
-Capability=DirectX11
-TargetPlatform=DirectX11
-```
-
-The game re-probes and **Steam Cloud re-syncs** this file on launch (reverting it to DirectX12),
-so just editing it is not enough. Lock it:
+**Fix.** Drop ray-tracing and the offending NV extensions from vkd3d's device request:
 
 ```sh
-# set the file to DX11 as above, then:
-sudo chattr +i "steamapps/common/<game>/config.ini"   # immutable; game + cloud can't revert it
+VKD3D_CONFIG=nodxr
+VKD3D_DISABLE_EXTENSIONS=VK_NV_optical_flow,VK_NVX_binary_import,VK_NVX_image_view_handle
 ```
 
-Verified 2026-10-18: Ghosts 'n Goblins Resurrection (appid 1375400) boots to its intro and
-renders under DX11/DXVK after this.
+These are exported session-wide in `overlay/etc/default/steamos-orin`, so **all** DX12 games get
+them. They affect only vkd3d (DX12); DXVK (DX11) and native games are untouched. Verified:
+Ghosts 'n Goblins Resurrection (appid 1375400) boots to its intro and runs **in DirectX 12**.
+(We lose DXR ray-tracing, which the Tegra driver can't do here anyway.)
 
-**Root cause (confirmed).** With `PROTON_LOG=1 VKD3D_DEBUG=warn`, vkd3d-proton 3.0's
-`vkCreateDevice` returns `VK_ERROR_INITIALIZATION_FAILED (-3)` on the Tegra driver — even after
-vkd3d's own retry that strips known-problematic extensions. Every feature vkd3d needs is
-reported present by `vulkaninfo`, so it is not a missing feature; the driver simply can't create
-a device with the full set vkd3d requests. Ruled out: the gamescope WSI layer forcing
-`VK_EXT_swapchain_maintenance1` (disabling it per-game via Proton `user_settings.py`
-`DISABLE_GAMESCOPE_WSI=1` did not help). DXVK (DX11) requests a leaner set and succeeds — hence
-the DX11 workaround. This is a Tegra Vulkan **driver** bug, same family as the DCE scanout bug
-(see BLACK-SCREEN-LOG.md); re-test on JetPack updates and include in the NVIDIA report.
+**Fallback: force DirectX 11** (if a specific DX12 game still misbehaves). RE Engine titles keep
+the API in `steamapps/common/<game>/config.ini` (`Capability`/`TargetPlatform` = `DirectX11`);
+the game and **Steam Cloud** re-sync it to DirectX12 on launch, so lock it with
+`sudo chattr +i <that config.ini>`. D3D11 goes through DXVK, which always worked here.
+
+Re-test the DXR path (drop `nodxr`) on JetPack updates; include the coopmat/optical-flow
+advertisement bug in the NVIDIA report (see `NVIDIA-BUG-REPORT.md`, `BLACK-SCREEN-LOG.md`).

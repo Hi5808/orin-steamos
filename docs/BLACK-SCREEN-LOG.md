@@ -107,11 +107,18 @@ error. Installing `vulkan-validationlayers` (1.3.275) and forcing it on for the 
 (`VK_LOADER_LAYERS_ENABLE`, confirmed inserted) did not help: with validation active the game
 crashed **earlier** in the FEX/wine layer (`nested exception on signal stack`, unaligned-atomic
 exceptions) before reaching device creation, and validation cannot flag a driver-internal
-`INITIALIZATION_FAILED` anyway (the features *are* reported supported). Conclusion: a **Tegra
-driver `vkCreateDevice` conformance bug** — it rejects vkd3d-proton 3.0's full feature set
-despite advertising every feature. DX11/DXVK (leaner set) is the working path. Needs NVIDIA /
-a JetPack update. (Board note: `vulkan-validationlayers` left installed — harmless explicit
-layer, not enabled by default.)
+`INITIALIZATION_FAILED` anyway (the features *are* reported supported).
+
+**RESOLVED (online research, 2026-10-18).** vkd3d-proton #3076 + an NVIDIA forum thread describe
+the identical failure on desktop RTX 50-series: a **broken cooperative-matrix capability
+advertisement** — the driver advertises coopmat/DXR/optical-flow it can't enable at device
+creation. Our log's `vkd3d_supports_minimum_coopmat_caps: Missing sufficient features to expose
+WMMA` is the same tell. The confirmed workaround makes DX12 create a device and run:
+`VKD3D_CONFIG=nodxr VKD3D_DISABLE_EXTENSIONS=VK_NV_optical_flow,VK_NVX_binary_import,VK_NVX_image_view_handle`
+(our retry wasn't enough because ray-tracing stayed enabled). Verified: GnG:R runs in DX12.
+Baked into `overlay/etc/default/steamos-orin`. So D3D12 is a Tegra driver **conformance bug but
+user-space-workaroundable** — unlike the DCE scanout flicker, which remains unsolved.
+(Board note: `vulkan-validationlayers` left installed — harmless explicit layer, off by default.)
 
 Common thread across all three: **the Tegra driver claims support (features/extensions/modes)
 it cannot actually honour at the device/scanout level.**

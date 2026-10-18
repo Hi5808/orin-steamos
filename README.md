@@ -16,7 +16,7 @@ Working on real hardware (flashed 2026-10-17): boots to SDDM autologin → Steam
 | Bluetooth game controllers | works: fallback BlueZ pairing agent + `JustWorksRepairing`/`FastConnectable`; 8BitDo paired and reconnects |
 | First-boot setup screen, one-time desktop fallback, session switching | new in this repo, **not yet tested on hardware** |
 | Controller modules (uinput, hid-steam/playstation/nintendo/sony) | build-tested, **not yet loaded on hardware** |
-| FEX / Proton (x86 games) with NVIDIA's Vulkan driver | **untested** |
+| FEX / Proton (x86 games) with NVIDIA's Vulkan driver | works: DX11 (DXVK) and **DX12** (vkd3d-proton, needs `VKD3D_CONFIG=nodxr` — baked in; see docs/KNOWN-ISSUES.md). Ghosts 'n Goblins Resurrection runs. DXR ray-tracing unavailable on this driver |
 | Suspend / resume | **untested** (`p0-checklist.sh --suspend-test`) |
 | OS updates (A/B, like SteamOS) | not implemented (`steamos-update` is a "no update" stub) |
 | Tailscale `xt_connmark` | not available in NVIDIA's kernel (`CONFIG_NF_CONNTRACK_MARK` off); Tailscale works, with a warning |
@@ -77,7 +77,7 @@ docs/               BUILD.md, FLASH.md, live-board-changes.md
 
 ## TODO
 - Test the new first-boot screen, one-time desktop and controller modules on hardware.
-- FEX/Proton validation, suspend/resume.
+- Suspend/resume. (FEX/Proton DX11+DX12 validated — Ghosts 'n Goblins Resurrection runs.)
 - A/B OS updates (RAUC), a real `steamos-update`.
 - Published images: first-boot SSH key / password setup instead of build-time secrets.
 - Gamepad navigation for the setup screen (it needs a keyboard or mouse today).

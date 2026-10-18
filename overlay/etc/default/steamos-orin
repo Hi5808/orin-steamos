@@ -33,3 +33,14 @@ STEAM_CRASH_WINDOW=120
 # When the installed client has this version, client self-updates are blocked with
 # ~/.local/share/Steam/steam.cfg. Empty = unpinned (Steam updates itself as usual).
 STEAM_CLIENT_PIN="1791918634"
+
+# --- DirectX 12 games (vkd3d-proton) workaround ---
+# The Orin Tegra Vulkan driver (595.78) advertises cooperative-matrix / ray-tracing /
+# optical-flow capabilities it cannot actually enable, so vkd3d-proton's vkCreateDevice fails
+# with VK_ERROR_INITIALIZATION_FAILED and DX12 games die with "D3D12CreateDeviceFailed".
+# nodxr drops the ray-tracing extension set and VKD3D_DISABLE_EXTENSIONS forces off the NV
+# extensions that trip device creation; with these, DX12 games create a device and run.
+# (Same class of driver bug as the desktop RTX 50-series coopmat issue, vkd3d-proton #3076.)
+# These only affect vkd3d (DX12); DXVK (DX11) and native games are unaffected. See docs/KNOWN-ISSUES.md.
+export VKD3D_CONFIG=nodxr
+export VKD3D_DISABLE_EXTENSIONS=VK_NV_optical_flow,VK_NVX_binary_import,VK_NVX_image_view_handle

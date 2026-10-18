@@ -73,9 +73,18 @@ extensions, still fails.
   change the failure).
 - Vulkan validation finds no usage violation (the failure is driver-internal).
 
-**Ask:** which feature/extension *combination* causes `vkCreateDevice` to return
-`INITIALIZATION_FAILED` on this driver despite being advertised, and is there a driver-side fix?
-A minimal repro (a device-create call enabling the full advertised feature set) can be provided.
+**Identified cause + workaround.** This matches vkd3d-proton #3076 and an NVIDIA forum thread on
+desktop RTX 50-series: the driver advertises **cooperative-matrix / ray-tracing / optical-flow**
+capabilities it cannot enable at device creation (log tell: `vkd3d_supports_minimum_coopmat_caps:
+Missing sufficient features to expose WMMA`). Disabling them —
+`VKD3D_CONFIG=nodxr VKD3D_DISABLE_EXTENSIONS=VK_NV_optical_flow,VK_NVX_binary_import,VK_NVX_image_view_handle`
+— makes `vkCreateDevice` succeed and DX12 games run. So the GPU works; the driver just
+over-advertises.
+
+**Ask:** please fix the capability advertisement so `vkCreateDevice` does not return
+`INITIALIZATION_FAILED` for features/extensions the driver reports as supported (a Vulkan-spec
+violation), so the `nodxr`/disable-extensions workaround isn't needed. A minimal repro
+(device-create enabling the full advertised feature set) can be provided.
 
 Attach: full `PROTON_LOG` with `VKD3D_DEBUG=warn`, `vulkaninfo` output. TODO: attach files.
 
