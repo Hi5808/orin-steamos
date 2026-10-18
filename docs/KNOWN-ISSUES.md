@@ -66,3 +66,34 @@ fixable from user space / our image.
 Reproduce: Steam Settings → test screensaver. Capturing `gamescopectl screenshot` shows a
 *clean* composite (so capture never matches the flickering display — the tell that it is scanout,
 not compositing). Watch `dmesg | grep rpcRmApiControl_dce` grow.
+
+## x86-64 games that default to DirectX 12 fail (vkd3d-proton can't create a D3D12 device)
+
+**Symptom.** A game launches through Proton 11 (ARM64) — FEX runs the x86-64 code, the prefix
+sets up, wineserver/winedevice start — then the renderer dies with a dialog like
+`D3D12CreateDeviceFailed / Please restart your computer` (seen in Ghosts 'n Goblins Resurrection,
+`renderdevicedx12.cpp`). Proton/FEX work; the **D3D12→Vulkan layer (vkd3d-proton)** cannot create
+a D3D12 device on the Orin's NVIDIA Vulkan driver (595.78).
+
+**Fix (per game): force DirectX 11.** D3D11 goes through DXVK, which works on this driver.
+Capcom **RE Engine** titles (GnG:R, Monster Hunter, RE) keep the API in
+`steamapps/common/<game>/config.ini`:
+
+```ini
+[Render]
+PCTargetAPIFallback=Enable
+Capability=DirectX11
+TargetPlatform=DirectX11
+```
+
+The game re-probes and **Steam Cloud re-syncs** this file on launch (reverting it to DirectX12),
+so just editing it is not enough. Lock it:
+
+```sh
+# set the file to DX11 as above, then:
+sudo chattr +i "steamapps/common/<game>/config.ini"   # immutable; game + cloud can't revert it
+```
+
+Verified 2026-10-18: Ghosts 'n Goblins Resurrection (appid 1375400) boots to its intro and
+renders under DX11/DXVK after this. (A real fix would be vkd3d-proton gaining support for
+whatever Vulkan feature the Tegra driver is missing — re-test on JetPack updates.)
