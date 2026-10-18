@@ -21,7 +21,7 @@ pkgs=(
   openssh-server avahi-daemon libnss-mdns
   steam-devices vulkan-tools mesa-utils
   libgtk2.0-0t64 libvdpau1 libvpx9 ibus libxtst6 libnm0 libgl1 libegl1
-  pipewire pipewire-pulse wireplumber bluez
+  pipewire pipewire-pulse wireplumber bluez python3-dbus python3-gi
   systemd-zram-generator earlyoom systemd-timesyncd
 )
 [[ $DESKTOP == xfce ]] && pkgs+=(xfce4 xfce4-terminal thunar)
@@ -44,6 +44,23 @@ echo /usr/bin/sddm > /etc/X11/default-display-manager
 systemctl disable gdm3.service gdm.service 2>/dev/null || true
 ln -sf /usr/lib/systemd/system/sddm.service /etc/systemd/system/display-manager.service
 systemctl set-default graphical.target
+
+# --- Bluetooth controllers (SteamOS-style) ---
+# seatd is pulled in by the gamescope build deps but we use logind seats; its presence makes
+# gamescope pick the libseat seatd backend and fight logind. Disable it (bt-fix 2026-10-17).
+systemctl disable seatd.service 2>/dev/null || true
+# BlueZ main.conf tuning for game controllers (applied live in round3 2026-10-17):
+#   JustWorksRepairing=always  - controllers re-pair without a PIN prompt
+#   FastConnectable=true        - quicker reconnect of bonded controllers
+#   ConnectionSupervisionTimeout=400 - tolerate the RTL8822CE Wi-Fi/BT coexistence stalls
+if [[ -f /etc/bluetooth/main.conf ]]; then
+  sed -i -E \
+    -e 's/^#?[[:space:]]*JustWorksRepairing[[:space:]]*=.*/JustWorksRepairing = always/' \
+    -e 's/^#?[[:space:]]*FastConnectable[[:space:]]*=.*/FastConnectable = true/' \
+    -e 's/^#?[[:space:]]*ConnectionSupervisionTimeout[[:space:]]*=.*/ConnectionSupervisionTimeout=400/' \
+    /etc/bluetooth/main.conf
+  grep -q '^JustWorksRepairing'   /etc/bluetooth/main.conf || printf '\n[General]\nJustWorksRepairing = always\nFastConnectable = true\n' >> /etc/bluetooth/main.conf
+fi
 
 # Steam wants libvpx.so.6 on some builds; noble ships .so.9 (community-installer workaround)
 if [[ -e /usr/lib/aarch64-linux-gnu/libvpx.so.9 && ! -e /usr/lib/aarch64-linux-gnu/libvpx.so.6 ]]; then

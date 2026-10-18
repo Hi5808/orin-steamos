@@ -85,4 +85,7 @@ for j in "$PREFIX"/share/vulkan/implicit_layer.d/*.json; do
     [[ -e "$j" ]] && ln -sfn "$j" /usr/local/share/vulkan/implicit_layer.d/
 done
 "$PREFIX/bin/gamescope" --version || true
-echo "gamescope installed to $PREFIX (symlinks in /usr/local/bin). Test with: steamos-session-select steam-gamescope"
+# The gamescope session uses logind (LIBSEAT_BACKEND=logind); seatd, if apt pulled it in,
+# is not needed and aborts on session switches. Disabled for the next boot only (not stopped).
+systemctl disable seatd.service 2>/dev/null || true
+echo "gamescope installed to $PREFIX (symlinks in /usr/local/bin). It is the default Game Mode session (steam-gamescope.desktop)"

@@ -1,0 +1,15 @@
+[Unit]
+Description=steamos-orin: fallback Bluetooth pairing agent (controllers)
+Documentation=file:///usr/lib/steamos-orin/bt-agent
+After=bluetooth.service
+Requires=bluetooth.service
+PartOf=bluetooth.service
+
+[Service]
+Type=simple
+ExecStart=/usr/lib/steamos-orin/bt-agent
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=bluetooth.service

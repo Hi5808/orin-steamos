@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=Steam Game Mode (gamescope, experimental)
-Comment=P2 test: gamescope DRM backend on nvidia-drm; not the default session
+Name=Steam Game Mode (gamescope)
+Comment=Steam Big Picture (gamepadui) in gamescope on nvidia-drm, SteamOS-style (default)
 Exec=/usr/lib/steamos-orin/steam-gamescope-session
 DesktopNames=gamescope

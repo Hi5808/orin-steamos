@@ -1,0 +1,7 @@
+#!/bin/bash
+# SteamOS OS-branch selector stub. Steam calls "steamos-select-branch -c" for the OS update
+# channel; this image has no OS update channels (see steamos-update), so it is always "rel".
+case "${1:-}" in
+    -c|--current|-l|--list|"") echo rel ;;
+    *) exit 0 ;;            # selecting a branch is a no-op
+esac

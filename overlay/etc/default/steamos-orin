@@ -7,14 +7,29 @@ STEAM_EXTRA_ARGS="-cef-disable-gpu-compositing"
 GAMESCOPE_STEAM_EXTRA_ARGS=""
 # Desktop session used by "Switch to Desktop"
 DESKTOP_SESSION_FILE="xfce.desktop"
-# Session used for Game Mode ("steam-gamemode.desktop" = X11 kiosk, P1;
-# "steam-gamescope.desktop" = experimental gamescope session, P2)
-GAMEMODE_SESSION_FILE="steam-gamemode.desktop"
-# gamescope session tuning (P2 experiments)
+# Session used for Game Mode / "Return to Gaming Mode" (gamescope, SteamOS-style)
+GAMEMODE_SESSION_FILE="steam-gamescope.desktop"
+# X11 kiosk Game Mode: used for one boot when gamescope cannot start (and for first-boot setup)
+GAMEMODE_FALLBACK_SESSION_FILE="steam-gamemode.desktop"
+# gamescope session tuning
 GAMESCOPE_BACKEND="drm"          # drm | wayland (nested, needs a compositor)
-GAMESCOPE_OUTPUT_W=1920
-GAMESCOPE_OUTPUT_H=1080
-GAMESCOPE_EXTRA_ARGS=""
+# Output mode: empty = the display's preferred mode (gamescope picks it from EDID)
+GAMESCOPE_OUTPUT_W=""
+GAMESCOPE_OUTPUT_H=""
+# Steam's render size: empty = same as the output
+GAMESCOPE_NESTED_W=""
+GAMESCOPE_NESTED_H=""
+# --force-composition --disable-layers: always composite with Vulkan into the primary plane.
+# nvidia-drm on Orin has a single usable plane; letting gamescope switch between direct
+# scan-out / libliftoff overlay planes and composition makes the screen flicker (seen on
+# Steam's animated home/background art).
+GAMESCOPE_EXTRA_ARGS="--force-composition --disable-layers"
+# A gamescope exit with an error within this many seconds of starting = "cannot start"
+GAMESCOPE_FALLBACK_WINDOW=60
 # Fast-crash protection: after N crashes within WINDOW seconds fall back to desktop
 STEAM_CRASH_LIMIT=5
 STEAM_CRASH_WINDOW=120
+# Steam client version pin (build id of a known-good client, see docs/STEAM-PIN.md).
+# When the installed client has this version, client self-updates are blocked with
+# ~/.local/share/Steam/steam.cfg. Empty = unpinned (Steam updates itself as usual).
+STEAM_CLIENT_PIN="1791918634"

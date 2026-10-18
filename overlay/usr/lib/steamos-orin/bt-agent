@@ -1,0 +1,119 @@
+#!/usr/bin/python3
+"""Fallback BlueZ pairing agent (NoInputNoOutput), like the one SteamOS keeps running.
+
+Steam registers its own agent (/org/steam/btagent) only part of the time; without any
+agent, BlueZ rejects "Just Works" pairing (controllers have no display/keyboard) with
+"No agent available ... device_confirm_passkey: Operation not permitted". This agent is
+the default agent whenever Steam's is not. It accepts pairing only while the adapter is
+discovering (someone is pairing from Steam's Bluetooth settings or bluetoothctl) or for
+devices that are already bonded, and marks newly paired devices Trusted so they reconnect.
+"""
+import sys
+
+import dbus
+import dbus.mainloop.glib
+import dbus.service
+from gi.repository import GLib
+
+BUS = "org.bluez"
+AGENT_PATH = "/org/steamos_orin/btagent"
+AGENT_IFACE = "org.bluez.Agent1"
+
+
+def log(msg):
+    print(msg, flush=True)
+
+
+class Rejected(dbus.DBusException):
+    _dbus_error_name = "org.bluez.Error.Rejected"
+
+
+class Agent(dbus.service.Object):
+    def __init__(self, bus):
+        super().__init__(bus, AGENT_PATH)
+        self.bus = bus
+
+    def _props(self, path, iface):
+        return dbus.Interface(self.bus.get_object(BUS, path), "org.freedesktop.DBus.Properties").GetAll(iface)
+
+    def _allowed(self, device):
+        try:
+            dev = self._props(device, "org.bluez.Device1")
+            if dev.get("Paired") or dev.get("Bonded"):
+                return True
+            adapter = self._props(dev["Adapter"], "org.bluez.Adapter1")
+            return bool(adapter.get("Discovering") or adapter.get("Discoverable"))
+        except dbus.DBusException as e:
+            log(f"lookup failed for {device}: {e}")
+            return False
+
+    def _check(self, device, what):
+        if not self._allowed(device):
+            log(f"rejected {what} for {device} (adapter not discovering)")
+            raise Rejected("pairing only while discovering")
+        log(f"accepted {what} for {device}")
+
+    @dbus.service.method(AGENT_IFACE, in_signature="", out_signature="")
+    def Release(self):
+        log("released")
+
+    @dbus.service.method(AGENT_IFACE, in_signature="os", out_signature="")
+    def AuthorizeService(self, device, uuid):
+        self._check(device, f"service {uuid}")
+
+    @dbus.service.method(AGENT_IFACE, in_signature="o", out_signature="")
+    def RequestAuthorization(self, device):
+        self._check(device, "pairing (just works)")
+
+    @dbus.service.method(AGENT_IFACE, in_signature="ou", out_signature="")
+    def RequestConfirmation(self, device, passkey):
+        self._check(device, "pairing (confirmation)")
+
+    @dbus.service.method(AGENT_IFACE, in_signature="o", out_signature="s")
+    def RequestPinCode(self, device):
+        self._check(device, "PIN pairing")
+        return "0000"
+
+    @dbus.service.method(AGENT_IFACE, in_signature="o", out_signature="u")
+    def RequestPasskey(self, device):
+        self._check(device, "passkey pairing")
+        return dbus.UInt32(0)
+
+    @dbus.service.method(AGENT_IFACE, in_signature="ouq", out_signature="")
+    def DisplayPasskey(self, device, passkey, entered):
+        pass
+
+    @dbus.service.method(AGENT_IFACE, in_signature="os", out_signature="")
+    def DisplayPinCode(self, device, pincode):
+        pass
+
+    @dbus.service.method(AGENT_IFACE, in_signature="", out_signature="")
+    def Cancel(self):
+        log("cancelled")
+
+
+def main():
+    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+    bus = dbus.SystemBus()
+    Agent(bus)
+    manager = dbus.Interface(bus.get_object(BUS, "/org/bluez"), "org.bluez.AgentManager1")
+    manager.RegisterAgent(AGENT_PATH, "NoInputNoOutput")
+    manager.RequestDefaultAgent(AGENT_PATH)
+    log("registered fallback agent (NoInputNoOutput)")
+
+    def on_props(iface, changed, _invalidated, path=None):
+        if iface == "org.bluez.Device1" and changed.get("Paired") and path:
+            try:
+                dbus.Interface(bus.get_object(BUS, path), "org.freedesktop.DBus.Properties").Set(
+                    "org.bluez.Device1", "Trusted", dbus.Boolean(True))
+                log(f"paired: {path} (marked trusted)")
+            except dbus.DBusException as e:
+                log(f"could not trust {path}: {e}")
+
+    bus.add_signal_receiver(on_props, dbus_interface="org.freedesktop.DBus.Properties",
+                            signal_name="PropertiesChanged", bus_name=BUS, path_keyword="path")
+    GLib.MainLoop().run()
+
+
+if __name__ == "__main__":
+    sys.exit(main())

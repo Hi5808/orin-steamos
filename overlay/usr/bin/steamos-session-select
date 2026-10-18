@@ -5,7 +5,10 @@
 #   desktop | xfce | plasma-persistent | desktop-persistent
 #                                persistent desktop: every boot goes to the desktop until changed
 #   gamescope | gamemode | game  back to Game Mode (the "Return to Gaming Mode" shortcut)
-#   steam-gamescope              experimental gamescope session (P2)
+#   steam-gamescope              the gamescope session (the default Game Mode)
+#   gamemode-x11                 the X11 kiosk Game Mode, persistently
+#   x11-fallback                 the X11 kiosk Game Mode for this boot only (used by the
+#                                gamescope session when gamescope cannot start)
 # Works from Game Mode, the desktop, or an SSH shell as the Steam user (polkit allows the
 # helper without an authentication agent).
 set -euo pipefail
@@ -17,8 +20,10 @@ mode=persistent
 case "$req" in
     plasma)                                               target="${DESKTOP_SESSION_FILE:-xfce.desktop}"; mode=oneshot ;;
     desktop|xfce|plasma-persistent|desktop-persistent)   target="${DESKTOP_SESSION_FILE:-xfce.desktop}" ;;
-    gamescope|gamemode|game)                              target="${GAMEMODE_SESSION_FILE:-steam-gamemode.desktop}" ;;
+    gamescope|gamemode|game)                              target="${GAMEMODE_SESSION_FILE:-steam-gamescope.desktop}" ;;
     steam-gamescope)                                      target="steam-gamescope.desktop" ;;
+    gamemode-x11|steam-gamemode)                          target="${GAMEMODE_FALLBACK_SESSION_FILE:-steam-gamemode.desktop}" ;;
+    x11-fallback)                                         target="${GAMEMODE_FALLBACK_SESSION_FILE:-steam-gamemode.desktop}"; mode=oneshot ;;
     *) echo "!! Unrecognized session '$req'" >&2; exit 1 ;;
 esac
 

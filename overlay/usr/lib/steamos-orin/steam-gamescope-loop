@@ -1,0 +1,30 @@
+#!/bin/bash
+# Runs inside gamescope: Steam with restart-on-exit, like the X11 kiosk session.
+#   rc 0  -> Steam quit on purpose (power menu, session switch): end the gamescope session
+#   rc 42 -> bootstrapper "restart me" (client update): restart Steam
+#   other -> crash: restart; after STEAM_CRASH_LIMIT crashes in STEAM_CRASH_WINDOW s fall back
+#         to the X11 Game Mode for this boot (which has its own crash-loop handling)
+set -uo pipefail
+# shellcheck source=/dev/null
+[[ -r /etc/default/steamos-orin ]] && . /etc/default/steamos-orin
+LIMIT="${STEAM_CRASH_LIMIT:-5}"
+WINDOW="${STEAM_CRASH_WINDOW:-120}"
+crashes=()
+while true; do
+    /usr/lib/steamos-orin/steam-launch
+    rc=$?
+    now=$(date +%s)
+    echo "steam exited rc=$rc"
+    (( rc == 0 )) && exit 0
+    if (( rc != 42 )); then
+        crashes+=("$now")
+        recent=()
+        for t in "${crashes[@]}"; do (( now - t < WINDOW )) && recent+=("$t"); done
+        crashes=("${recent[@]}")
+        if (( ${#crashes[@]} >= LIMIT )); then
+            echo "Steam crashed ${#crashes[@]} times in ${WINDOW}s; X11 Game Mode for this boot"
+            exec /usr/bin/steamos-session-select x11-fallback
+        fi
+        sleep 2
+    fi
+done

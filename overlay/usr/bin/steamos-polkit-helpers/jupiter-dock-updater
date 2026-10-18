@@ -1,0 +1,4 @@
+#!/bin/bash
+# SteamOS dock firmware updater stub: no Steam Deck dock on a Jetson, nothing to update.
+echo "no dock connected"
+exit 0

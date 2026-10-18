@@ -11,10 +11,11 @@ Working on real hardware (flashed 2026-10-17): boots to SDDM autologin → Steam
 
 | Area | State |
 |---|---|
-| Boot to Steam Game Mode (X11 kiosk, `steam -steamos3 -gamepadui`) | works; Big Picture needed `-cef-disable-gpu-compositing` (now the default), on-screen confirmation pending |
+| Boot to Steam Game Mode (gamescope DRM, `steam -steamos3 -gamepadui`) | **default session** (flashed 2026-10-17); under gamescope Xwayland has DRI3 + NVIDIA GLX so CEF Big Picture composites cleanly. X11 kiosk is the oneshot fallback when gamescope can't start |
+| gamescope on NVIDIA's display driver (single usable plane) | works with `--force-composition --disable-layers`; exit segfault patched out (Tegra patch) |
+| Bluetooth game controllers | works: fallback BlueZ pairing agent + `JustWorksRepairing`/`FastConnectable`; 8BitDo paired and reconnects |
 | First-boot setup screen, one-time desktop fallback, session switching | new in this repo, **not yet tested on hardware** |
 | Controller modules (uinput, hid-steam/playstation/nintendo/sony) | build-tested, **not yet loaded on hardware** |
-| gamescope on NVIDIA's display driver (single usable plane) | **untested** (experimental session, not default) |
 | FEX / Proton (x86 games) with NVIDIA's Vulkan driver | **untested** |
 | Suspend / resume | **untested** (`p0-checklist.sh --suspend-test`) |
 | OS updates (A/B, like SteamOS) | not implemented (`steamos-update` is a "no update" stub) |
@@ -76,7 +77,7 @@ docs/               BUILD.md, FLASH.md, live-board-changes.md
 
 ## TODO
 - Test the new first-boot screen, one-time desktop and controller modules on hardware.
-- gamescope session on NVIDIA (P2), FEX/Proton validation, suspend.
+- FEX/Proton validation, suspend/resume.
 - A/B OS updates (RAUC), a real `steamos-update`.
 - Published images: first-boot SSH key / password setup instead of build-time secrets.
 - Gamepad navigation for the setup screen (it needs a keyboard or mouse today).

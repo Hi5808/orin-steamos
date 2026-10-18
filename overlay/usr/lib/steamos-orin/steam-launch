@@ -10,6 +10,7 @@ if [[ -n "${GAMESCOPE_WAYLAND_DISPLAY:-}" ]]; then STEAM_EXTRA_ARGS="${GAMESCOPE
 STEAMROOT="${STEAMROOT:-$HOME/.local/share/Steam}"
 export LD_LIBRARY_PATH="$STEAMROOT/steamrtarm64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 mkdir -p "$STEAMROOT/logs"
+/usr/lib/steamos-orin/steam-pin apply || true
 # OOM policy: Steam client -200 (games and steamwebhelper are raised by steamos-orin-oom-tagger)
 choom -n -200 -p $$ >/dev/null 2>&1 || true
 

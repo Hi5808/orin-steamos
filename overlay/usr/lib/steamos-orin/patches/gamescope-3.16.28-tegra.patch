@@ -1,3 +1,20 @@
+diff --git a/src/main.cpp b/src/main.cpp
+index 0bd0cb4..6cced86 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -1119,6 +1119,12 @@ int main(int argc, char **argv)
+ 
+ 	gamescope::Process::KillAllChildren( getpid(), SIGTERM );
+ 	gamescope::Process::WaitForAllChildren();
++
++	// steamos-orin: skip static destructors at exit. ~CVulkanDevice joins the shader compile
++	// thread, which segfaults inside the NVIDIA (Tegra) shader compiler once exit handlers run.
++	fflush( stdout );
++	fflush( stderr );
++	_exit( 0 );
+ }
+ 
+ static void steamCompMgrThreadRun(int argc, char **argv)
 diff --git a/src/rendervulkan.cpp b/src/rendervulkan.cpp
 index 1db9a46..e44458c 100644
 --- a/src/rendervulkan.cpp
@@ -49,3 +66,20 @@ index 1db9a46..e44458c 100644
  		.features = {
  			.shaderInt16 = m_bSupportsFp16,
  		},
+diff --git a/src/wlserver.cpp b/src/wlserver.cpp
+index 1512b71..f7f8d29 100644
+--- a/src/wlserver.cpp
++++ b/src/wlserver.cpp
+@@ -2318,7 +2318,11 @@ void wlserver_run(void)
+ 	}
+ 
+ #if HAVE_LIBEIS
+-	g_InputServer = nullptr;
++	// steamos-orin: stop the EIS thread before tearing down, and do not eis_unref() at exit:
++	// with Xwayland's libei clients still attached, libeis 1.2.1 crashes in eis_unref()
++	// (exit segfault). The process is exiting; the kernel closes the socket.
++	g_LibEisWaiter.Shutdown();
++	(void) g_InputServer.release();
+ #endif
+ 
+ 	// Released when steamcompmgr closes.

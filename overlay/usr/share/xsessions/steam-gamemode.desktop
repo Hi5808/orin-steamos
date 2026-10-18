@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=Steam Game Mode
-Comment=Steam Big Picture (gamepadui) kiosk, SteamOS-style
+Name=Steam Game Mode (X11 fallback)
+Comment=Steam Big Picture (gamepadui) X11 kiosk; fallback when gamescope cannot start
 Exec=/usr/lib/steamos-orin/steam-gamemode-session
 DesktopNames=SteamGameMode

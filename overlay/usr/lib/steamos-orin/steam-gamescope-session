@@ -1,7 +1,7 @@
 #!/bin/bash
-# EXPERIMENTAL (P2): gamescope Game Mode session. NOT the default session.
-# On Orin, nvidia-drm exposes a single usable plane (NVIDIA forum, r39.2), so
-# gamescope's DRM backend may fail or need composite-only mode. See the log.
+# Default Game Mode session: Steam (gamepadui) inside gamescope on the DRM backend.
+# The X11 kiosk session (steam-gamemode.desktop) is only a fallback: if gamescope cannot
+# start, this boot falls back to it once (a "oneshot" override, removed at the next boot).
 set -uo pipefail
 # shellcheck source=/dev/null
 [[ -r /etc/default/steamos-orin ]] && . /etc/default/steamos-orin
@@ -10,26 +10,32 @@ mkdir -p "$(dirname "$LOG")"
 exec >>"$LOG" 2>&1
 echo "=== gamescope session start $(date -Is)"
 export XDG_SESSION_TYPE=x11
+# Use logind (the SDDM session) for DRM/input devices; seatd is not needed
+export LIBSEAT_BACKEND="${LIBSEAT_BACKEND:-logind}"
+
+fallback() {
+    echo "falling back to the X11 Game Mode for this boot: $*"
+    exec /usr/bin/steamos-session-select x11-fallback
+}
 
 # First boot / Steam missing: the X11 Game Mode session owns the setup screen
-if [[ ! -x "$HOME/.local/share/Steam/steamrtarm64/steam" ]]; then
-    exec /usr/bin/steamos-session-select gamemode
-fi
+[[ -x "$HOME/.local/share/Steam/steamrtarm64/steam" ]] || fallback "Steam not installed yet"
+command -v gamescope >/dev/null || fallback "gamescope not installed (run: sudo /usr/lib/steamos-orin/build-gamescope)"
 
-if ! command -v gamescope >/dev/null; then
-    echo "gamescope not installed (run: sudo /usr/lib/steamos-orin/build-gamescope)"
-    exec /usr/bin/steamos-session-select gamemode
-fi
+# Output and nested sizes are left to gamescope (the connector's preferred mode) unless set
+args=(--backend "${GAMESCOPE_BACKEND:-drm}" -f -e --xwayland-count 2)
+[[ -n ${GAMESCOPE_OUTPUT_W:-} && -n ${GAMESCOPE_OUTPUT_H:-} ]] && args+=(-W "$GAMESCOPE_OUTPUT_W" -H "$GAMESCOPE_OUTPUT_H")
+[[ -n ${GAMESCOPE_NESTED_W:-} && -n ${GAMESCOPE_NESTED_H:-} ]] && args+=(-w "$GAMESCOPE_NESTED_W" -h "$GAMESCOPE_NESTED_H")
 
-# shellcheck disable=SC2086
-gamescope --backend "${GAMESCOPE_BACKEND:-drm}" \
-    -W "${GAMESCOPE_OUTPUT_W:-1920}" -H "${GAMESCOPE_OUTPUT_H:-1080}" \
-    -w 1280 -h 720 -f -e --xwayland-count 2 \
-    ${GAMESCOPE_EXTRA_ARGS:-} \
-    -- /usr/lib/steamos-orin/steam-launch
+start=$(date +%s)
+# shellcheck disable=SC2086  # GAMESCOPE_EXTRA_ARGS is intentionally word-split
+gamescope "${args[@]}" ${GAMESCOPE_EXTRA_ARGS:-} -- /usr/lib/steamos-orin/steam-gamescope-loop
 rc=$?
-echo "gamescope exited rc=$rc"
-# gamescope failed to start (KMS/plane problems etc.): go back to the X11 Game Mode
-if (( rc != 0 )); then
-    exec /usr/bin/steamos-session-select gamemode
+ran=$(( $(date +%s) - start ))
+echo "gamescope exited rc=$rc after ${ran}s"
+# Failed to start (KMS/plane/Vulkan problems): X11 Game Mode for this boot.
+# A later exit (session switch, Steam quit, crash) just ends the session; SDDM relogs in.
+if (( rc != 0 && ran < ${GAMESCOPE_FALLBACK_WINDOW:-60} )); then
+    fallback "gamescope failed to start (rc=$rc)"
 fi
+exit 0

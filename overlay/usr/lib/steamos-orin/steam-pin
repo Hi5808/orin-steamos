@@ -1,0 +1,55 @@
+#!/bin/bash
+# Pin the Steam client to STEAM_CLIENT_PIN (/etc/default/steamos-orin) with Valve's steam.cfg
+# switches (BootStrapperInhibitAll / BootStrapperForceSelfUpdate). Run as the Steam user.
+#   steam-pin apply    called by steam-launch before every Steam start
+#   steam-pin status   show the installed version, the pin and whether updates are blocked
+# Valve's CDN only serves the current client, so a pin cannot downgrade: it is applied only
+# when the installed client already has the pinned version. Unpin: STEAM_CLIENT_PIN="".
+set -uo pipefail
+# shellcheck source=/dev/null
+[[ -r /etc/default/steamos-orin ]] && . /etc/default/steamos-orin
+STEAMROOT="${STEAMROOT:-$HOME/.local/share/Steam}"
+pin="${STEAM_CLIENT_PIN:-}"
+cfg="$STEAMROOT/steam.cfg"
+marker="# steamos-orin: STEAM_CLIENT_PIN"
+log() { echo "[steam-pin] $*" >&2; }
+
+installed_version() {
+    local m
+    for m in "$STEAMROOT"/package/steam_client_*linuxarm64.manifest; do
+        [[ -f $m ]] || continue
+        sed -n 's/^[[:space:]]*"version"[[:space:]]*"\([0-9]*\)".*/\1/p' "$m" | head -1
+        return
+    done
+}
+ours() { [[ -f $cfg ]] && grep -qF "$marker" "$cfg"; }
+
+cur="$(installed_version)"
+case "${1:-apply}" in
+    status)
+        if ours; then state=blocked; elif [[ -f $cfg ]]; then state="steam.cfg present (not ours)"; else state=allowed; fi
+        echo "installed: ${cur:-none}  pin: ${pin:-none}  updates: $state"
+        ;;
+    apply)
+        if [[ -z $pin ]]; then
+            ours && { rm -f "$cfg"; log "unpinned: removed $cfg"; }
+            exit 0
+        fi
+        if [[ -z $cur ]]; then
+            ours && rm -f "$cfg"          # client not fully installed yet: let it bootstrap
+            exit 0
+        fi
+        if [[ $cur != "$pin" ]]; then
+            ours && rm -f "$cfg"
+            log "installed client $cur != pin $pin: not blocking updates (a pin cannot downgrade);"
+            log "set STEAM_CLIENT_PIN=\"$cur\" to pin this build or STEAM_CLIENT_PIN=\"\" to silence"
+            exit 0
+        fi
+        if ! ours; then
+            [[ -f $cfg ]] && { log "$cfg exists and is not ours; leaving it alone"; exit 0; }
+            printf '%s=%s\nBootStrapperInhibitAll=enable\nBootStrapperForceSelfUpdate=disable\n' "$marker" "$pin" > "$cfg"
+            log "pinned client $pin (updates blocked via $cfg)"
+        fi
+        ;;
+    *) echo "usage: steam-pin [apply|status]" >&2; exit 2 ;;
+esac
