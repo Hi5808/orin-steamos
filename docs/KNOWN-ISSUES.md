@@ -104,10 +104,11 @@ the game and **Steam Cloud** re-sync it to DirectX12 on launch, so lock it with
 Re-test the DXR path (drop `nodxr`) on JetPack updates; include the coopmat/optical-flow
 advertisement bug in the NVIDIA report (see `NVIDIA-BUG-REPORT.md`, `BLACK-SCREEN-LOG.md`).
 
-## gamescope aborts on session restart/switch (X0 socket collision) — fallback masks it
+## gamescope aborts on session restart/switch (X0 socket collision) — FIXED
 
-**Status: open, root-caused 2026-10-18 (QA sweep). Not yet fixed.** Found via an Apport crash
-report (`/var/crash/_opt_gamescope_bin_gamescope.1000.crash`, SIGABRT) and the session log.
+**Status: FIXED 2026-10-18.** Root-caused in a QA sweep via an Apport crash report
+(`/var/crash/_opt_gamescope_bin_gamescope.1000.crash`, SIGABRT) and the session log; fixed by a
+pre-launch guard in `steam-gamescope-session` and validated live (see end of section).
 
 **Symptom.** On a session **restart or desktop→Game-Mode switch**, gamescope aborts at startup:
 ```
@@ -127,8 +128,12 @@ Xwayland cannot bind `:0` and aborts. The exit-segfault fix (`_exit(0)` after ch
 change #14) **skips Xwayland teardown**, which makes gamescope more likely to leave the X0 socket
 behind — so the segfault fix and this restart-abort are linked.
 
-**Proposed fix (not yet applied — touches the boot-critical launcher, validate on a reflash).**
-In `steam-gamescope-session`, before launching gamescope: bounded-wait for `:0`/`:1` to be free,
-and remove only `/tmp/.X{0,1}-lock` + sockets whose owning PID is already dead (never kill a live
-X server). Alternatively, have gamescope's Xwayland avoid `:0`. Until fixed, the crash-loop
-fallback keeps the device usable.
+**Fix (applied).** In `steam-gamescope-session`, before launching gamescope: bounded-wait (~10 s)
+for `:0`/`:1` to be free, and remove only `/tmp/.X{0,1}-lock` + sockets whose owning PID is already
+dead (never kill a live X server).
+
+**Validated live 2026-10-18** on the board over 4 desktop↔Game-Mode cycles (2 gamescope restarts):
+the guard fired (`clearing stale X`), there were **0** `X11 I/O error … Aborting`, **0** new
+`/var/crash` reports, **0** fallbacks to the X11 kiosk, and the final session came up healthy
+(gamescope + steamwebhelper up). A few non-fatal `Failed to bind … X0` retry lines still appear but
+no longer escalate to the fatal abort.
