@@ -1,0 +1,1368 @@
+[    0.000000] software IO TLB: area num 8.
+[    0.000000] software IO TLB: mapped [mem 0x00000000ffbe0000-0x00000000fffe0000] (4MB)
+[    0.000000] Memory: 7442412K/8050304K available (21248K kernel code, 5878K rwdata, 13332K rodata, 11584K init, 640K bss, 345748K reserved, 262144K cma-reserved)
+[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=6, Nodes=1
+[    0.000000] rcu: Preemptible hierarchical RCU implementation.
+[    0.000000] rcu: 	RCU event tracing is enabled.
+[    0.000000] rcu: 	RCU restricting CPUs from NR_CPUS=256 to nr_cpu_ids=6.
+[    0.000000] 	Trampoline variant of Tasks RCU enabled.
+[    0.000000] 	Tracing variant of Tasks RCU enabled.
+[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=6
+[    0.000000] RCU Tasks: Setting shift to 3 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=6.
+[    0.000000] RCU Tasks Trace: Setting shift to 3 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=6.
+[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000] GICv3: GIC: Using split EOI/Deactivate mode
+[    0.000000] GICv3: 960 SPIs implemented
+[    0.000000] GICv3: 0 Extended SPIs implemented
+[    0.000000] Root IRQ handler: gic_handle_irq
+[    0.000000] GICv3: GICv3 features: 16 PPIs
+[    0.000000] GICv3: CPU0: found redistributor 0 region 0:0x000000000f440000
+[    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.000000] arch_timer: cp15 timer(s) running at 31.25MHz (phys).
+[    0.000000] clocksource: arch_sys_counter: mask: 0xffffffffffffff max_cycles: 0xe6a171046, max_idle_ns: 881590405314 ns
+[    0.000000] sched_clock: 56 bits at 31MHz, resolution 32ns, wraps every 4398046511088ns
+[    0.000326] Console: colour dummy device 80x25
+[    0.000332] printk: legacy console [tty0] enabled
+[    0.000395] Calibrating delay loop (skipped), value calculated using timer frequency.. 62.50 BogoMIPS (lpj=125000)
+[    0.000399] pid_max: default: 32768 minimum: 301
+[    0.000443] LSM: initializing lsm=capability,landlock,yama,apparmor,integrity
+[    0.000453] landlock: Up and running.
+[    0.000454] Yama: becoming mindful.
+[    0.000484] AppArmor: AppArmor initialized
+[    0.000517] Mount-cache hash table entries: 16384 (order: 5, 131072 bytes, linear)
+[    0.000526] Mountpoint-cache hash table entries: 16384 (order: 5, 131072 bytes, linear)
+[    0.001242] rcu: Hierarchical SRCU implementation.
+[    0.001245] rcu: 	Max phase no-delay instances is 1000.
+[    0.002302] Tegra Revision: A01 SKU: 213 CPU Process: 0 SoC Process: 0
+[    0.003230] Remapping and enabling EFI services.
+[    0.003853] smp: Bringing up secondary CPUs ...
+[    0.004140] Detected PIPT I-cache on CPU1
+[    0.004174] GICv3: CPU1: found redistributor 100 region 0:0x000000000f460000
+[    0.004187] CPU1: Booted secondary processor 0x0000000100 [0x410fd421]
+[    0.004450] Detected PIPT I-cache on CPU2
+[    0.004470] GICv3: CPU2: found redistributor 200 region 0:0x000000000f480000
+[    0.004480] CPU2: Booted secondary processor 0x0000000200 [0x410fd421]
+[    0.004714] Detected PIPT I-cache on CPU3
+[    0.004734] GICv3: CPU3: found redistributor 300 region 0:0x000000000f4a0000
+[    0.004742] CPU3: Booted secondary processor 0x0000000300 [0x410fd421]
+[    0.006866] Detected PIPT I-cache on CPU4
+[    0.006906] GICv3: CPU4: found redistributor 10200 region 0:0x000000000f500000
+[    0.006924] CPU4: Booted secondary processor 0x0000010200 [0x410fd421]
+[    0.007196] Detected PIPT I-cache on CPU5
+[    0.007219] GICv3: CPU5: found redistributor 10300 region 0:0x000000000f520000
+[    0.007230] CPU5: Booted secondary processor 0x0000010300 [0x410fd421]
+[    0.007271] smp: Brought up 1 node, 6 CPUs
+[    0.007277] SMP: Total of 6 processors activated.
+[    0.007279] CPU: All CPU(s) started at EL2
+[    0.007281] CPU features: detected: 32-bit EL0 Support
+[    0.007283] CPU features: detected: Data cache clean to the PoU not required for I/D coherence
+[    0.007285] CPU features: detected: Common not Private translations
+[    0.007286] CPU features: detected: CRC32 instructions
+[    0.007287] CPU features: detected: Data cache clean to Point of Persistence
+[    0.007290] CPU features: detected: Generic authentication (architected QARMA5 algorithm)
+[    0.007291] CPU features: detected: RCpc load-acquire (LDAPR)
+[    0.007293] CPU features: detected: LSE atomic instructions
+[    0.007295] CPU features: detected: Privileged Access Never
+[    0.007296] CPU features: detected: RAS Extension Support
+[    0.007297] CPU features: detected: Speculative Store Bypassing Safe (SSBS)
+[    0.007329] alternatives: applying system-wide alternatives
+[    0.010036] CPU features: detected: Hardware dirty bit management on CPU0-5
+[    0.010533] devtmpfs: initialized
+[    0.016750] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+[    0.016757] futex hash table entries: 2048 (order: 5, 131072 bytes, linear)
+[    0.018325] pinctrl core: initialized pinctrl subsystem
+[    0.019396] SMBIOS 3.6.0 present.
+[    0.019404] DMI: NVIDIA NVIDIA Jetson Orin Nano Engineering Reference Developer Kit Super/Jetson, BIOS 39.2.1-gcid-46758480 08/07/2026
+[    0.019657] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    0.020126] DMA: preallocated 1024 KiB GFP_KERNEL pool for atomic allocations
+[    0.020171] DMA: preallocated 1024 KiB GFP_KERNEL|GFP_DMA pool for atomic allocations
+[    0.020210] DMA: preallocated 1024 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+[    0.020225] audit: initializing netlink subsys (disabled)
+[    0.020274] audit: type=2000 audit(0.016:1): state=initialized audit_enabled=0 res=1
+[    0.020876] thermal_sys: Registered thermal governor 'step_wise'
+[    0.020878] thermal_sys: Registered thermal governor 'user_space'
+[    0.020880] thermal_sys: Registered thermal governor 'power_allocator'
+[    0.020897] cpuidle: using governor menu
+[    0.021034] hw-breakpoint: found 6 breakpoint and 4 watchpoint registers.
+[    0.021077] ASID allocator initialised with 32768 entries
+[    0.021830] Serial: AMBA PL011 UART driver
+[    0.026522] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/processing-engine@2908000
+[    0.026530] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/asrc@2910000
+[    0.026535] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/amixer@290bb00
+[    0.026539] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/adx@2903b00
+[    0.026543] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/adx@2903a00
+[    0.026547] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/adx@2903900
+[    0.026551] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/adx@2903800
+[    0.026555] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/amx@2903300
+[    0.026560] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/amx@2903200
+[    0.026564] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/amx@2903100
+[    0.026568] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/amx@2903000
+[    0.026572] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/mvc@290a200
+[    0.026576] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/mvc@290a000
+[    0.026581] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/sfc@2902600
+[    0.026585] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/sfc@2902400
+[    0.026589] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/sfc@2902200
+[    0.026592] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/sfc@2902000
+[    0.026596] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/i2s@2901300
+[    0.026600] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/i2s@2901100
+[    0.026605] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/admaif@290f000
+[    0.026613] /bus@0/aconnect@2900000/ahub@2900800/i2s@2901100: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.026622] /bus@0/aconnect@2900000/ahub@2900800/i2s@2901300: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.026632] /bus@0/aconnect@2900000/ahub@2900800/sfc@2902000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.026641] /bus@0/aconnect@2900000/ahub@2900800/sfc@2902200: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.026649] /bus@0/aconnect@2900000/ahub@2900800/sfc@2902400: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.026657] /bus@0/aconnect@2900000/ahub@2900800/sfc@2902600: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.026666] /bus@0/aconnect@2900000/ahub@2900800/amx@2903000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.026675] /bus@0/aconnect@2900000/ahub@2900800/amx@2903100: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.026684] /bus@0/aconnect@2900000/ahub@2900800/amx@2903200: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.026694] /bus@0/aconnect@2900000/ahub@2900800/amx@2903300: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.026703] /bus@0/aconnect@2900000/ahub@2900800/adx@2903800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.026713] /bus@0/aconnect@2900000/ahub@2900800/adx@2903900: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.026722] /bus@0/aconnect@2900000/ahub@2900800/adx@2903a00: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.026731] /bus@0/aconnect@2900000/ahub@2900800/adx@2903b00: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.026742] /bus@0/aconnect@2900000/ahub@2900800/processing-engine@2908000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.026751] /bus@0/aconnect@2900000/ahub@2900800/mvc@290a000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.026760] /bus@0/aconnect@2900000/ahub@2900800/mvc@290a200: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.026769] /bus@0/aconnect@2900000/ahub@2900800/amixer@290bb00: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.026780] /bus@0/aconnect@2900000/ahub@2900800/admaif@290f000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.026794] /bus@0/aconnect@2900000/ahub@2900800/asrc@2910000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.026852] /bus@0/padctl@3520000/ports/usb2-0: Fixed dependency cycle(s) with /bus@0/i2c@c240000/fusb301@25/connector@0
+[    0.026881] /bus@0/i2c@c240000/fusb301@25/connector@0: Fixed dependency cycle(s) with /bus@0/padctl@3520000/ports/usb2-0
+[    0.026891] /bus@0/interrupt-controller@f400000: Fixed dependency cycle(s) with /bus@0/interrupt-controller@f400000
+[    0.026935] /bus@0/aon@c000000: Fixed dependency cycle(s) with /bus@0/aon@c000000
+[    0.027540] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/processing-engine@2908000
+[    0.027545] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/asrc@2910000
+[    0.027549] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/amixer@290bb00
+[    0.027553] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/adx@2903b00
+[    0.027557] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/adx@2903a00
+[    0.027561] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/adx@2903900
+[    0.027565] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/adx@2903800
+[    0.027568] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/amx@2903300
+[    0.027572] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/amx@2903200
+[    0.027576] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/amx@2903100
+[    0.027580] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/amx@2903000
+[    0.027583] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/mvc@290a200
+[    0.027587] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/mvc@290a000
+[    0.027591] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/sfc@2902600
+[    0.027595] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/sfc@2902400
+[    0.027599] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/sfc@2902200
+[    0.027603] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/sfc@2902000
+[    0.027606] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/i2s@2901300
+[    0.027610] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/i2s@2901100
+[    0.027615] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/admaif@290f000
+[    0.027625] /bus@0/aconnect@2900000/ahub@2900800/i2s@2901100: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.027635] /bus@0/aconnect@2900000/ahub@2900800/i2s@2901300: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.027646] /bus@0/aconnect@2900000/ahub@2900800/sfc@2902000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.027656] /bus@0/aconnect@2900000/ahub@2900800/sfc@2902200: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.027667] /bus@0/aconnect@2900000/ahub@2900800/sfc@2902400: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.027677] /bus@0/aconnect@2900000/ahub@2900800/sfc@2902600: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.027687] /bus@0/aconnect@2900000/ahub@2900800/amx@2903000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.027698] /bus@0/aconnect@2900000/ahub@2900800/amx@2903100: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.027709] /bus@0/aconnect@2900000/ahub@2900800/amx@2903200: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.027719] /bus@0/aconnect@2900000/ahub@2900800/amx@2903300: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.027731] /bus@0/aconnect@2900000/ahub@2900800/adx@2903800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.027741] /bus@0/aconnect@2900000/ahub@2900800/adx@2903900: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.027752] /bus@0/aconnect@2900000/ahub@2900800/adx@2903a00: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.027763] /bus@0/aconnect@2900000/ahub@2900800/adx@2903b00: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.027775] /bus@0/aconnect@2900000/ahub@2900800/processing-engine@2908000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.027786] /bus@0/aconnect@2900000/ahub@2900800/mvc@290a000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.027796] /bus@0/aconnect@2900000/ahub@2900800/mvc@290a200: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.027806] /bus@0/aconnect@2900000/ahub@2900800/amixer@290bb00: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.027819] /bus@0/aconnect@2900000/ahub@2900800/admaif@290f000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.027834] /bus@0/aconnect@2900000/ahub@2900800/asrc@2910000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    0.028718] 31d0000.serial: ttyAMA0 at MMIO 0x31d0000 (irq = 15, base_baud = 0) is a SBSA
+[    0.029368] /bus@0/padctl@3520000/ports/usb2-0: Fixed dependency cycle(s) with /bus@0/i2c@c240000/fusb301@25/connector@0
+[    0.031498] /bus@0/i2c@c240000/fusb301@25/connector@0: Fixed dependency cycle(s) with /bus@0/padctl@3520000/ports/usb2-0
+[    0.033776] /bus@0/aon@c000000: Fixed dependency cycle(s) with /bus@0/aon@c000000
+[    0.034289] /bus@0/memory-controller@2c00000/external-memory-controller@2c60000: Fixed dependency cycle(s) with /bpmp
+[    0.034339] /bpmp: Fixed dependency cycle(s) with /bus@0/memory-controller@2c00000/external-memory-controller@2c60000
+[    0.037395] Modules: 2G module region forced by RANDOMIZE_MODULE_REGION_FULL
+[    0.037399] Modules: 0 pages in range for non-PLT usage
+[    0.037400] Modules: 511056 pages in range for PLT usage
+[    0.037763] HugeTLB: registered 1.00 GiB page size, pre-allocated 0 pages
+[    0.037768] HugeTLB: 0 KiB vmemmap can be freed for a 1.00 GiB page
+[    0.037770] HugeTLB: registered 32.0 MiB page size, pre-allocated 0 pages
+[    0.037771] HugeTLB: 0 KiB vmemmap can be freed for a 32.0 MiB page
+[    0.037773] HugeTLB: registered 2.00 MiB page size, pre-allocated 0 pages
+[    0.037774] HugeTLB: 0 KiB vmemmap can be freed for a 2.00 MiB page
+[    0.037775] HugeTLB: registered 64.0 KiB page size, pre-allocated 0 pages
+[    0.037776] HugeTLB: 0 KiB vmemmap can be freed for a 64.0 KiB page
+[    0.038384] ACPI: Interpreter disabled.
+[    0.039433] iommu: Default domain type: Translated
+[    0.039436] iommu: DMA domain TLB invalidation policy: strict mode
+[    0.042365] SCSI subsystem initialized
+[    0.042410] libata version 3.00 loaded.
+[    0.042466] usbcore: registered new interface driver usbfs
+[    0.042476] usbcore: registered new interface driver hub
+[    0.042485] usbcore: registered new device driver usb
+[    0.042838] pps_core: LinuxPPS API ver. 1 registered
+[    0.042840] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+[    0.042846] PTP clock support registered
+[    0.042895] EDAC MC: Ver: 3.0.0
+[    0.043146] ARM FF-A: FFA_VERSION returned not supported
+[    0.043159] scmi_core: SCMI protocol bus registered
+[    0.043366] efivars: Registered efivars operations
+[    0.043793] FPGA manager framework
+[    0.043837] Advanced Linux Sound Architecture Driver Initialized.
+[    0.044103] vgaarb: loaded
+[    0.044296] clocksource: Switched to clocksource arch_sys_counter
+[    0.044440] VFS: Disk quotas dquot_6.6.0
+[    0.044452] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+[    0.044673] AppArmor: AppArmor Filesystem Enabled
+[    0.044683] pnp: PnP ACPI: disabled
+[    0.046180] NET: Registered PF_INET protocol family
+[    0.046260] IP idents hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+[    0.048122] tcp_listen_portaddr_hash hash table entries: 4096 (order: 4, 65536 bytes, linear)
+[    0.048155] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    0.048160] TCP established hash table entries: 65536 (order: 7, 524288 bytes, linear)
+[    0.048401] TCP bind hash table entries: 65536 (order: 9, 2097152 bytes, linear)
+[    0.049296] TCP: Hash tables configured (established 65536 bind 65536)
+[    0.049333] UDP hash table entries: 4096 (order: 5, 131072 bytes, linear)
+[    0.049420] UDP-Lite hash table entries: 4096 (order: 5, 131072 bytes, linear)
+[    0.049549] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    0.049675] RPC: Registered named UNIX socket transport module.
+[    0.049678] RPC: Registered udp transport module.
+[    0.049679] RPC: Registered tcp transport module.
+[    0.049680] RPC: Registered tcp-with-tls transport module.
+[    0.049681] RPC: Registered tcp NFSv4.1 backchannel transport module.
+[    0.049687] PCI: CLS 0 bytes, default 64
+[    0.049752] Unpacking initramfs...
+[    0.056339] kvm [1]: IPA Size Limit: 48 bits
+[    0.056351] kvm [1]: GICv3: no GICV resource entry
+[    0.056353] kvm [1]: disabling GICv2 emulation
+[    0.056365] kvm [1]: GIC system register CPU interface enabled
+[    0.056377] kvm [1]: vgic interrupt IRQ9
+[    0.056393] kvm [1]: VHE mode initialized successfully
+[    0.056799] Initialise system trusted keyrings
+[    0.056809] Key type blacklist registered
+[    0.056843] workingset: timestamp_bits=42 max_order=21 bucket_order=0
+[    0.057011] squashfs: version 4.0 (2009/01/31) Phillip Lougher
+[    0.057104] NFS: Registering the id_resolver key type
+[    0.057110] Key type id_resolver registered
+[    0.057112] Key type id_legacy registered
+[    0.057118] nfs4filelayout_init: NFSv4 File Layout Driver Registering...
+[    0.057123] nfs4flexfilelayout_init: NFSv4 Flexfile Layout Driver Registering...
+[    0.057131] ntfs: driver 2.1.32 [Flags: R/O].
+[    0.057176] 9p: Installing v9fs 9p2000 file system support
+[    0.057225] integrity: Platform Keyring initialized
+[    0.073405] Key type asymmetric registered
+[    0.073408] Asymmetric key parser 'x509' registered
+[    0.073428] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 244)
+[    0.073431] io scheduler mq-deadline registered
+[    0.073433] io scheduler kyber registered
+[    0.073450] io scheduler bfq registered
+[    0.080027] EINJ: ACPI disabled.
+[    0.091049] Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+[    0.092280] msm_serial: driver initialized
+[    0.092439] SuperH (H)SCI(F) driver initialized
+[    0.092517] STM32 USART driver initialized
+[    0.092878] printk: legacy console [ttyTCU0] enabled
+[    0.093547] arm-smmu 8000000.iommu: probing hardware configuration...
+[    0.093550] arm-smmu 8000000.iommu: SMMUv2 with:
+[    0.093553] arm-smmu 8000000.iommu: 	stage 1 translation
+[    0.093555] arm-smmu 8000000.iommu: 	stage 2 translation
+[    0.093556] arm-smmu 8000000.iommu: 	nested translation
+[    0.093560] arm-smmu 8000000.iommu: 	stream matching with 128 register groups
+[    0.093563] arm-smmu 8000000.iommu: 	128 context banks (0 stage-2 only)
+[    0.093567] arm-smmu 8000000.iommu: 	Supported page sizes: 0x61311000
+[    0.093569] arm-smmu 8000000.iommu: 	Stage-1: 48-bit VA -> 48-bit IPA
+[    0.093571] arm-smmu 8000000.iommu: 	Stage-2: 48-bit IPA -> 48-bit PA
+[    0.093633] arm-smmu 8000000.iommu: 	preserved 0 boot mappings
+[    0.094309] arm-smmu 10000000.iommu: probing hardware configuration...
+[    0.094312] arm-smmu 10000000.iommu: SMMUv2 with:
+[    0.094314] arm-smmu 10000000.iommu: 	stage 1 translation
+[    0.094315] arm-smmu 10000000.iommu: 	stage 2 translation
+[    0.094316] arm-smmu 10000000.iommu: 	nested translation
+[    0.094318] arm-smmu 10000000.iommu: 	stream matching with 128 register groups
+[    0.094321] arm-smmu 10000000.iommu: 	128 context banks (0 stage-2 only)
+[    0.094326] arm-smmu 10000000.iommu: 	Supported page sizes: 0x61311000
+[    0.094328] arm-smmu 10000000.iommu: 	Stage-1: 48-bit VA -> 48-bit IPA
+[    0.094329] arm-smmu 10000000.iommu: 	Stage-2: 48-bit IPA -> 48-bit PA
+[    0.094367] arm-smmu 10000000.iommu: 	preserved 0 boot mappings
+[    0.094753] arm-smmu 12000000.iommu: probing hardware configuration...
+[    0.094755] arm-smmu 12000000.iommu: SMMUv2 with:
+[    0.094757] arm-smmu 12000000.iommu: 	stage 1 translation
+[    0.094759] arm-smmu 12000000.iommu: 	stage 2 translation
+[    0.094760] arm-smmu 12000000.iommu: 	nested translation
+[    0.094762] arm-smmu 12000000.iommu: 	stream matching with 128 register groups
+[    0.094764] arm-smmu 12000000.iommu: 	128 context banks (0 stage-2 only)
+[    0.094767] arm-smmu 12000000.iommu: 	Supported page sizes: 0x61311000
+[    0.094768] arm-smmu 12000000.iommu: 	Stage-1: 48-bit VA -> 48-bit IPA
+[    0.094770] arm-smmu 12000000.iommu: 	Stage-2: 48-bit IPA -> 48-bit PA
+[    0.094810] arm-smmu 12000000.iommu: 	preserved 0 boot mappings
+[    0.097034] loop: module loaded
+[    0.097454] megasas: 07.727.03.00-rc1
+[    0.099760] tun: Universal TUN/TAP device driver, 1.6
+[    0.100122] thunder_xcv, ver 1.0
+[    0.100134] thunder_bgx, ver 1.0
+[    0.100145] nicpf, ver 1.0
+[    0.100656] hns3: Hisilicon Ethernet Network Driver for Hip08 Family - version
+[    0.100659] hns3: Copyright (c) 2017 Huawei Corporation.
+[    0.100673] hclge is initializing
+[    0.100685] e1000: Intel(R) PRO/1000 Network Driver
+[    0.100687] e1000: Copyright (c) 1999-2006 Intel Corporation.
+[    0.100696] e1000e: Intel(R) PRO/1000 Network Driver
+[    0.100698] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+[    0.100709] igb: Intel(R) Gigabit Ethernet Network Driver
+[    0.100711] igb: Copyright (c) 2007-2014 Intel Corporation.
+[    0.100719] igbvf: Intel(R) Gigabit Virtual Function Network Driver
+[    0.100721] igbvf: Copyright (c) 2009 - 2012 Intel Corporation.
+[    0.100854] sky2: driver version 1.30
+[    0.101291] PPP generic driver version 2.4.2
+[    0.101413] VFIO - User Level meta-driver version: 0.3
+[    0.102745] usbcore: registered new interface driver usb-storage
+[    0.103981] i2c_dev: i2c /dev entries driver
+[    0.104935] pps_ldisc: PPS line discipline registered
+[    0.106606] device-mapper: ioctl: 4.48.0-ioctl (2023-03-01) initialised: dm-devel@redhat.com
+[    0.107417] sdhci: Secure Digital Host Controller Interface driver
+[    0.107420] sdhci: Copyright(c) Pierre Ossman
+[    0.107738] Synopsys Designware Multimedia Card Interface Driver
+[    0.108169] sdhci-pltfm: SDHCI platform and OF driver helper
+[    0.109109] ledtrig-cpu: registered to indicate activity on CPUs
+[    0.109445] SMCCC: SOC_ID: ID = jep106:036b:0234 Revision = 0x00000001
+[    0.109615] tegra-bpmp bpmp: Adding to iommu group 0
+[    0.110113] tegra-bpmp bpmp: firmware: 25124d2c239300e0a924-bfff9e30f72
+[    0.221736] Freeing initrd memory: 11108K
+[    1.262917] clocksource: tsc: mask: 0xffffffffffffff max_cycles: 0xe6a171046, max_idle_ns: 881590405314 ns
+[    1.262925] clocksource: osc: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 49772407460 ns
+[    1.262928] clocksource: usec: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1911260446275 ns
+[    1.263004] hid: raw HID events driver (C) Jiri Kosina
+[    1.263170] usbcore: registered new interface driver usbhid
+[    1.263172] usbhid: USB HID core driver
+[    1.265986] hw perfevents: enabled with armv8_cortex_a78 PMU driver, 7 counters available
+[    1.267082] optee: probing for conduit method.
+[    1.267097] optee: revision 4.6 (565c76420cf641dd)
+[    1.325534] optee: dynamic shared memory is enabled
+[    1.325680] optee: initialized driver
+[    1.325716] Driver 'optee' was unable to register with bus_type 'arm_ffa' because the bus was not initialized.
+[    1.326763] usbcore: registered new interface driver snd-usb-audio
+[    1.327128] u32 classifier
+[    1.327131]     input device check on
+[    1.327132]     Actions configured
+[    1.327196] NET: Registered PF_PACKET protocol family
+[    1.327234] 9pnet: Installing 9P2000 support
+[    1.327257] Key type dns_resolver registered
+[    1.330211] registered taskstats version 1
+[    1.330278] Loading compiled-in X.509 certificates
+[    1.331046] Loaded X.509 cert 'Build time autogenerated kernel key: ec804eb170e00f516f62af1d1c810ac5ad3b170e'
+[    1.333434] AppArmor: AppArmor sha256 policy hashing enabled
+[    1.343981] tegra-gpcdma 2600000.dma-controller: Adding to iommu group 1
+[    1.344690] tegra-gpcdma 2600000.dma-controller: GPC DMA driver register 31 channels
+[    1.345228] serial-tegra 3100000.serial: Adding to iommu group 1
+[    1.345328] 3100000.serial: ttyTHS1 at MMIO 0x3100000 (irq = 133, base_baud = 0) is a TEGRA_UART
+[    1.345614] serial-tegra 3140000.serial: Adding to iommu group 1
+[    1.345711] 3140000.serial: ttyTHS2 at MMIO 0x3140000 (irq = 134, base_baud = 0) is a TEGRA_UART
+[    1.353816] [drm] Initialized simpledrm 1.0.0 20200625 for chosen:framebuffer on minor 0
+[    1.357713] Console: switching to colour frame buffer device 210x65
+[    1.361972] simple-framebuffer chosen:framebuffer: [drm] fb0: simpledrmdrmfb frame buffer device
+[    1.363393] tegra_rtc c2a0000.rtc: registered as rtc1
+[    1.363400] tegra_rtc c2a0000.rtc: Tegra internal Real Time Clock
+[    1.363656] tegra-i2c 3160000.i2c: Adding to iommu group 1
+[    1.364975] tegra-i2c 3180000.i2c: Adding to iommu group 1
+[    1.365976] tegra-i2c 31b0000.i2c: Adding to iommu group 1
+[    1.366948] tegra-i2c c240000.i2c: Adding to iommu group 1
+[    1.367788] /bus@0/i2c@c240000/fusb301@25/connector@0: Fixed dependency cycle(s) with /bus@0/padctl@3520000/ports/usb2-0
+[    1.368036] tegra-i2c c250000.i2c: Adding to iommu group 1
+[    1.372300] cpufreq: cpufreq_online: CPU4: Running at unlisted initial frequency: 1770000 KHz, changing to: 1728000 KHz
+[    1.373997] /bus@0/i2c@c240000/fusb301@25/connector@0: Fixed dependency cycle(s) with /bus@0/padctl@3520000/ports/usb2-0
+[    1.374023] /bus@0/padctl@3520000/ports/usb2-0: Fixed dependency cycle(s) with /bus@0/i2c@c240000/fusb301@25/connector@0
+[    1.374522] tegra-xusb 3610000.usb: Adding to iommu group 2
+[    1.388307] tegra-xusb 3610000.usb: Firmware timestamp: 2023-02-10 03:48:10 UTC, Version: 80.05 release
+[    1.388316] tegra-xusb 3610000.usb: xHCI Host Controller
+[    1.388324] tegra-xusb 3610000.usb: new USB bus registered, assigned bus number 1
+[    1.389057] tegra-xusb 3610000.usb: hcc params 0x0180ff05 hci version 0x120 quirks 0x0000000000000810
+[    1.389072] tegra-xusb 3610000.usb: irq 141, io mem 0x03610000
+[    1.389153] tegra-xusb 3610000.usb: xHCI Host Controller
+[    1.389157] tegra-xusb 3610000.usb: new USB bus registered, assigned bus number 2
+[    1.389161] tegra-xusb 3610000.usb: Host supports USB 3.1 Enhanced SuperSpeed
+[    1.389252] usb usb1: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.08
+[    1.389258] usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    1.389261] usb usb1: Product: xHCI Host Controller
+[    1.389263] usb usb1: Manufacturer: Linux 6.8.12-1021-tegra xhci-hcd
+[    1.389265] usb usb1: SerialNumber: 3610000.usb
+[    1.389421] hub 1-0:1.0: USB hub found
+[    1.389438] hub 1-0:1.0: 4 ports detected
+[    1.389666] usb usb2: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 6.08
+[    1.389670] usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    1.389672] usb usb2: Product: xHCI Host Controller
+[    1.389674] usb usb2: Manufacturer: Linux 6.8.12-1021-tegra xhci-hcd
+[    1.389675] usb usb2: SerialNumber: 3610000.usb
+[    1.389777] hub 2-0:1.0: USB hub found
+[    1.389791] hub 2-0:1.0: 4 ports detected
+[    1.391350] irq: IRQ150: trimming hierarchy from :bus@0:pmc@c360000
+[    1.392404] irq: IRQ151: trimming hierarchy from :bus@0:interrupt-controller@f400000-1
+[    1.392461] input: gpio-keys as /devices/platform/gpio-keys/input/input0
+[    1.392848] clk: Disabling unused clocks
+[    1.421954] ALSA device list:
+[    1.421958]   No soundcards found.
+[    1.423495] Freeing unused kernel memory: 11584K
+[    1.423542] Run /init as init process
+[    1.423544]   with arguments:
+[    1.423546]     /init
+[    1.423547]   with environment:
+[    1.423548]     HOME=/
+[    1.423549]     TERM=linux
+[    1.423550]     bl_prof_dataptr=2031616@0x267210000
+[    1.423552]     bl_prof_ro_ptr=65536@0x267200000
+[    1.432757] Checking overlayfs setting...
+[    1.449963] Overlayfs is disabled...
+[    1.455250] Root device found: PARTUUID=42752956-097c-440b-8652-16d5329a3335
+[    1.477911] tegra194-pcie 14100000.pcie: Adding to iommu group 3
+[    1.478595] irq: IRQ176: trimming hierarchy from :bus@0:interrupt-controller@f400000-1
+[    1.479320] tegra194-pcie 14100000.pcie: host bridge /bus@0/pcie@14100000 ranges:
+[    1.479335] tegra194-pcie 14100000.pcie:      MEM 0x2080000000..0x20a7ffffff -> 0x2080000000
+[    1.479343] tegra194-pcie 14100000.pcie:      MEM 0x20a8000000..0x20afffffff -> 0x0040000000
+[    1.479348] tegra194-pcie 14100000.pcie:       IO 0x0030100000..0x00301fffff -> 0x0030100000
+[    1.479652] tegra194-pcie 14100000.pcie: iATU: unroll T, 8 ob, 2 ib, align 64K, limit 32G
+[    1.500032] usbcore: registered new interface driver uas
+[    1.503766] tegra-xudc 3550000.usb: Adding to iommu group 4
+[    1.648301] usb 1-2: new high-speed USB device number 2 using tegra-xusb
+[    1.692438] tegra194-pcie 14100000.pcie: PCIe Gen.1 x1 link up
+[    1.800308] tegra194-pcie 14100000.pcie: PCIe Gen.1 x1 link up
+[    1.800518] tegra194-pcie 14100000.pcie: PCI host bridge to bus 0001:00
+[    1.800525] pci_bus 0001:00: root bus resource [bus 00-ff]
+[    1.800529] pci_bus 0001:00: root bus resource [mem 0x2080000000-0x20a7ffffff pref]
+[    1.800533] pci_bus 0001:00: root bus resource [mem 0x20a8000000-0x20afffffff] (bus address [0x40000000-0x47ffffff])
+[    1.800535] pci_bus 0001:00: root bus resource [io  0x0000-0xfffff] (bus address [0x30100000-0x301fffff])
+[    1.800567] pci 0001:00:00.0: [10de:229e] type 01 class 0x060400 PCIe Root Port
+[    1.800599] pci 0001:00:00.0: PCI bridge to [bus 01-ff]
+[    1.800609] pci 0001:00:00.0:   bridge window [io  0x0000-0x0fff]
+[    1.800614] pci 0001:00:00.0:   bridge window [mem 0x00000000-0x000fffff]
+[    1.800626] pci 0001:00:00.0:   bridge window [mem 0x00000000-0x000fffff 64bit pref]
+[    1.800749] pci 0001:00:00.0: PME# supported from D0 D3hot
+[    1.802181] usb 1-2: New USB device found, idVendor=2109, idProduct=2822, bcdDevice= 7.f3
+[    1.802187] usb 1-2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[    1.802190] usb 1-2: Product: USB2.0 Hub             
+[    1.802193] usb 1-2: Manufacturer: VIA Labs, Inc.         
+[    1.802195] usb 1-2: SerialNumber: 000000001
+[    1.803007] hub 1-2:1.0: USB hub found
+[    1.803111] pci 0001:01:00.0: [10ec:c822] type 00 class 0x028000 PCIe Endpoint
+[    1.803479] hub 1-2:1.0: 4 ports detected
+[    1.803622] pci 0001:01:00.0: BAR 0 [io  0x0000-0x00ff]
+[    1.803668] pci 0001:01:00.0: BAR 2 [mem 0x20a8000000-0x20a800ffff 64bit]
+[    1.804602] pci 0001:01:00.0: supports D1 D2
+[    1.804604] pci 0001:01:00.0: PME# supported from D0 D1 D2 D3hot D3cold
+[    1.816509] pci 0001:00:00.0: bridge window [mem 0x20a8000000-0x20a80fffff]: assigned
+[    1.816513] pci 0001:00:00.0: bridge window [io  0x1000-0x1fff]: assigned
+[    1.816517] pci 0001:01:00.0: BAR 2 [mem 0x20a8000000-0x20a800ffff 64bit]: assigned
+[    1.816618] pci 0001:01:00.0: BAR 0 [io  0x1000-0x10ff]: assigned
+[    1.816649] pci 0001:00:00.0: PCI bridge to [bus 01-ff]
+[    1.816652] pci 0001:00:00.0:   bridge window [io  0x1000-0x1fff]
+[    1.816657] pci 0001:00:00.0:   bridge window [mem 0x20a8000000-0x20a80fffff]
+[    1.816666] pci_bus 0001:00: resource 4 [mem 0x2080000000-0x20a7ffffff pref]
+[    1.816668] pci_bus 0001:00: resource 5 [mem 0x20a8000000-0x20afffffff]
+[    1.816671] pci_bus 0001:00: resource 6 [io  0x0000-0xfffff]
+[    1.816673] pci_bus 0001:01: resource 0 [io  0x1000-0x1fff]
+[    1.816675] pci_bus 0001:01: resource 1 [mem 0x20a8000000-0x20a80fffff]
+[    1.816689] pci 0001:00:00.0: Max Payload Size set to  256/ 256 (was  128), Max Read Rq  256
+[    1.816834] pci 0001:01:00.0: Max Payload Size set to  128/ 128 (was  128), Max Read Rq  128
+[    1.816925] pcieport 0001:00:00.0: Adding to iommu group 3
+[    1.817006] pcieport 0001:00:00.0: PME: Signaling with IRQ 177
+[    1.817220] pcieport 0001:00:00.0: AER: enabled with IRQ 177
+[    1.818001] tegra194-pcie 14160000.pcie: Adding to iommu group 5
+[    1.819196] tegra194-pcie 14160000.pcie: host bridge /bus@0/pcie@14160000 ranges:
+[    1.819208] tegra194-pcie 14160000.pcie:      MEM 0x2140000000..0x2427ffffff -> 0x2140000000
+[    1.819215] tegra194-pcie 14160000.pcie:      MEM 0x2428000000..0x242fffffff -> 0x0040000000
+[    1.819218] tegra194-pcie 14160000.pcie:       IO 0x0036100000..0x00361fffff -> 0x0036100000
+[    1.819512] tegra194-pcie 14160000.pcie: iATU: unroll T, 8 ob, 2 ib, align 64K, limit 32G
+[    1.928110] usb 2-1: new SuperSpeed Plus Gen 2x1 USB device number 2 using tegra-xusb
+[    1.976854] usb 2-1: New USB device found, idVendor=2109, idProduct=0822, bcdDevice= 7.f3
+[    1.976862] usb 2-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[    1.976865] usb 2-1: Product: USB3.1 Hub             
+[    1.976866] usb 2-1: Manufacturer: VIA Labs, Inc.         
+[    1.976868] usb 2-1: SerialNumber: 000000001
+[    1.978332] hub 2-1:1.0: USB hub found
+[    1.978737] hub 2-1:1.0: 4 ports detected
+[    2.032437] tegra194-pcie 14160000.pcie: PCIe Gen.3 x4 link up
+[    2.100306] usb 1-3: new full-speed USB device number 3 using tegra-xusb
+[    2.140314] tegra194-pcie 14160000.pcie: PCIe Gen.3 x4 link up
+[    2.140370] tegra194-pcie 14160000.pcie: PCI host bridge to bus 0004:00
+[    2.140377] pci_bus 0004:00: root bus resource [bus 00-ff]
+[    2.140380] pci_bus 0004:00: root bus resource [mem 0x2140000000-0x2427ffffff pref]
+[    2.140383] pci_bus 0004:00: root bus resource [mem 0x2428000000-0x242fffffff] (bus address [0x40000000-0x47ffffff])
+[    2.140386] pci_bus 0004:00: root bus resource [io  0x100000-0x1fffff] (bus address [0x36100000-0x361fffff])
+[    2.140413] pci 0004:00:00.0: [10de:229c] type 01 class 0x060400 PCIe Root Port
+[    2.140442] pci 0004:00:00.0: PCI bridge to [bus 01-ff]
+[    2.140451] pci 0004:00:00.0:   bridge window [io  0x0000-0x0fff]
+[    2.140455] pci 0004:00:00.0:   bridge window [mem 0x00000000-0x000fffff]
+[    2.140467] pci 0004:00:00.0:   bridge window [mem 0x00000000-0x000fffff 64bit pref]
+[    2.140577] pci 0004:00:00.0: PME# supported from D0 D3hot
+[    2.142916] pci 0004:01:00.0: [1d97:5216] type 00 class 0x010802 PCIe Endpoint
+[    2.143351] pci 0004:01:00.0: BAR 0 [mem 0x00000000-0x00003fff 64bit]
+[    2.143412] pci 0004:01:00.0: ROM [mem 0x00000000-0x0001ffff pref]
+[    2.160460] pci 0004:00:00.0: bridge window [mem 0x2428000000-0x24280fffff]: assigned
+[    2.160465] pci 0004:01:00.0: ROM [mem 0x2428000000-0x242801ffff pref]: assigned
+[    2.160469] pci 0004:01:00.0: BAR 0 [mem 0x2428020000-0x2428023fff 64bit]: assigned
+[    2.160552] pci 0004:00:00.0: PCI bridge to [bus 01-ff]
+[    2.160557] pci 0004:00:00.0:   bridge window [mem 0x2428000000-0x24280fffff]
+[    2.160565] pci_bus 0004:00: resource 4 [mem 0x2140000000-0x2427ffffff pref]
+[    2.160568] pci_bus 0004:00: resource 5 [mem 0x2428000000-0x242fffffff]
+[    2.160570] pci_bus 0004:00: resource 6 [io  0x100000-0x1fffff]
+[    2.160572] pci_bus 0004:01: resource 1 [mem 0x2428000000-0x24280fffff]
+[    2.160585] pci 0004:00:00.0: Max Payload Size set to  256/ 256 (was  128), Max Read Rq  256
+[    2.160706] pci 0004:01:00.0: Max Payload Size set to  256/ 512 (was  128), Max Read Rq  256
+[    2.160791] pcieport 0004:00:00.0: Adding to iommu group 5
+[    2.160866] pcieport 0004:00:00.0: PME: Signaling with IRQ 180
+[    2.160953] pcieport 0004:00:00.0: AER: enabled with IRQ 180
+[    2.161120] nvme 0004:01:00.0: Adding to iommu group 5
+[    2.161289] nvme nvme0: pci function 0004:01:00.0
+[    2.161316] nvme 0004:01:00.0: enabling device (0000 -> 0002)
+[    2.164547] nvme nvme0: Shutdown timeout set to 8 seconds
+[    2.165681] hwmon hwmon1: temp1_input not attached to any thermal zone
+[    2.174697] nvme nvme0: allocated 64 MiB host memory buffer.
+[    2.240703] nvme nvme0: 6/0/0 default/read/poll queues
+[    2.242749]  nvme0n1: p1 p2 p3 p4 p5 p6 p7 p8 p9 p10 p11 p12 p13 p14 p15
+[    2.244020] tegra194-pcie 141e0000.pcie: Adding to iommu group 6
+[    2.245187] tegra194-pcie 141e0000.pcie: host bridge /bus@0/pcie@141e0000 ranges:
+[    2.245200] tegra194-pcie 141e0000.pcie:      MEM 0x3000000000..0x3227ffffff -> 0x3000000000
+[    2.245206] tegra194-pcie 141e0000.pcie:      MEM 0x3228000000..0x322fffffff -> 0x0040000000
+[    2.245210] tegra194-pcie 141e0000.pcie:       IO 0x003e100000..0x003e1fffff -> 0x003e100000
+[    2.245518] tegra194-pcie 141e0000.pcie: iATU: unroll T, 8 ob, 2 ib, align 64K, limit 32G
+[    2.252390] usb 1-3: New USB device found, idVendor=0bda, idProduct=c822, bcdDevice= 0.00
+[    2.252397] usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[    2.252399] usb 1-3: Product: Bluetooth Radio 
+[    2.252401] usb 1-3: Manufacturer: Realtek 
+[    2.252403] usb 1-3: SerialNumber: 00e04c000001
+[    2.537946] usb 1-2.3: new full-speed USB device number 4 using tegra-xusb
+[    2.667846] EXT4-fs (nvme0n1p1): 3 orphan inodes deleted
+[    2.667858] EXT4-fs (nvme0n1p1): recovery complete
+[    2.669370] EXT4-fs (nvme0n1p1): mounted filesystem edadf258-faf0-43b6-8551-bd1fd1a553a1 r/w with ordered data mode. Quota mode: none.
+[    2.675930] Rootfs mounted over PARTUUID=42752956-097c-440b-8652-16d5329a3335
+[    2.680648] Switching from initrd to actual rootfs
+[    2.703241] usb 1-2.3: New USB device found, idVendor=046d, idProduct=c52b, bcdDevice=12.11
+[    2.703249] usb 1-2.3: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[    2.703252] usb 1-2.3: Product: USB Receiver
+[    2.703254] usb 1-2.3: Manufacturer: Logitech
+[    2.709196] input: Logitech USB Receiver as /devices/platform/bus@0/3610000.usb/usb1/1-2/1-2.3/1-2.3:1.0/0003:046D:C52B.0001/input/input1
+[    2.741152] systemd[1]: System time before build time, advancing clock.
+[    2.772914] usb 2-1.1: new SuperSpeed Plus Gen 2x1 USB device number 3 using tegra-xusb
+[    2.788524] NET: Registered PF_INET6 protocol family
+[    2.788836] Segment Routing with IPv6
+[    2.788843] In-situ OAM (IOAM) with IPv6
+[    2.801504] systemd[1]: systemd 255.4-1ubuntu8.18 running in system mode (+PAM +AUDIT +SELINUX +APPARMOR +IMA +SMACK +SECCOMP +GCRYPT -GNUTLS +OPENSSL +ACL +BLKID +CURL +ELFUTILS +FIDO2 +IDN2 -IDN +IPTC +KMOD +LIBCRYPTSETUP +LIBFDISK +PCRE2 -PWQUALITY +P11KIT +QRENCODE +TPM2 +BZIP2 +LZ4 +XZ +ZLIB +ZSTD -BPF_FRAMEWORK -XKBCOMMON +UTMP +SYSVINIT default-hierarchy=unified)
+[    2.801514] systemd[1]: Detected architecture arm64.
+[    2.805332] systemd[1]: Hostname set to <orin-steamos>.
+[    2.807056] usb 2-1.1: New USB device found, idVendor=0bda, idProduct=9210, bcdDevice=31.00
+[    2.807063] usb 2-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[    2.807066] usb 2-1.1: Product: RTL9210B-CG
+[    2.807069] usb 2-1.1: Manufacturer: Realtek
+[    2.807072] usb 2-1.1: SerialNumber: 012345678931
+[    2.809098] usb 2-1.1: Enable of device-initiated U1 failed.
+[    2.820341] usb 2-1.1: Enable of device-initiated U2 failed.
+[    2.835318] systemd[1]: Using hardware watchdog 'NVIDIA Tegra186 WDT', version 0, device /dev/watchdog0
+[    2.835351] systemd[1]: Watchdog running with a timeout of 2min.
+[    2.856532] hid-generic 0003:046D:C52B.0001: input,hidraw0: USB HID v1.11 Keyboard [Logitech USB Receiver] on usb-3610000.usb-2.3/input0
+[    2.860530] input: Logitech USB Receiver Mouse as /devices/platform/bus@0/3610000.usb/usb1/1-2/1-2.3/1-2.3:1.1/0003:046D:C52B.0002/input/input2
+[    2.860622] input: Logitech USB Receiver Consumer Control as /devices/platform/bus@0/3610000.usb/usb1/1-2/1-2.3/1-2.3:1.1/0003:046D:C52B.0002/input/input3
+[    2.879717] zram: Added device: zram0
+[    2.920424] input: Logitech USB Receiver System Control as /devices/platform/bus@0/3610000.usb/usb1/1-2/1-2.3/1-2.3:1.1/0003:046D:C52B.0002/input/input4
+[    2.920504] hid-generic 0003:046D:C52B.0002: input,hidraw1: USB HID v1.11 Mouse [Logitech USB Receiver] on usb-3610000.usb-2.3/input1
+[    2.924174] hid-generic 0003:046D:C52B.0003: hidraw2: USB HID v1.11 Device [Logitech USB Receiver] on usb-3610000.usb-2.3/input2
+[    3.047601] systemd[1]: Queued start job for default target graphical.target.
+[    3.097459] systemd[1]: Created slice system-modprobe.slice - Slice /system/modprobe.
+[    3.097965] systemd[1]: Created slice system-serial\x2dgetty.slice - Slice /system/serial-getty.
+[    3.098389] systemd[1]: Created slice system-systemd\x2dfsck.slice - Slice /system/systemd-fsck.
+[    3.098806] systemd[1]: Created slice system-systemd\x2dzram\x2dsetup.slice - Slice /system/systemd-zram-setup.
+[    3.099074] systemd[1]: Created slice user.slice - User and Session Slice.
+[    3.099171] systemd[1]: Started systemd-ask-password-wall.path - Forward Password Requests to Wall Directory Watch.
+[    3.099447] systemd[1]: Set up automount proc-sys-fs-binfmt_misc.automount - Arbitrary Executable File Formats File System Automount Point.
+[    3.099480] systemd[1]: Expecting device dev-disk-by\x2duuid-BB88\x2d0654.device - /dev/disk/by-uuid/BB88-0654...
+[    3.099493] systemd[1]: Expecting device dev-ttyGS0.device - /dev/ttyGS0...
+[    3.099500] systemd[1]: Expecting device dev-ttyTCU0.device - /dev/ttyTCU0...
+[    3.099506] systemd[1]: Expecting device dev-zram0.device - /dev/zram0...
+[    3.099532] systemd[1]: Reached target integritysetup.target - Local Integrity Protected Volumes.
+[    3.099561] systemd[1]: Reached target network-pre.target - Preparation for Network.
+[    3.099588] systemd[1]: Reached target remote-fs.target - Remote File Systems.
+[    3.099600] systemd[1]: Reached target remote-veritysetup.target - Remote Verity Protected Volumes.
+[    3.099616] systemd[1]: Reached target slices.target - Slice Units.
+[    3.099634] systemd[1]: Reached target snapd.mounts-pre.target - Mounting snaps.
+[    3.099648] systemd[1]: Reached target snapd.mounts.target - Mounted snaps.
+[    3.099690] systemd[1]: Reached target veritysetup.target - Local Verity Protected Volumes.
+[    3.099941] systemd[1]: Listening on syslog.socket - Syslog Socket.
+[    3.100071] systemd[1]: Listening on systemd-fsckd.socket - fsck to fsckd communication Socket.
+[    3.100153] systemd[1]: Listening on systemd-initctl.socket - initctl Compatibility Named Pipe.
+[    3.100287] systemd[1]: Listening on systemd-journald-dev-log.socket - Journal Socket (/dev/log).
+[    3.100480] systemd[1]: Listening on systemd-journald.socket - Journal Socket.
+[    3.100708] systemd[1]: Listening on systemd-networkd.socket - Network Service Netlink Socket.
+[    3.100756] systemd[1]: systemd-pcrextend.socket - TPM2 PCR Extension (Varlink) was skipped because of an unmet condition check (ConditionSecurity=measured-uki).
+[    3.101614] systemd[1]: Listening on systemd-udevd-control.socket - udev Control Socket.
+[    3.101733] systemd[1]: Listening on systemd-udevd-kernel.socket - udev Kernel Socket.
+[    3.102900] systemd[1]: Mounting dev-hugepages.mount - Huge Pages File System...
+[    3.103694] systemd[1]: Mounting dev-mqueue.mount - POSIX Message Queue File System...
+[    3.104543] systemd[1]: Mounting sys-kernel-debug.mount - Kernel Debug File System...
+[    3.105453] systemd[1]: Mounting sys-kernel-tracing.mount - Kernel Trace File System...
+[    3.108834] systemd[1]: Starting systemd-journald.service - Journal Service...
+[    3.111791] systemd[1]: Starting keyboard-setup.service - Set the console keyboard layout...
+[    3.113147] systemd[1]: Starting kmod-static-nodes.service - Create List of Static Device Nodes...
+[    3.114250] systemd[1]: Starting modprobe@configfs.service - Load Kernel Module configfs...
+[    3.115351] systemd[1]: Starting modprobe@dm_mod.service - Load Kernel Module dm_mod...
+[    3.119398] systemd[1]: Starting modprobe@drm.service - Load Kernel Module drm...
+[    3.121418] systemd[1]: Starting modprobe@efi_pstore.service - Load Kernel Module efi_pstore...
+[    3.124623] systemd[1]: Starting modprobe@fuse.service - Load Kernel Module fuse...
+[    3.126083] systemd[1]: Starting modprobe@loop.service - Load Kernel Module loop...
+[    3.127310] systemd[1]: Starting modprobe@nvme_fabrics.service - Load Kernel Module nvme_fabrics...
+[    3.129559] systemd[1]: nvfb-ping-config.service - NVIDIA first-boot setup service for ping was skipped because of an unmet condition check (ConditionFirstBoot=yes).
+[    3.129643] systemd[1]: nvfb-udev.service - NVIDIA specific first-boot udev script was skipped because of an unmet condition check (ConditionFirstBoot=yes).
+[    3.129947] systemd[1]: systemd-fsck-root.service - File System Check on Root Device was skipped because of an unmet condition check (ConditionPathIsReadWrite=!/).
+[    3.131100] systemd-journald[215]: Collecting audit messages is disabled.
+[    3.132586] systemd[1]: Starting systemd-modules-load.service - Load Kernel Modules...
+[    3.132618] systemd[1]: systemd-pcrlock-file-system.service - Lock File Systems to TPM2 PCR Policy was skipped because of an unmet condition check (ConditionSecurity=measured-uki).
+[    3.132663] systemd[1]: systemd-pcrlock-machine-id.service - Lock Machine ID to TPM2 PCR Policy was skipped because of an unmet condition check (ConditionSecurity=measured-uki).
+[    3.132700] systemd[1]: systemd-pcrmachine.service - TPM2 PCR Machine ID Measurement was skipped because of an unmet condition check (ConditionSecurity=measured-uki).
+[    3.133785] systemd[1]: Starting systemd-remount-fs.service - Remount Root and Kernel File Systems...
+[    3.135716] systemd[1]: Starting systemd-time-wait-sync.service - Wait Until Kernel Time Synchronized...
+[    3.135775] systemd[1]: systemd-tpm2-setup-early.service - TPM2 SRK Setup (Early) was skipped because of an unmet condition check (ConditionSecurity=measured-uki).
+[    3.138645] systemd[1]: Starting systemd-udev-trigger.service - Coldplug All udev Devices...
+[    3.143638] fuse: init (API version 7.39)
+[    3.144420] systemd[1]: Mounted dev-hugepages.mount - Huge Pages File System.
+[    3.144596] systemd[1]: Mounted dev-mqueue.mount - POSIX Message Queue File System.
+[    3.144749] systemd[1]: Mounted sys-kernel-debug.mount - Kernel Debug File System.
+[    3.144936] systemd[1]: Mounted sys-kernel-tracing.mount - Kernel Trace File System.
+[    3.145230] systemd[1]: Finished kmod-static-nodes.service - Create List of Static Device Nodes.
+[    3.145640] systemd[1]: modprobe@configfs.service: Deactivated successfully.
+[    3.145829] systemd[1]: Finished modprobe@configfs.service - Load Kernel Module configfs.
+[    3.146173] systemd[1]: modprobe@dm_mod.service: Deactivated successfully.
+[    3.146340] systemd[1]: Finished modprobe@dm_mod.service - Load Kernel Module dm_mod.
+[    3.146652] systemd[1]: modprobe@drm.service: Deactivated successfully.
+[    3.146812] systemd[1]: Finished modprobe@drm.service - Load Kernel Module drm.
+[    3.147121] systemd[1]: modprobe@efi_pstore.service: Deactivated successfully.
+[    3.147288] systemd[1]: Finished modprobe@efi_pstore.service - Load Kernel Module efi_pstore.
+[    3.147591] systemd[1]: modprobe@fuse.service: Deactivated successfully.
+[    3.147752] systemd[1]: Finished modprobe@fuse.service - Load Kernel Module fuse.
+[    3.148227] systemd[1]: modprobe@loop.service: Deactivated successfully.
+[    3.148593] systemd[1]: Finished modprobe@loop.service - Load Kernel Module loop.
+[    3.149008] systemd[1]: modprobe@nvme_fabrics.service: Deactivated successfully.
+[    3.149178] systemd[1]: Finished modprobe@nvme_fabrics.service - Load Kernel Module nvme_fabrics.
+[    3.150609] systemd[1]: Mounting sys-fs-fuse-connections.mount - FUSE Control File System...
+[    3.151530] systemd[1]: Mounting sys-kernel-config.mount - Kernel Configuration File System...
+[    3.151635] systemd[1]: systemd-repart.service - Repartition Root Disk was skipped because no trigger condition checks were met.
+[    3.154069] systemd[1]: Starting systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully...
+[    3.157511] bridge: filtering via arp/ip/ip6tables is no longer available by default. Update your scripts to load br_netfilter if you need this.
+[    3.159592] Bridge firewalling registered
+[    3.160044] systemd[1]: Mounted sys-fs-fuse-connections.mount - FUSE Control File System.
+[    3.160212] systemd[1]: Mounted sys-kernel-config.mount - Kernel Configuration File System.
+[    3.162132] hsp_mailbox_client: loading out-of-tree module taints kernel.
+[    3.164966] EXT4-fs (nvme0n1p1): re-mounted edadf258-faf0-43b6-8551-bd1fd1a553a1.
+[    3.168348] systemd[1]: Finished systemd-remount-fs.service - Remount Root and Kernel File Systems.
+[    3.169400] tegra186-cam-rtcpu bc00000.rtcpu: Adding to iommu group 7
+[    3.169981] tegra186-cam-rtcpu bc00000.rtcpu: Trace buffer configured at IOVA=0xbff00000
+[    3.170379] systemd[1]: systemd-hwdb-update.service - Rebuild Hardware Database was skipped because of an unmet condition check (ConditionNeedsUpdate=/etc).
+[    3.170456] systemd[1]: systemd-pstore.service - Platform Persistent Storage Archival was skipped because of an unmet condition check (ConditionDirectoryNotEmpty=/sys/fs/pstore).
+[    3.172206] systemd[1]: Starting systemd-random-seed.service - Load/Save OS Random Seed...
+[    3.173028] systemd[1]: systemd-tpm2-setup.service - TPM2 SRK Setup was skipped because of an unmet condition check (ConditionSecurity=measured-uki).
+[    3.173067] systemd[1]: systemd-pcrlock-firmware-code.service - Lock Firmware Code to TPM2 PCR Policy was skipped because of an unmet condition check (ConditionSecurity=measured-uki).
+[    3.173087] systemd[1]: systemd-pcrlock-firmware-config.service - Lock Firmware Configuration to TPM2 PCR Policy was skipped because of an unmet condition check (ConditionSecurity=measured-uki).
+[    3.173106] systemd[1]: systemd-pcrlock-secureboot-authority.service - Lock UEFI SecureBoot Authority to TPM2 PCR Policy was skipped because of an unmet condition check (ConditionSecurity=measured-uki).
+[    3.173122] systemd[1]: systemd-pcrlock-secureboot-policy.service - Lock UEFI SecureBoot Policy to TPM2 PCR Policy was skipped because of an unmet condition check (ConditionSecurity=measured-uki).
+[    3.173137] systemd[1]: systemd-pcrlock-make-policy.service - Make TPM2 PCR Policy was skipped because of an unmet condition check (ConditionSecurity=measured-uki).
+[    3.173579] systemd[1]: Finished keyboard-setup.service - Set the console keyboard layout.
+[    3.174056]  bc00000.rtcpu:hsp-vm1: camrtc_hsp_vm_read_boot_log: RTCPU boot complete
+[    3.174746] tegra-ivc-bus bc00000.rtcpu:ivc-bus: region 0: iova=0xbfec0000-0xbfee02ff size=131840
+[    3.174789] tegra-ivc-bus bc00000.rtcpu:ivc-bus:echo@0: echo: ver=0 grp=1 RX[16x64]=0x1000-0x1480 TX[16x64]=0x1480-0x1900
+[    3.174818] tegra-ivc-bus bc00000.rtcpu:ivc-bus:dbg@1: dbg: ver=0 grp=1 RX[1x512]=0x1900-0x1b80 TX[1x512]=0x1b80-0x1e00
+[    3.174838] tegra-ivc-bus bc00000.rtcpu:ivc-bus:dbg@2: dbg: ver=0 grp=1 RX[1x8192]=0x1e00-0x3e80 TX[1x8192]=0x3e80-0x5f00
+[    3.174855] tegra-ivc-bus bc00000.rtcpu:ivc-bus:ivccontrol@3: ivccontrol: ver=0 grp=1 RX[64x320]=0x5f00-0xaf80 TX[64x320]=0xaf80-0x10000
+[    3.174875] tegra-ivc-bus bc00000.rtcpu:ivc-bus:ivccapture@4: ivccapture: ver=0 grp=1 RX[512x64]=0x10000-0x18080 TX[512x64]=0x18080-0x20100
+[    3.174894] tegra-ivc-bus bc00000.rtcpu:ivc-bus:diag@5: diag: ver=0 grp=1 RX[1x128]=0x20100-0x20200 TX[1x128]=0x20200-0x20300
+[    3.175043] tegra186-cam-rtcpu bc00000.rtcpu: using cam RTCPU IRQ (191)
+[    3.175047] tegra186-cam-rtcpu bc00000.rtcpu: tegra_camrtc_mon_create is successful
+[    3.175538] tegra186-cam-rtcpu bc00000.rtcpu: firmware version cpu=rce cmd=6 sha1=dfa4cae106f00e37b6d2d53e94a5c9636b9cc011
+[    3.175969] tegra-ivc-bus bc00000.rtcpu:ivc-bus:echo@0: ivc channel driver missing
+[    3.175973] tegra-ivc-bus bc00000.rtcpu:ivc-bus:dbg@1: ivc channel driver missing
+[    3.175975] tegra-ivc-bus bc00000.rtcpu:ivc-bus:dbg@2: ivc channel driver missing
+[    3.175976] tegra-ivc-bus bc00000.rtcpu:ivc-bus:ivccontrol@3: ivc channel driver missing
+[    3.175978] tegra-ivc-bus bc00000.rtcpu:ivc-bus:ivccapture@4: ivc channel driver missing
+[    3.175980] tegra-ivc-bus bc00000.rtcpu:ivc-bus:diag@5: ivc channel driver missing
+[    3.178101] tegra-camera-rtcpu-debugfs bc00000.rtcpu:ivc-bus:dbg@2: nvidia,mem-map[1] node has no device
+[    3.178134] tegra-camera-rtcpu-debugfs bc00000.rtcpu:ivc-bus:dbg@2: nvidia,mem-map[2] node has no device
+[    3.178155] tegra-camera-rtcpu-debugfs bc00000.rtcpu:ivc-bus:dbg@2: nvidia,mem-map[3] node has no device
+[    3.179848] camchar: rtcpu character device driver loaded
+[    3.183065] systemd[1]: Started systemd-journald.service - Journal Service.
+[    3.185895] mc: Linux media interface: v0.10
+[    3.193056] videodev: Linux video capture interface: v2.00
+[    3.204115] systemd-journald[215]: Received client request to flush runtime journal.
+[    3.204695] systemd-journald[215]: File /var/log/journal/5b30312d75bc4927b81c2eb53fa54a53/system.journal corrupted or uncleanly shut down, renaming and replacing.
+[    3.206736] tegra-host1x 13e00000.host1x: Adding to iommu group 8
+[    3.207488] host1x-context 13e00000.host1x.host1x-ctx.0: Adding to iommu group 9
+[    3.207570] host1x-context 13e00000.host1x.host1x-ctx.1: Adding to iommu group 10
+[    3.207641] host1x-context 13e00000.host1x.host1x-ctx.2: Adding to iommu group 11
+[    3.207719] host1x-context 13e00000.host1x.host1x-ctx.3: Adding to iommu group 12
+[    3.207793] host1x-context 13e00000.host1x.host1x-ctx.4: Adding to iommu group 13
+[    3.207861] host1x-context 13e00000.host1x.host1x-ctx.5: Adding to iommu group 14
+[    3.207923] host1x-context 13e00000.host1x.host1x-ctx.6: Adding to iommu group 15
+[    3.208002] host1x-context 13e00000.host1x.host1x-ctx.7: Adding to iommu group 16
+[    3.208083] host1x-context 13e00000.host1x.host1x-ctx.8: Adding to iommu group 17
+[    3.208157] host1x-context 13e00000.host1x.host1x-ctx.9: Adding to iommu group 18
+[    3.208226] host1x-context 13e00000.host1x.host1x-ctx.10: Adding to iommu group 19
+[    3.208323] host1x-context 13e00000.host1x.host1x-ctx.11: Adding to iommu group 20
+[    3.208405] host1x-context 13e00000.host1x.host1x-ctx.12: Adding to iommu group 21
+[    3.208473] host1x-context 13e00000.host1x.host1x-ctx.13: Adding to iommu group 22
+[    3.208546] host1x-context 13e00000.host1x.host1x-ctx.14: Adding to iommu group 23
+[    3.208612] host1x-context 13e00000.host1x.host1x-ctx.15: Adding to iommu group 24
+[    3.224309] [RCE] TCU debug prints will be routed to traces.
+[    3.232131] tegra-soc-hwpm f100000.hwpm: Adding to iommu group 25
+[    3.244483] tegra-vic 15340000.vic: Adding to iommu group 26
+[    3.246813] tegra-nvdec 15480000.nvdec: Adding to iommu group 27
+[    3.249244] tegra-nvjpg 15380000.nvjpg: Adding to iommu group 28
+[    3.251374] tegra-nvjpg 15540000.nvjpg: Adding to iommu group 29
+[    3.253546] tegra-ofa 15a50000.ofa: Adding to iommu group 30
+[    3.254453] [drm] Initialized tegra 1.0.99 20120330 for 13e00000.host1x.drm on minor 1
+[    3.268107] tegra-camrtc-capture-isp tegra-capture-isp: capture_isp_probe: Probe-time fuse cache initialized - mask=0x1, num_devices=1
+[    3.270324] tegra194-isp5 14800000.isp: Adding to iommu group 31
+[    3.271300] driver not enabled, cannot register any devices
+[    3.272537]  camera-diag: Limiting to 1 ISP instance(s) for this chip
+[    3.273403]  camera-diag: Failed to find ISP device node
+[    3.274378] camera-diagnostics bc00000.rtcpu:ivc-bus:diag@5: Failed to initialize diagnostic channel: -19
+[    3.274382] camera-diagnostics bc00000.rtcpu:ivc-bus:diag@5: Probe failed with error: -19
+[    3.291237] usb 2-1.1: Enable of device-initiated U1 failed.
+[    3.303938] usb 2-1.1: Enable of device-initiated U2 failed.
+[    3.315895] scsi host0: uas
+[    3.321517] tegra194-vi5 13e00000.host1x:vi0@15c00000: Adding to iommu group 32
+[    3.322105] scsi 0:0:0:0: Direct-Access     Realtek  RTL9210B NVME    1.00 PQ: 0 ANSI: 6
+[    3.323709] tegra194-vi5 13e00000.host1x:vi0@15c00000: vi5_probe: client init done
+[    3.324028] driver not enabled, cannot register any devices
+[    3.324034] tegra194-vi5 13e00000.host1x:vi0@15c00000: Unable to create debugfs entry
+[    3.324926] tegra194-vi5 13e00000.host1x:vi1@14c00000: Adding to iommu group 33
+[    3.325681] tegra194-vi5 13e00000.host1x:vi1@14c00000: vi5_probe: client init done
+[    3.325873] driver not enabled, cannot register any devices
+[    3.325875] tegra194-vi5 13e00000.host1x:vi1@14c00000: Unable to create debugfs entry
+[    3.356316] tegra194-pcie 141e0000.pcie: Phy link never came up
+[    3.357788] driver not enabled, cannot register any devices
+[    3.400869] sd 0:0:0:0: [sda] 250069680 512-byte logical blocks: (128 GB/119 GiB)
+[    3.403520] sd 0:0:0:0: [sda] Write Protect is off
+[    3.404571] sd 0:0:0:0: [sda] Mode Sense: 37 00 00 08
+[    3.408940] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+[    3.482575] sd 0:0:0:0: [sda] Preferred minimum I/O size 512 bytes
+[    3.482588] sd 0:0:0:0: [sda] Optimal transfer size 33553920 bytes
+[    3.529142] sd 0:0:0:0: [sda] Attached SCSI disk
+[    3.539039] zram0: detected capacity change from 0 to 7727104
+[    3.674881] Adding 3863548k swap on /dev/zram0.  Priority:100 extents:1 across:3863548k SSDsc
+[    3.827703] Adding 4194300k swap on /var/swap/swapfile.  Priority:10 extents:33 across:6815744k SS
+[    3.854582] audit: type=1400 audit(1791790577.108:2): apparmor="STATUS" operation="profile_load" profile="unconfined" name="balena-etcher" pid=492 comm="apparmor_parser"
+[    3.855082] audit: type=1400 audit(1791790577.108:3): apparmor="STATUS" operation="profile_load" profile="unconfined" name=4D6F6E676F444220436F6D70617373 pid=490 comm="apparmor_parser"
+[    3.855577] audit: type=1400 audit(1791790577.108:4): apparmor="STATUS" operation="profile_load" profile="unconfined" name="Discord" pid=489 comm="apparmor_parser"
+[    3.859419] audit: type=1400 audit(1791790577.108:5): apparmor="STATUS" operation="profile_load" profile="unconfined" name="1password" pid=488 comm="apparmor_parser"
+[    3.859921] audit: type=1400 audit(1791790577.108:6): apparmor="STATUS" operation="profile_load" profile="unconfined" name="QtWebEngineProcess" pid=491 comm="apparmor_parser"
+[    3.862212] audit: type=1400 audit(1791790577.108:7): apparmor="STATUS" operation="profile_load" profile="unconfined" name="brave" pid=493 comm="apparmor_parser"
+[    3.863793] audit: type=1400 audit(1791790577.112:8): apparmor="STATUS" operation="profile_load" profile="unconfined" name="ch-checkns" pid=497 comm="apparmor_parser"
+[    3.869625] audit: type=1400 audit(1791790577.112:9): apparmor="STATUS" operation="profile_load" profile="unconfined" name="buildah" pid=495 comm="apparmor_parser"
+[    3.883996] audit: type=1400 audit(1791790577.112:10): apparmor="STATUS" operation="profile_load" profile="unconfined" name="vscode" pid=501 comm="apparmor_parser"
+[    3.991199] pstore: Using crash dump compression: deflate
+[    3.991313] printk: legacy console [ramoops-1] enabled
+[    3.991712] pstore: Registered ramoops as persistent store backend
+[    3.991714] ramoops: using 0x200000@0x26b5f0000, ecc: 0
+[    4.008949] Host1x-Fence: Default interface init done
+[    4.047950] spi-tegra114 3210000.spi: Adding to iommu group 1
+[    4.059780] nvvrs_pseq 4-003c: NVVRS Vendor ID: 0x9
+[    4.060069] nvvrs_pseq 4-003c: NVVRS Model Rev: 0x82
+[    4.064505] cfg80211: Loading compiled-in X.509 certificates for regulatory database
+[    4.065322] Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+[    4.065830] Loaded X.509 cert 'wens: 61c038651aabdcf94bd0ac7ff06c7248db18c600'
+[    4.085434] tegra-hda 3510000.hda: Adding to iommu group 34
+[    4.091730] nvvrs_pseq 4-003c: NVVRS PSEQ probe successful
+[    4.109764] spi-tegra114 3230000.spi: Adding to iommu group 1
+[    4.124466] at24 0-0050: 256 byte 24c02 EEPROM, read-only
+[    4.167539] rtl88x2ce 0001:01:00.0: Adding to iommu group 3
+[    4.167683] rtl88x2ce 0001:01:00.0: enabling device (0000 -> 0003)
+[    4.190581] input: NVIDIA Jetson Orin Nano HDA HDMI/DP,pcm=3 as /devices/platform/bus@0/3510000.hda/sound/card0/input6
+[    4.190740] input: NVIDIA Jetson Orin Nano HDA HDMI/DP,pcm=7 as /devices/platform/bus@0/3510000.hda/sound/card0/input7
+[    4.193905] at24 0-0057: 256 byte 24c02 EEPROM, read-only
+[    4.196471] input: NVIDIA Jetson Orin Nano HDA HDMI/DP,pcm=8 as /devices/platform/bus@0/3510000.hda/sound/card0/input8
+[    4.196588] input: NVIDIA Jetson Orin Nano HDA HDMI/DP,pcm=9 as /devices/platform/bus@0/3510000.hda/sound/card0/input9
+[    4.196806] tegra234-aon c000000.aon: Adding to iommu group 35
+[    4.197304]  c000000.aon:hsp: probed
+[    4.197408] tegra234-aon c000000.aon: init done
+[    4.204234] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/processing-engine@2908000
+[    4.204248] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/asrc@2910000
+[    4.204254] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/amixer@290bb00
+[    4.204260] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/adx@2903b00
+[    4.204266] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/adx@2903a00
+[    4.204271] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/adx@2903900
+[    4.204277] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/adx@2903800
+[    4.204282] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/amx@2903300
+[    4.204288] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/amx@2903200
+[    4.204310] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/amx@2903100
+[    4.204317] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/amx@2903000
+[    4.204323] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/mvc@290a200
+[    4.204329] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/mvc@290a000
+[    4.204360] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/sfc@2902600
+[    4.204366] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/sfc@2902400
+[    4.204371] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/sfc@2902200
+[    4.204376] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/sfc@2902000
+[    4.204382] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/i2s@2901300
+[    4.204388] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/i2s@2901100
+[    4.204393] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/admaif@290f000
+[    4.205461] /bus@0/aconnect@2900000/ahub@2900800/i2s@2901100: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.205706] /bus@0/aconnect@2900000/ahub@2900800/i2s@2901300: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.205748] /bus@0/aconnect@2900000/ahub@2900800/sfc@2902000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.205847] /bus@0/aconnect@2900000/ahub@2900800/sfc@2902200: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.205933] /bus@0/aconnect@2900000/ahub@2900800/sfc@2902400: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.206019] /bus@0/aconnect@2900000/ahub@2900800/sfc@2902600: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.206104] /bus@0/aconnect@2900000/ahub@2900800/amx@2903000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.206196] /bus@0/aconnect@2900000/ahub@2900800/amx@2903100: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.206349] /bus@0/aconnect@2900000/ahub@2900800/amx@2903200: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.206540] /bus@0/aconnect@2900000/ahub@2900800/amx@2903300: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.206592] /bus@0/aconnect@2900000/ahub@2900800/adx@2903800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.206631] /bus@0/aconnect@2900000/ahub@2900800/adx@2903900: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.206670] /bus@0/aconnect@2900000/ahub@2900800/adx@2903a00: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.206709] /bus@0/aconnect@2900000/ahub@2900800/adx@2903b00: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.206749] /bus@0/aconnect@2900000/ahub@2900800/processing-engine@2908000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.206786] /bus@0/aconnect@2900000/ahub@2900800/mvc@290a000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.206819] /bus@0/aconnect@2900000/ahub@2900800/mvc@290a200: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.206853] /bus@0/aconnect@2900000/ahub@2900800/amixer@290bb00: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.206907] /bus@0/aconnect@2900000/ahub@2900800/admaif@290f000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.208220] thermal-trip-event cpu-throttle-alert: cooling device registered.
+[    4.212434] /bus@0/aconnect@2900000/ahub@2900800/asrc@2910000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.212603] CAN device driver interface
+[    4.218318] Bluetooth: Core ver 2.22
+[    4.218362] NET: Registered PF_BLUETOOTH protocol family
+[    4.218365] Bluetooth: HCI device and connection manager initialized
+[    4.218373] Bluetooth: HCI socket layer initialized
+[    4.218376] Bluetooth: L2CAP socket layer initialized
+[    4.218382] Bluetooth: SCO socket layer initialized
+[    4.221567] thermal-trip-event gpu-throttle-alert: cooling device registered.
+[    4.223847] tegra-dce d800000.dce: Adding to iommu group 36
+[    4.223927] tegra-dce d800000.dce: dce-reset not supported in dce kmd
+[    4.223933] tegra-dce d800000.dce: Setting DCE HSP functions for tegra234-dce
+[    4.224778] dce: dce_ipc_channel_init_unlocked:248  Invalid Channel State [0x0] for ch_type [2]
+[    4.224995] dce: tegra_dce_probe:370  Found display consumer device
+[    4.226256] dce: dce_admin_send_cmd_ver:824  version : dcefw:[0x4] dcekmd:[0x4] err : [0x0]
+[    4.226487] dce: dce_admin_setup_clients_ipc:1002 Channel Reset Complete for Type [1] ...
+[    4.226491] dce: dce_admin_setup_clients_ipc:978  Get queue info failed for [2]
+[    4.226709] dce: dce_admin_setup_clients_ipc:1002 Channel Reset Complete for Type [3] ...
+[    4.227132] gic 2a41000.interrupt-controller: GIC IRQ controller registered
+[    4.227699] dce: dce_start_boot_flow:207  DCE_BOOT_DONE
+[    4.234128] tegra-aconnect bus@0:aconnect@2900000: Tegra ACONNECT bus registered
+[    4.234343] thermal-trip-event cv0-throttle-alert: cooling device registered.
+[    4.234511] TT CAN feature is not supported
+[    4.239193] 	 Message RAM Configuration
+               	| base addr   |0x0c312000|
+               	| sidfc_flssa |0x00000000|
+               	| xidfc_flesa |0x00000040|
+               	| rxf0c_f0sa  |0x000000c0|
+               	| rxf1c_f1sa  |0x000009c0|
+               	| rxbc_rbsa   |0x000009c0|
+               	| txefc_efsa  |0x000009c0|
+               	| txbc_tbsa   |0x00000a40|
+               	| tmc_tmsa    |0x00000ec0|
+               	| mram size   |0x00001000|
+[    4.240533] modprobe: btusb: not loading in-tree driver, out-of-tree rtk_btusb is present
+[    4.244384] Release 3.2.3 from 09.06.2018
+[    4.245122] modprobe: btusb: not loading in-tree driver, out-of-tree rtk_btusb is present
+[    4.246383] modprobe: btusb: not loading in-tree driver, out-of-tree rtk_btusb is present
+[    4.250128] modprobe: btusb: not loading in-tree driver, out-of-tree rtk_btusb is present
+[    4.254217] rtk_btusb: Realtek Bluetooth USB driver ver 3.1.65ab490.20240531-141726
+[    4.254225] rtk_btcoex: rtk_btcoex_init: version: 1.2
+[    4.254229] rtk_btcoex: create workqueue
+[    4.254364] net can0: mttcan device registered (regs=00000000fb32b545, irq=212)
+[    4.254456] rtk_btcoex: alloc buffers 1792, 2432 for ev and l2
+[    4.255817] rtk_btusb: btusb_probe intf->cur_altsetting->desc.bInterfaceNumber 0
+[    4.255824] rtk_btusb: btusb_probe can_wakeup 1, may wakeup 0
+[    4.255828] rtk_btusb: patch_add
+[    4.255830] rtk_btusb: auto suspend is disabled
+[    4.255833] rtk_btusb: pid = 0xc822
+[    4.255837] rtk_btusb: patch_add: Reset gEVersion to 0xff
+[    4.256051] rtk_btusb: btusb_probe: done
+[    4.256108] rtk_btusb: btusb_open start
+[    4.256113] rtk_btusb: btusb_open hdev->promisc ==0
+[    4.256116] rtk_btusb: download_patch start
+[    4.256118] rtk_btusb: chip type value: 0x73
+[    4.256868] thermal-trip-event cv1-throttle-alert: cooling device registered.
+[    4.257741] rtk_btusb: chip_type->status = 0x0, chip_type->chip = 0xbeef
+[    4.257747] rtk_btusb: HCI reset.
+[    4.257894] usbcore: registered new interface driver rtk_btusb
+[    4.269744] rtk_btusb: read_ver_rsp->lmp_subver = 0x8822
+[    4.269753] rtk_btusb: read_ver_rsp->hci_rev = 0xc
+[    4.269756] rtk_btusb: patch_entry->lmp_sub = 0x8822
+[    4.269758] rtk_btusb: load_firmware start
+[    4.269760] rtk_btusb: lmp_version = 0x8822
+[    4.269762] rtk_btusb: config filename rtl8822cu_config
+[    4.270640] rtk_btusb: no bdaddr file /opt/bdaddr
+[    4.270644] rtk_btusb: Origin cfg len 6
+[    4.270647] rtk_btusb: 55 ab 23 87 00 00
+[    4.270649] rtk_btusb: New cfg len 6
+[    4.270651] rtk_btusb: 55 ab 23 87 00 00
+[    4.270656] rtk_btusb: fw name is  rtl8822cu_fw
+[    4.271127] rtk_btusb: This is not 8723a, use new patch style!
+[    4.271131] rtk_btusb: rtk_get_eversion: gEVersion 255
+[    4.272742] rtk_btusb: eversion->status = 0x0, eversion->version = 0x3
+[    4.272746] rtk_btusb: load_firmware: New gEVersion 3
+[    4.272750] rtk_btusb: rtk_get_fw_project_id: opcode 0, len 1, data 13
+[    4.272752] rtk_btusb: lmp_version is 8822, project_id is 13, match!
+[    4.272755] rtk_btusb: fw_version = 0xefd6d8d7
+[    4.272757] rtk_btusb: number_of_total_patch = 3
+[    4.272759] rtk_btusb: chipID 4
+[    4.272761] rtk_btusb: patch_length 0x8660
+[    4.272763] rtk_btusb: start_offset 0x00005d00
+[    4.272764] rtk_btusb: Svn version: -412133102
+[    4.272766] rtk_btusb: Coexistence: BTCOEX_20210106-2020
+[    4.272768] rtk_btusb: buf_len = 0x8666
+[    4.272783] rtk_btusb: fw: exists, config file: exists
+[    4.272785] rtk_btusb: load_firmware done
+[    4.272794] rtk_btusb: download_data start
+[    4.277570] thermal-trip-event cv2-throttle-alert: cooling device registered.
+[    4.295439] ivc-cdev: hypervisor not present
+[    4.301142] thermal-trip-event soc0-throttle-alert: cooling device registered.
+[    4.318218] thermal-trip-event soc1-throttle-alert: cooling device registered.
+[    4.318423] nvsciipc nvsciipc: creating nvsciipc_uid sysfs group
+[    4.320452] nvsciipc nvsciipc: nvsciipc_uid sysfs group: done
+[    4.320560] irq: IRQ214: trimming hierarchy from :bus@0:pmc@c360000
+[    4.321171] fusb301 1-0025: failed to read device id, err : 0xffffff87
+[    4.321407] fusb301 1-0025: fusb301 not support
+[    4.321562] fusb301: probe of 1-0025 failed with error -22
+[    4.327994] nvsciipc: Failed to find nvsciipc node
+[    4.328001] nvsciipc: loaded module
+[    4.329938] thermal-trip-event soc2-throttle-alert: cooling device registered.
+[    4.360304] tegra194-pcie 141e0000.pcie: Phy link never came up
+[    4.360435] tegra194-pcie 141e0000.pcie: PCI host bridge to bus 0007:00
+[    4.360466] pci_bus 0007:00: root bus resource [bus 00-ff]
+[    4.360472] pci_bus 0007:00: root bus resource [mem 0x3000000000-0x3227ffffff pref]
+[    4.360478] pci_bus 0007:00: root bus resource [mem 0x3228000000-0x322fffffff] (bus address [0x40000000-0x47ffffff])
+[    4.360483] pci_bus 0007:00: root bus resource [io  0x200000-0x2fffff] (bus address [0x3e100000-0x3e1fffff])
+[    4.360516] pci 0007:00:00.0: [10de:229a] type 01 class 0x060400 PCIe Root Port
+[    4.360548] pci 0007:00:00.0: PCI bridge to [bus 01-ff]
+[    4.360558] pci 0007:00:00.0:   bridge window [io  0x0000-0x0fff]
+[    4.360565] pci 0007:00:00.0:   bridge window [mem 0x00000000-0x000fffff]
+[    4.360578] pci 0007:00:00.0:   bridge window [mem 0x00000000-0x000fffff 64bit pref]
+[    4.360691] pci 0007:00:00.0: PME# supported from D0 D3hot
+[    4.365809] thermal-trip-event hot-surface-alert: cooling device registered.
+[    4.367318] nvmap_heap_init: nvmap_heap_init: created heap block cache
+[    4.371300] nvmap_init_ivc_queue: nvmap-sci-ipc-ivc-queue property not found
+[    4.371317] nvmap_page_pool_init: Total RAM pages: 1931812
+[    4.371321] nvmap_page_pool_init: nvmap page pool size: 241476 pages (943 MB)
+[    4.371390] nvmap_background_zero_thread: PP zeroing thread starting.
+[    4.381988] pci 0007:00:00.0: PCI bridge to [bus 01-ff]
+[    4.382010] pci_bus 0007:00: resource 4 [mem 0x3000000000-0x3227ffffff pref]
+[    4.382015] pci_bus 0007:00: resource 5 [mem 0x3228000000-0x322fffffff]
+[    4.382017] pci_bus 0007:00: resource 6 [io  0x200000-0x2fffff]
+[    4.382031] pci 0007:00:00.0: Max Payload Size set to  256/ 256 (was  128), Max Read Rq  256
+[    4.403744] pcieport 0007:00:00.0: Adding to iommu group 6
+[    4.420976] pcieport 0007:00:00.0: PME: Signaling with IRQ 189
+[    4.426794] pcieport 0007:00:00.0: AER: enabled with IRQ 189
+[    4.431459] pci_bus 0007:01: busn_res: [bus 01-ff] is released
+[    4.431791] pci_bus 0007:00: busn_res: [bus 00-ff] is released
+[    4.434726] tegra194-pcie 140a0000.pcie: Adding to iommu group 37
+[    4.476745] rtk_btusb: download_data done
+[    4.476754] rtk_btusb: HCI reset.
+[    4.489741] rtk_btusb: read_ver_rsp->lmp_subver = 0xd8d7
+[    4.489751] rtk_btusb: read_ver_rsp->hci_rev = 0xefd6
+[    4.489754] rtk_btusb: patch_entry->lmp_sub = 0x8822
+[    4.489766] rtk_btusb: Rtk patch end 0
+[    4.489770] rtk_btusb: chip type value: 0x73
+[    4.489773] rtk_btusb: btusb_open set HCI UP RUNNING
+[    4.489795] rtk_btcoex: Open BTCOEX
+[    4.489799] rtk_btusb: btusb_open end
+[    4.504050] rtl88x2ce 0001:01:00.0 wlP1p1s0: renamed from wlan0
+[    4.504584] rtk_btcoex: rtk_vendor_cmd_to_fw: opcode 0xfc1b
+[    4.505090] rtk_btcoex: BTCOEX hci_rev 0xefd6
+[    4.505095] rtk_btcoex: BTCOEX lmp_subver 0xd8d7
+[    4.509773] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/i2s@2901100
+[    4.509838] /bus@0/aconnect@2900000/ahub@2900800/i2s@2901100: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.511097] nvvrs-pseq-rtc nvvrs-pseq-rtc: registered as rtc0
+[    4.512210] nvvrs-pseq-rtc nvvrs-pseq-rtc: setting system clock to 1970-01-01T00:00:23 UTC (23)
+[    4.517130] systemd-journald[215]: Time jumped backwards, rotating.
+[    4.523548] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/i2s@2901300
+[    4.536952] rtk_btusb: btusb_notify: hci0 evt 3
+[    4.562892] /bus@0/aconnect@2900000/ahub@2900800/i2s@2901300: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.576931] tegra194-pcie 140a0000.pcie: host bridge /bus@0/pcie@140a0000 ranges:
+[    4.576957] tegra194-pcie 140a0000.pcie:      MEM 0x3240000000..0x3527ffffff -> 0x3240000000
+[    4.576966] tegra194-pcie 140a0000.pcie:      MEM 0x3528000000..0x352fffffff -> 0x0040000000
+[    4.576971] tegra194-pcie 140a0000.pcie:       IO 0x002a100000..0x002a1fffff -> 0x002a100000
+[    4.579916] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/sfc@2902000
+[    4.579968] /bus@0/aconnect@2900000/ahub@2900800/sfc@2902000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.580508] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/sfc@2902200
+[    4.580541] /bus@0/aconnect@2900000/ahub@2900800/sfc@2902200: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.580984] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/sfc@2902400
+[    4.581012] /bus@0/aconnect@2900000/ahub@2900800/sfc@2902400: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.581388] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/sfc@2902600
+[    4.581416] /bus@0/aconnect@2900000/ahub@2900800/sfc@2902600: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.581751] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/amx@2903000
+[    4.581778] /bus@0/aconnect@2900000/ahub@2900800/amx@2903000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.582112] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/amx@2903100
+[    4.582137] /bus@0/aconnect@2900000/ahub@2900800/amx@2903100: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.582470] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/amx@2903200
+[    4.582498] /bus@0/aconnect@2900000/ahub@2900800/amx@2903200: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.582827] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/amx@2903300
+[    4.582850] /bus@0/aconnect@2900000/ahub@2900800/amx@2903300: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.583179] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/adx@2903800
+[    4.583205] /bus@0/aconnect@2900000/ahub@2900800/adx@2903800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.583533] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/adx@2903900
+[    4.583555] /bus@0/aconnect@2900000/ahub@2900800/adx@2903900: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.583881] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/adx@2903a00
+[    4.583904] /bus@0/aconnect@2900000/ahub@2900800/adx@2903a00: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.584229] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/adx@2903b00
+[    4.584255] /bus@0/aconnect@2900000/ahub@2900800/adx@2903b00: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.585330] tegra194-pcie 140a0000.pcie: iATU: unroll T, 8 ob, 2 ib, align 64K, limit 32G
+[    4.599801] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/processing-engine@2908000
+[    4.606632] /bus@0/aconnect@2900000/ahub@2900800/processing-engine@2908000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.611777] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/mvc@290a000
+[    4.613182] /bus@0/aconnect@2900000/ahub@2900800/mvc@290a000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.616744] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/mvc@290a200
+[    4.617965] /bus@0/aconnect@2900000/ahub@2900800/mvc@290a200: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.619041] tegra-adma 2930000.dma-controller: Tegra210 ADMA driver registered 32 channels
+[    4.619824] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/amixer@290bb00
+[    4.619868] /bus@0/aconnect@2900000/ahub@2900800/amixer@290bb00: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.621114] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/admaif@290f000
+[    4.621154] /bus@0/aconnect@2900000/ahub@2900800/admaif@290f000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.621679] /bus@0/aconnect@2900000/ahub@2900800: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800/asrc@2910000
+[    4.621968] /bus@0/aconnect@2900000/ahub@2900800/asrc@2910000: Fixed dependency cycle(s) with /bus@0/aconnect@2900000/ahub@2900800
+[    4.808302] tegra194-pcie 140a0000.pcie: PCIe Gen.1 x1 link up
+[    4.916302] tegra194-pcie 140a0000.pcie: PCIe Gen.1 x1 link up
+[    4.916384] tegra194-pcie 140a0000.pcie: PCI host bridge to bus 0008:00
+[    4.916394] pci_bus 0008:00: root bus resource [bus 00-ff]
+[    4.916399] pci_bus 0008:00: root bus resource [mem 0x3240000000-0x3527ffffff pref]
+[    4.916405] pci_bus 0008:00: root bus resource [mem 0x3528000000-0x352fffffff] (bus address [0x40000000-0x47ffffff])
+[    4.916410] pci_bus 0008:00: root bus resource [io  0x300000-0x3fffff] (bus address [0x2a100000-0x2a1fffff])
+[    4.916440] pci 0008:00:00.0: [10de:229c] type 01 class 0x060400 PCIe Root Port
+[    4.916470] pci 0008:00:00.0: PCI bridge to [bus 01-ff]
+[    4.916479] pci 0008:00:00.0:   bridge window [io  0x0000-0x0fff]
+[    4.916484] pci 0008:00:00.0:   bridge window [mem 0x00000000-0x000fffff]
+[    4.916496] pci 0008:00:00.0:   bridge window [mem 0x00000000-0x000fffff 64bit pref]
+[    4.916607] pci 0008:00:00.0: PME# supported from D0 D3hot
+[    4.919162] pci 0008:01:00.0: [10ec:8168] type 00 class 0x020000 PCIe Endpoint
+[    4.919624] pci 0008:01:00.0: BAR 0 [io  0x0000-0x00ff]
+[    4.919666] pci 0008:01:00.0: BAR 2 [mem 0x00000000-0x00000fff 64bit]
+[    4.919693] pci 0008:01:00.0: BAR 4 [mem 0x00000000-0x00003fff 64bit]
+[    4.920671] pci 0008:01:00.0: supports D1 D2
+[    4.920674] pci 0008:01:00.0: PME# supported from D0 D1 D2 D3hot D3cold
+[    4.936496] pci 0008:00:00.0: bridge window [mem 0x3528000000-0x35280fffff]: assigned
+[    4.936504] pci 0008:00:00.0: bridge window [io  0x300000-0x300fff]: assigned
+[    4.936511] pci 0008:01:00.0: BAR 4 [mem 0x3528000000-0x3528003fff 64bit]: assigned
+[    4.936605] pci 0008:01:00.0: BAR 2 [mem 0x3528004000-0x3528004fff 64bit]: assigned
+[    4.936697] pci 0008:01:00.0: BAR 0 [io  0x300000-0x3000ff]: assigned
+[    4.936726] pci 0008:00:00.0: PCI bridge to [bus 01-ff]
+[    4.936730] pci 0008:00:00.0:   bridge window [io  0x300000-0x300fff]
+[    4.936734] pci 0008:00:00.0:   bridge window [mem 0x3528000000-0x35280fffff]
+[    4.936742] pci_bus 0008:00: resource 4 [mem 0x3240000000-0x3527ffffff pref]
+[    4.936745] pci_bus 0008:00: resource 5 [mem 0x3528000000-0x352fffffff]
+[    4.936747] pci_bus 0008:00: resource 6 [io  0x300000-0x3fffff]
+[    4.936749] pci_bus 0008:01: resource 0 [io  0x300000-0x300fff]
+[    4.936751] pci_bus 0008:01: resource 1 [mem 0x3528000000-0x35280fffff]
+[    4.936764] pci 0008:00:00.0: Max Payload Size set to  256/ 256 (was  128), Max Read Rq  256
+[    4.936895] pci 0008:01:00.0: Max Payload Size set to  128/ 128 (was  128), Max Read Rq  128
+[    4.937006] pcieport 0008:00:00.0: Adding to iommu group 37
+[    4.937174] pcieport 0008:00:00.0: PME: Signaling with IRQ 215
+[    4.937383] pcieport 0008:00:00.0: AER: enabled with IRQ 215
+[    4.981241] tegra210-admaif 290f000.admaif: Adding to iommu group 38
+[    4.991026] r8168 0008:01:00.0: Adding to iommu group 37
+[    4.991141] r8168 Gigabit Ethernet driver 8.053.00-NAPI loaded
+[    4.991199] r8168 0008:01:00.0: enabling device (0000 -> 0003)
+[    5.009031] r8168: This product is covered by one or more of the following patents: US6,570,884, US6,115,776, and US6,327,625.
+[    5.011085] r8168  Copyright (C) 2024 Realtek NIC software team <nicfae@realtek.com> 
+                This program comes with ABSOLUTELY NO WARRANTY; for details, please see <http://www.gnu.org/licenses/>. 
+                This is free software, and you are welcome to redistribute it under certain conditions; see <http://www.gnu.org/licenses/>. 
+[    5.016177] r8168 0008:01:00.0 enP8p1s0: renamed from eth0
+[    5.053097] tegra-audio-graph-card sound: Registered APE graph sound card with DPCM links for AHUB
+[    5.068697] tegra-mixer-controls sound:mixer-controls: Begin probe of override control device
+[    5.069979] tegra-mixer-controls sound:mixer-controls: Registered override controls for APE sound card
+[    5.263530] nv_nvsciipc_init.sh[861]: found /dev/nvsciipc
+[    5.287533] nvsciipc: nvsciipc_uid is set as 2000
+[    5.287585] nv_nvsciipc_init.sh[861]: set 2000 to /sys/devices/platform/nvsciipc/nvsciipc_uid
+[    5.293015] Bluetooth: BNEP (Ethernet Emulation) ver 1.3
+[    5.293028] Bluetooth: BNEP filters: protocol multicast
+[    5.293039] Bluetooth: BNEP socket layer initialized
+[    5.297959] Bluetooth: MGMT ver 1.22
+[    5.306080] NET: Registered PF_ALG protocol family
+[    5.372488] loop0: detected capacity change from 0 to 32768
+[    5.536895] nvgpu: 17000000.gpu              nvgpu_get_nvhost_dev:114  [INFO]  host1x device found at iteration 0
+
+[    5.536917] nvgpu: 17000000.gpu          nvgpu_nvhost_syncpt_init:156  [INFO]  syncpt_unit_base 60000000 syncpt_unit_size 4000000 size 10000 number of syncpoints 200
+
+[    5.610687] nv_platform 13800000.display: Adding to iommu group 39
+[    5.610798] iommu smmu.0x0000000010000000: IOMMU driver was not able to establish FW requested direct mapping.
+[    5.615307] platform 13800000.display:nvdisplay-niso: Adding to iommu group 40
+[    5.621650] NVRM: loading NVIDIA UNIX Open Kernel Module for aarch64  TempVersion  Release Build  (r595_00)  (buildbrain@74e043fc-6c96-4a54-a660-50b30a72108d-97k4-j97dd)  Thu Aug  6 10:09:09 PM PDT 2026
+[    5.679029] nvidia-modeset: Loading NVIDIA UNIX Open Kernel Mode Setting Driver for aarch64  TempVersion  Release Build  (r595_00)  (buildbrain@74e043fc-6c96-4a54-a660-50b30a72108d-97k4-j97dd)  Thu Aug  6 10:09:07 PM PDT 2026
+[    5.683959] [drm] [nvidia-drm] [GPU ID 0xfffffffe] Loading driver
+[    5.745327] loop1: detected capacity change from 0 to 8
+[    5.931936] Mass Storage Function, version: 2009/09/11
+[    5.931949] LUN: removable file: (no medium)
+[    5.942396] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    5.954950] configfs-gadget.l4t gadget.0: HOST MAC ca:22:40:60:b0:2c
+[    5.954963] configfs-gadget.l4t gadget.0: MAC ca:22:40:60:b0:2d
+[    5.956466] configfs-gadget.l4t gadget.0: HOST MAC ca:22:40:60:b0:2e
+[    5.956476] configfs-gadget.l4t gadget.0: MAC ca:22:40:60:b0:2f
+[    5.956499] tegra-xudc 3550000.usb: EP 0 (type: ctrl, dir: out) enabled
+[    5.959810] l4tbr0: port 1(usb0) entered blocking state
+[    5.959824] l4tbr0: port 1(usb0) entered disabled state
+[    5.959844] configfs-gadget.l4t gadget.0 usb0: entered allmulticast mode
+[    5.959931] configfs-gadget.l4t gadget.0 usb0: entered promiscuous mode
+[    5.968179] loop0: detected capacity change from 0 to 32768
+[    6.174797] [drm] Initialized nvidia-drm 0.0.0 20160202 for 13800000.display on minor 2
+[    6.190559] Console: switching to colour dummy device 80x25
+[    6.405019] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.405250] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.405451] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.405630] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.405809] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.405990] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.406165] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.406340] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.406514] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.406684] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.406861] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.407033] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.407211] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.407387] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.407559] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.407734] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.407907] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.408078] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.408247] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.408433] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.408618] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.408796] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.408973] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.409144] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.409313] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.409493] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.409666] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.409840] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.410015] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.410186] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.410358] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.410536] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.410706] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.410878] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.411056] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.411231] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.411401] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.411574] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.411746] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.411916] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.415082] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.415298] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.415489] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.415663] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.415839] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.416014] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.416185] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.416363] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.416538] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.416716] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.416892] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.417062] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.417234] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.417408] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.417576] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.417749] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.417919] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.418097] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.418266] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.418440] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.418619] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.418791] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.418968] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.419141] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.419313] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.419489] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.419660] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.419832] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.420003] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.420175] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.420349] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.420531] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.420707] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.420883] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.421056] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.421227] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.421401] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.421573] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.421745] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.421925] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    6.512097] Console: switching to colour frame buffer device 210x65
+[    6.522041] nv_platform 13800000.display: [drm] fb0: nvidia-drmdrmfb frame buffer device
+[    6.572523] nvsciipc: Failed to find nvsciipc node
+[    6.575259] nvsciipc: set_db start
+[    6.575303] nvsciipc: set_db done
+[    6.645531] Consider using thermal netlink events interface
+[    6.740599] NET: Registered PF_QIPCRTR protocol family
+[    6.848457] nvgpu: 17000000.gpu                    ga10b_init_hal:2237 [INFO]  Semaphore-based GP_GET tracking is not intended for GA10B production drivers
+
+[    6.995813] nvgpu: 17000000.gpu                  gk20a_scale_init:648  [INFO]  No specific device tree OPP table, using default frequency table
+[    6.997857] nvgpu: 17000000.gpu                  gk20a_scale_init:680  [INFO]  enabled scaling for GPU
+
+[    7.000119] nvgpu: 17000000.gpu                  gk20a_scale_init:694  [INFO]  DevFreq cooling device registered successfully
+[    7.125410] nvgpu: 17000000.gpu                 fbp_pg_mask_store:2151 [INFO]  no value change, same mask already set
+[    7.125435] nvgpu: 17000000.gpu                 tpc_pg_mask_store:2240 [INFO]  no value change, same mask already set
+[    7.658791] enP8p1s0: 0xffff80008527d000, 3c:6d:66:5d:c1:c8, IRQ 249
+[    7.744368] rtl8822ce_interrupt: 103 callbacks suppressed
+[    8.597781] nvgpu: 17000000.gpu                 fbp_pg_mask_store:2151 [INFO]  no value change, same mask already set
+[    8.597807] nvgpu: 17000000.gpu                 tpc_pg_mask_store:2240 [INFO]  no value change, same mask already set
+[    8.974141] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.974502] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.974724] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.974917] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.975105] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.975286] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.975466] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.975641] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.975819] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.975993] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.976180] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.976363] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.976552] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.976730] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.976908] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.977092] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.977274] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.977461] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.977637] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.977820] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.978001] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.978181] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.978358] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.978536] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.978715] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.978896] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.979077] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.979257] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.979439] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.979621] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.979796] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.979975] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.980154] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.980334] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.980516] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.980688] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.980868] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.981045] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.981228] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.981405] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    8.981588] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.384635] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.384885] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.385098] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.385303] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.385495] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.385685] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.385872] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.386060] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.386245] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.386436] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.386628] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.386817] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.387007] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.387198] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.387395] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.387589] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.387775] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.387970] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.388159] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.388356] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.388551] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.388740] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.388930] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.389124] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.389320] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.389516] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.389706] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.389897] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.390086] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.390276] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.390488] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.390682] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.390874] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.391071] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.391260] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.391457] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.391653] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.391850] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.392042] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[    9.392231] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.077673] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.078043] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.078277] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.078493] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.078701] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.078899] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.079097] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.079293] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.079492] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.079688] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.079885] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.080081] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.080278] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.080496] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.080689] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.080878] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.081064] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.081253] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.081440] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.081626] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.081809] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.081994] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.082183] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.082383] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.082567] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.082754] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.082943] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.083129] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.083320] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.083507] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.083696] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.083884] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.084073] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.084265] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.084455] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.084645] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.084832] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.085024] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.085210] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.085397] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.085587] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   11.396691] Bluetooth: RFCOMM TTY layer initialized
+[   11.396715] Bluetooth: RFCOMM socket layer initialized
+[   11.396732] Bluetooth: RFCOMM ver 1.11
+[   14.273746] warning: `ThreadPoolForeg' uses wireless extensions which will stop working for Wi-Fi 7 hardware; use nl80211
+[   16.096491] tegra186-emc 2c60000.external-memory-controller: sync_state() pending due to 15820000.crypto
+[   16.096508] tegra-mc 2c00000.memory-controller: sync_state() pending due to 15820000.crypto
+[   16.096512] tegra186-emc 2c60000.external-memory-controller: sync_state() pending due to 15840000.crypto
+[   16.096514] tegra-mc 2c00000.memory-controller: sync_state() pending due to 15840000.crypto
+[   16.096520] tegra186-emc 2c60000.external-memory-controller: sync_state() pending due to 13e00000.host1x:vi0-thi@15f00000
+[   16.096523] tegra-mc 2c00000.memory-controller: sync_state() pending due to 13e00000.host1x:vi0-thi@15f00000
+[   16.096526] tegra186-emc 2c60000.external-memory-controller: sync_state() pending due to 13e00000.host1x:vi1-thi@14f00000
+[   16.096528] tegra-mc 2c00000.memory-controller: sync_state() pending due to 13e00000.host1x:vi1-thi@14f00000
+[   17.036744] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.036967] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.037166] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.037468] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.037680] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.037887] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.038084] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.038281] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.038475] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.038667] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.038856] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.039041] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.039220] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.039394] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.039578] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.039751] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.039925] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.040099] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.040276] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.040478] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.040680] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.040873] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.041054] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.041233] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.041408] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.041585] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.041761] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.041937] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.042111] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.042281] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.042458] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.042636] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.042813] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.042988] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.043163] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.043337] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.043512] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.043691] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.043866] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   17.044041] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[   19.218107] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  550.010362] usb 1-2.3: USB disconnect, device number 4

@@ -3,10 +3,11 @@
 Draft for the NVIDIA Jetson developer forum. Two issues on one unit, both consistent with the
 GPU/display stack **advertising capabilities it cannot actually deliver**.
 
-**Attachments** live in [`nvidia-bug-attachments/`](nvidia-bug-attachments/). Staged: `vulkaninfo.txt`
-(device `apiVersion 1.4.329`, driver `595.78.0.0`, `NVIDIA Tegra Orin (nvgpu)`). Still to capture
-live before posting — see "Capture checklist" at the bottom: `dmesg` with the DCE flood, and a
-`PROTON_LOG` from a DX12 title.
+**Attachments** live in [`nvidia-bug-attachments/`](nvidia-bug-attachments/). Captured: `vulkaninfo.txt`
+(device `apiVersion 1.4.329`, driver `595.78.0.0`, `NVIDIA Tegra Orin (nvgpu)`) and
+`dmesg-dce-flood.txt` (full `dmesg` from a live session — **244** `rpcRmApiControl_dce`
+`cmd:0x731341` failures, all clustered in the first ~6–19 s of boot). Still to capture
+live before posting — see "Capture checklist" at the bottom: a `PROTON_LOG` from a DX12 title.
 
 ## Environment
 
@@ -30,7 +31,9 @@ floods with DCE RM-control failures.
 ```
 NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
 ```
-All failures use the same `cmd:0x731341`. 862 occurrences in ~11 minutes after one session start.
+All failures use the same `cmd:0x731341`. The captured `dmesg-dce-flood.txt` has **244** of them in
+one session, all in the first ~6–19 s of boot (an earlier run showed 862 over ~11 min). See that
+attachment for the full log.
 
 **Evidence that it is scanout, not the compositor:**
 - Capturing the compositor's *composited output* (gamescope's own screenshot of the buffer it
@@ -109,10 +112,11 @@ address both. Happy to test patched drivers / a newer JetPack on this unit.
 
 These need a live session and are not grabbable headless:
 
-1. **`dmesg-dce-flood.txt`** — root-restricted (`dmesg_restrict=1`, no passwordless sudo) and the
-   flood only exists *while* the UI flickers. On the board: open Steam → Settings → trigger the
-   **test screensaver** so the flicker runs, then in another shell `sudo dmesg > /tmp/dmesg-dce-flood.txt`
-   and `scp` it into `nvidia-bug-attachments/`. Confirm it contains `rpcRmApiControl_dce` lines.
+1. ~~**`dmesg-dce-flood.txt`**~~ — **DONE** (2026-10-18): captured `sudo dmesg` from a live session,
+   244 `rpcRmApiControl_dce cmd:0x731341` failures, all at boot (6–19 s). Interestingly the flood is
+   not only flicker-correlated — it bursts at session start too. If a flicker-time sample is wanted,
+   trigger Steam's **test screensaver** (Settings → Display) and re-capture; the boot burst already
+   documents the signature.
 2. **`proton-vkd3d.log`** — launch a DX12 title with `PROTON_LOG=1 VKD3D_DEBUG=warn` **and the
    `VKD3D_CONFIG=nodxr…` workaround removed** so the failure reproduces; copy
    `~/steam-<appid>.log` in. (With the workaround in place the game runs and there is no error to show.)
