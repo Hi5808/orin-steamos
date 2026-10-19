@@ -95,7 +95,11 @@ systemctl mask systemd-networkd-wait-online.service
 chmod 600 /etc/netplan/*.yaml 2>/dev/null || true
 # Desktop extras that only cost RAM / boot time here
 if [[ ${PURGE_DESKTOP_EXTRAS:-1} == 1 ]]; then
-  for p in snapd gnome-remote-desktop deja-dup; do
+  # xdg-desktop-portal-{gnome,gtk}: on a gamescope console XDG_CURRENT_DESKTOP is not GNOME,
+  # so xdg-desktop-portal falls back to the GTK backend, which hangs on D-Bus activation and
+  # times out — leaving the user session `degraded`. A gamescope kiosk needs no desktop portal
+  # backend (the base xdg-desktop-portal then answers immediately). Drop them like SteamOS does.
+  for p in snapd gnome-remote-desktop deja-dup xdg-desktop-portal-gnome xdg-desktop-portal-gtk; do
     dpkg-query -W -f='${Status}' "$p" 2>/dev/null | grep -q 'install ok installed' && { apt-get purge -y "$p" || echo "warning: could not purge $p"; }
   done
   rm -rf /snap /var/snap /var/lib/snapd /var/cache/snapd

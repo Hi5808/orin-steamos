@@ -23,6 +23,21 @@ Times are Pacific/Honolulu (HST). Backups were kept on the board with the suffix
 | 15 | Bluetooth controllers (round3 + bt-fix): fallback BlueZ pairing agent `steamos-orin-bt-agent.service` (NoInputNoOutput, trusts newly paired devices) since Steam's own agent is only intermittently present; `bluetooth.service.d/zz-steamos-orin.conf` drops L4T's `-d` debug flag and keeps the A2DP plugins; `main.conf` `JustWorksRepairing=always`, `FastConnectable=true`, `ConnectionSupervisionTimeout=400`; `seatd.service` disabled (logind seats); Wi-Fi power saving off (`NetworkManager/conf.d/zz-steamos-orin-wifi-powersave.conf`, RTL8822CE Wi-Fi/BT coexistence). An 8BitDo controller paired and reconnects. | Repo: `steamos-orin-bt-agent.service` + `bt-agent`, the bluetooth drop-in and NM conf, BlueZ `main.conf` sed and `seatd` disable in `chroot-customize.sh`, bt-agent enabled in `chroot-enable.sh`, `python3-dbus`/`python3-gi` added to packages |
 | 16 | Steam client **pinned** to build `1791918634` to stop the ARM64 beta self-updating into regressions: `STEAM_CLIENT_PIN` in `/etc/default/steamos-orin`, applied by `steam-pin` (writes `steam.cfg` only when the installed version matches). | Repo default: `etc/default/steamos-orin`, `usr/lib/steamos-orin/steam-pin`, `steam-launch`, `docs/STEAM-PIN.md` |
 
+## Full-device QA sweep (2026-10-18, live board)
+
+`systemctl is-system-running` = **degraded**. Findings and disposition:
+
+| Finding | Severity | Disposition |
+|---|---|---|
+| `uinput` kernel module absent (`CONFIG_INPUT_UINPUT` unset in r39.2.1 tegra kernel); no `/dev/uinput`. **Steam Input virtual controllers cannot work.** `modules-load.d` requests it and fails. | high | **Fixed in repo, not on live board:** `build.sh` stage `modules` builds `uinput` + `hid-steam/playstation/nintendo/sony` as add-on modules. Delivered by reflash. |
+| `xdg-desktop-portal` + `-gtk` user units fail (25 s D-Bus activation timeout). In the gamescope session `XDG_CURRENT_DESKTOP`≠GNOME, so the shipped `gnome-portals.conf` doesn't match and it falls back to the GTK backend, which hangs. Main cause of the `degraded` state. | medium | **Fixed in repo (this commit):** purge `xdg-desktop-portal-gnome`/`-gtk` in `chroot-customize.sh` (a gamescope console needs no desktop portal backend; nothing hard-depends on them but each other). Delivered by reflash. |
+| `systemd-networkd-wait-online` timeout; `r8168 … Device reseting!`. | low | Ethernet unplugged (live link is Wi-Fi); wait-online cleanup already in new builds. |
+| `fwupd-refresh.service` failed. | low | Cosmetic metadata timer; handled in `chroot-customize.sh`. |
+| Big-Picture flicker (DCE scanout). | known-issue | NVIDIA display-driver bug; see `KNOWN-ISSUES.md` + `NVIDIA-BUG-REPORT.md`. Not fixable in-image. |
+| `fusb301` / `camera-diagnostics` probe errors. | none | Devkit hardware not present (USB-C PD, camera); harmless. |
+
+Net: after a reflash the only non-green item is the NVIDIA flicker. The **current** board is still on the Oct-16 image and is missing the uinput/portal fixes, so it is not shippable as-is — it must be reflashed.
+
 ## Board vs. repo differences still open
 - The board has the old first-boot/session scripts (sticky-desktop bug, no setup screen), no `uinput`/HID add-on modules, and no updater stubs. Reflash with a new build to get them, or copy the changed overlay files by hand.
 - systemd-networkd-wait-online, netplan permissions and snapd/gnome-remote-desktop/deja-dup are cleaned up in new builds only.
