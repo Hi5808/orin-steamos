@@ -142,8 +142,10 @@ no longer escalate to the fatal abort.
 
 ## One suspend hang traced to a wedged USB-C NVMe enclosure (not a suspend bug)
 
-**Status:** resolved/understood 2026-10-19. Suspend/resume had been working. A single no-resume
-hang was observed, where the journal reached:
+**Status:** resolved/understood 2026-10-19. Suspend/resume works — re-verified with
+`sudo rtcwake -m mem -s 30`: the board suspended and auto-resumed, uptime did **not** reset, and
+gamescope/Steam/WiFi all survived. A single earlier no-resume hang was observed, where the journal
+reached:
 ```
 systemd-logind: The system will suspend now!
 systemd-sleep: Performing sleep operation 'suspend'...
