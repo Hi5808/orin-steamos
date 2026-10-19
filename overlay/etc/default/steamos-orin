@@ -32,7 +32,7 @@ STEAM_CRASH_WINDOW=120
 # Steam client version pin (build id of a known-good client, see docs/STEAM-PIN.md).
 # When the installed client has this version, client self-updates are blocked with
 # ~/.local/share/Steam/steam.cfg. Empty = unpinned (Steam updates itself as usual).
-STEAM_CLIENT_PIN="1791918634"
+STEAM_CLIENT_PIN="1792192922"
 
 # --- DirectX 12 games (vkd3d-proton) workaround ---
 # The Orin Tegra Vulkan driver (595.78) advertises cooperative-matrix / ray-tracing /
