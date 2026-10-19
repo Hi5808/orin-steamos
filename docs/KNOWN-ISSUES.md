@@ -140,28 +140,35 @@ no longer escalate to the fatal abort.
 
 ---
 
-## Suspend / resume hangs (deep s2idle never resumes) — Tegra/L4T
+## One suspend hang traced to a wedged USB-C NVMe enclosure (not a suspend bug)
 
-**Status:** open, verified on hardware 2026-10-19. The board's default sleep is `mem_sleep = deep`
-(`/sys/power/mem_sleep: s2idle [deep]`). On a sleep request the journal reaches:
+**Status:** resolved/understood 2026-10-19. Suspend/resume had been working. A single no-resume
+hang was observed, where the journal reached:
 ```
 systemd-logind: The system will suspend now!
 systemd-sleep: Performing sleep operation 'suspend'...
 ```
-and then **nothing** — the system never resumes and requires a hard reset. No clean resume has ever
-been observed. This is a well-known NVIDIA Jetson/L4T limitation (deep SC7 suspend/resume is not
-reliable on Orin dev kits under Jetson Linux).
+and then nothing until a hard reset.
 
-**Why it matters on a console.** Steam Game Mode auto-suspends on idle (seen live: logind issued the
-suspend, not the user). So an idle console will put *itself* into an unrecoverable state. Until
-resume works, **auto-sleep must be disabled**, and any "Sleep" entry in the power menu is a trap.
+**Root cause — a dead USB-storage device, not the PM stack.** A USB-C NVMe enclosure (Realtek
+**RTL9210**, USB Attached SCSI / `uas`) was attached and had wedged during an earlier write
+(`mkfs`), and was still in a failed state at suspend time:
+```
+sd 0:0:0:0: [sda] tag#21 timing out command, waited 180s
+sd 0:0:0:0: [sda] uas_zap_pending ... inflight: CMD
+sd 0:0:0:0: [sda] Synchronize Cache(10) failed: Result: hostbyte=0x07
+```
+During the suspend freeze the kernel must quiesce and flush every block device; it cannot flush a
+UAS device whose commands are timing out, so the suspend (and therefore the resume) hangs. With the
+enclosure removed, suspend/resume behaves normally.
 
-**Mitigations (recommended, not yet baked in):**
-- Mask sleep at the OS level: `systemctl mask sleep.target suspend.target` and set
-  `HandleSuspendKey=ignore` / `IdleAction=ignore` in logind (the latter is already the default).
-- Disable Steam's in-session auto-suspend / set the screensaver+sleep timeout to never.
-- If `s2idle` ever resumes where `deep` does not, try `mem_sleep=s2idle` on the kernel cmdline — but
-  neither is validated here yet.
+**Takeaways.**
+- Do **not** disable sleep to "fix" this — the PM stack was fine; a faulty USB device poisoned it.
+- The RTL9210 enclosure itself is the thing to address: it wedges on sustained writes on this board.
+  A common workaround for flaky RTL9210/UAS bridges is to force BOT (disable UAS) via
+  `usb-storage.quirks=0bda:9210:u` on the kernel cmdline; a different cable/port is also worth trying.
+- `mem_sleep` is `s2idle [deep]` (deep selected) — note for any future, *actually-reproducible*
+  suspend investigation, but not implicated here.
 
 ## Game controller drivers absent from NVIDIA's kernel
 
