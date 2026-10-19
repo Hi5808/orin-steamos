@@ -105,6 +105,27 @@ if [[ ${PURGE_DESKTOP_EXTRAS:-1} == 1 ]]; then
   rm -rf /snap /var/snap /var/lib/snapd /var/cache/snapd
 fi
 
+# Real browser for Desktop Mode. Ubuntu's /usr/bin/firefox is only a snap
+# transitional wrapper (deb `firefox 1:1snap1`) that execs /snap/bin/firefox;
+# with snapd purged above it is a dead end ("requires the firefox snap"), so
+# the desktop ships no working browser. Install Firefox from Mozilla's own APT
+# repo (a real .deb) and pin it above the snap stub so it is never replaced.
+if [[ ${WITH_FIREFOX_DEB:-1} == 1 ]]; then
+  install -d -m0755 /etc/apt/keyrings
+  if curl -fsSL https://packages.mozilla.org/apt/repo-signing-key.gpg -o /etc/apt/keyrings/packages.mozilla.org.asc; then
+    echo 'deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main' \
+      > /etc/apt/sources.list.d/mozilla.list
+    printf 'Package: *\nPin: origin packages.mozilla.org\nPin-Priority: 1000\n' \
+      > /etc/apt/preferences.d/mozilla
+    apt-get purge -y firefox 2>/dev/null || true   # drop the snap transitional stub
+    apt-get update
+    apt-get install -y --no-install-recommends firefox \
+      || echo "warning: Firefox (Mozilla deb) install failed; desktop will have no browser"
+  else
+    echo "warning: could not fetch Mozilla APT signing key; skipping Firefox deb"
+  fi
+fi
+
 apt-get clean
 rm -rf /var/lib/apt/lists/*
 rm -f /usr/sbin/policy-rc.d
