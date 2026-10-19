@@ -16,9 +16,9 @@ Working on real hardware (flashed 2026-10-17): boots to SDDM autologin → Steam
 | Big Picture *animated* UI (menu dim/blur, idle screensaver) | **known issue:** flickers to black — an NVIDIA Orin display-engine (DCE) scanout bug in JetPack 7.2.1, not the compositor. Static UI and games are unaffected. See [docs/KNOWN-ISSUES.md](docs/KNOWN-ISSUES.md) and the writeup filed with NVIDIA in [docs/NVIDIA-BUG-REPORT.md](docs/NVIDIA-BUG-REPORT.md) |
 | Bluetooth game controllers | works: fallback BlueZ pairing agent + `JustWorksRepairing`/`FastConnectable`; 8BitDo paired and reconnects |
 | First-boot setup screen, one-time desktop fallback, session switching | new in this repo, **not yet tested on hardware** |
-| Controller modules (uinput, hid-steam/playstation/nintendo/sony) | build-tested, **not yet loaded on hardware** |
+| Controller modules (uinput, hid-steam/playstation/nintendo/sony) | **absent from NVIDIA's kernel** (verified on hardware: `/dev/uinput` missing, drivers not builtin or modular). Basic gamepads work as generic Bluetooth/USB HID, but **Steam Input (remapping/virtual controllers) is unavailable** without `uinput`, and DualSense/Switch Pro/Steam Controller get generic function only. Needs a kernel rebuild (`CONFIG_INPUT_UINPUT`, `HID_*`) |
 | FEX / Proton (x86 games) with NVIDIA's Vulkan driver | works: DX11 (DXVK) and **DX12** (vkd3d-proton, needs `VKD3D_CONFIG=nodxr` — baked in; see docs/KNOWN-ISSUES.md). Ghosts 'n Goblins Resurrection runs. DXR ray-tracing unavailable on this driver |
-| Suspend / resume | **untested** (`p0-checklist.sh --suspend-test`) |
+| Suspend / resume | **broken** (verified on hardware): deep s2idle suspends but **never resumes** — the system hangs and needs a hard reset (a known Tegra/L4T issue). Because Game Mode auto-suspends on idle, auto-sleep should be disabled until resume works (see [docs/KNOWN-ISSUES.md](docs/KNOWN-ISSUES.md)) |
 | OS updates (A/B, like SteamOS) | not implemented (`steamos-update` is a "no update" stub) |
 | Tailscale `xt_connmark` | not available in NVIDIA's kernel (`CONFIG_NF_CONNTRACK_MARK` off); Tailscale works, with a warning |
 

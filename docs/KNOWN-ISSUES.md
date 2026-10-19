@@ -137,3 +137,48 @@ the guard fired (`clearing stale X`), there were **0** `X11 I/O error … Aborti
 `/var/crash` reports, **0** fallbacks to the X11 kiosk, and the final session came up healthy
 (gamescope + steamwebhelper up). A few non-fatal `Failed to bind … X0` retry lines still appear but
 no longer escalate to the fatal abort.
+
+---
+
+## Suspend / resume hangs (deep s2idle never resumes) — Tegra/L4T
+
+**Status:** open, verified on hardware 2026-10-19. The board's default sleep is `mem_sleep = deep`
+(`/sys/power/mem_sleep: s2idle [deep]`). On a sleep request the journal reaches:
+```
+systemd-logind: The system will suspend now!
+systemd-sleep: Performing sleep operation 'suspend'...
+```
+and then **nothing** — the system never resumes and requires a hard reset. No clean resume has ever
+been observed. This is a well-known NVIDIA Jetson/L4T limitation (deep SC7 suspend/resume is not
+reliable on Orin dev kits under Jetson Linux).
+
+**Why it matters on a console.** Steam Game Mode auto-suspends on idle (seen live: logind issued the
+suspend, not the user). So an idle console will put *itself* into an unrecoverable state. Until
+resume works, **auto-sleep must be disabled**, and any "Sleep" entry in the power menu is a trap.
+
+**Mitigations (recommended, not yet baked in):**
+- Mask sleep at the OS level: `systemctl mask sleep.target suspend.target` and set
+  `HandleSuspendKey=ignore` / `IdleAction=ignore` in logind (the latter is already the default).
+- Disable Steam's in-session auto-suspend / set the screensaver+sleep timeout to never.
+- If `s2idle` ever resumes where `deep` does not, try `mem_sleep=s2idle` on the kernel cmdline — but
+  neither is validated here yet.
+
+## Game controller drivers absent from NVIDIA's kernel
+
+**Status:** open, verified on hardware 2026-10-19. `/dev/uinput` does not exist and
+`hid-steam`, `hid-playstation`, `hid-nintendo`, `hid-sony` are neither builtin nor shipped as
+modules in NVIDIA's `6.8.12-tegra` kernel.
+
+**Consequences.**
+- **Steam Input is unavailable** — it needs `uinput` to create the virtual controller it remaps to.
+  Without it, per-game layouts / remapping / the Deck-style input stack do not function.
+- Advanced-HID controllers (DualSense/DualShock via `hid-playstation`, Switch Pro via
+  `hid-nintendo`, Steam Controller via `hid-steam`) fall back to **generic HID**: basic buttons/axes
+  only, no gyro / rumble / touchpad.
+- Plain Bluetooth/USB gamepads (e.g. 8BitDo in X-input mode) still work as generic HID.
+
+**Fix (needs a kernel rebuild, not yet done).** Rebuild the Tegra kernel with at least
+`CONFIG_INPUT_UINPUT=m` and `CONFIG_HID_STEAM`/`HID_PLAYSTATION`/`HID_NINTENDO`/`HID_SONY=m`, ship
+the `.ko`s in the overlay, and `modules-load.d` them (`overlay/etc/modules-load.d/steamos-orin.conf`
+currently lists only `uinput` — which silently does nothing because the module isn't present — so
+add the `hid-*` names there too once the kernel actually builds them).
