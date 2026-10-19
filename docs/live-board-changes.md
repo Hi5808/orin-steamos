@@ -45,3 +45,6 @@ Net: after a reflash the only non-green item is the NVIDIA flicker. The **curren
 ## Board vs. repo differences still open
 - The board has the old first-boot/session scripts (sticky-desktop bug, no setup screen), no `uinput`/HID add-on modules, and no updater stubs. Reflash with a new build to get them, or copy the changed overlay files by hand.
 - systemd-networkd-wait-online, netplan permissions and snapd/gnome-remote-desktop/deja-dup are cleaned up in new builds only.
+
+## Deferred
+- VS-thumbnail-style wallpaper (ref: Valve+NVIDIA "SteamOS Is Coming"): v3 attempt looks amateur — hand-drawn logos in PIL. To do it right, composite the real official Steam/NVIDIA logo PNGs + a real lightning/ember element. Low priority. Default stays v2 (fluid).
