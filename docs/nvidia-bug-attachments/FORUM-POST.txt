@@ -1,0 +1,27 @@
+Board: Jetson Orin Nano 8GB Dev Kit (Super), JetPack 7.2.1 / Jetson Linux r39.2.1, kernel 6.8.12-tegra, Ubuntu 24.04. GPU/display driver 595.78, Vulkan 1.4.329. Display: HP w2207 over DisplayPort, 1680x1050@59.85, no VRR. Compositor: gamescope 3.16.28 (DRM/KMS atomic). Reproduced on two monitors.
+
+I'm hitting two issues on this unit; both look like the driver advertising capabilities it can't deliver at the moment of use.
+
+== Issue 1 — DCE RPC failures + black scanout during compositor flips ==
+
+When a KMS/atomic compositor continuously flips a *composited* buffer, the scanned-out image intermittently goes fully black (~70% of frames on animated content) even though the buffer the compositor produced is correct (verified via the compositor's own screenshot of what it presents). A fullscreen 3D game, which is direct-scanned-out, is unaffected — only composited UI flips glitch. Forcing any non-EDID-preferred mode gives no video at all. The kernel log floods with:
+
+    NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+
+All failures use cmd:0x731341 (244 at boot in the attached dmesg).
+
+Questions: what is cmd:0x731341 to the DCE, why does it return NV_ERR_GENERIC, and why does composited-flip scanout drop to black? Is there a known DCE firmware fix?
+
+== Issue 2 — vkCreateDevice returns VK_ERROR_INITIALIZATION_FAILED with the full feature set ==
+
+Creating a Vulkan device enabling the broad feature/extension set vkd3d-proton 3.0 requests fails with -3, even though vulkaninfo (attached) reports every one of those features/extensions as supported. A leaner DXVK/D3D11 device succeeds on the same driver. vkd3d-proton log:
+
+    vkd3d-proton: Found device: NVIDIA Tegra Orin (nvgpu) (NVIDIA 595.78.0)
+    vkd3d-proton: vkd3d_create_vk_device: Disabled extensions that can cause Vulkan device creation to fail, retrying.
+    vkd3d-proton: vkd3d_create_vk_device: Failed to create Vulkan device, vr -3.
+
+This matches vkd3d-proton #3076 / the desktop RTX 50-series coopmat issue: the driver advertises cooperative-matrix / ray-tracing / optical-flow it can't enable at device creation (vkd3d_supports_minimum_coopmat_caps: Missing sufficient features to expose WMMA). Disabling them (VKD3D_CONFIG=nodxr, disabling VK_NV_optical_flow / VK_NVX_binary_import / VK_NVX_image_view_handle) makes vkCreateDevice succeed and DX12 games run.
+
+Request: please fix the capability advertisement so vkCreateDevice doesn't return INITIALIZATION_FAILED for features the driver reports as supported (a spec violation). Minimal repro available.
+
+Happy to test a patched driver / newer JetPack on this unit.
