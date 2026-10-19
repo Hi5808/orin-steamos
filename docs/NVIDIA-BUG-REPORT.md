@@ -1,8 +1,12 @@
 # Draft bug report — Jetson Orin display/Vulkan driver (JetPack 7.2.1 / L4T r39.2.1)
 
 Draft for the NVIDIA Jetson developer forum. Two issues on one unit, both consistent with the
-GPU/display stack **advertising capabilities it cannot actually deliver**. Fill the `TODO` spots
-and attach the referenced logs before posting.
+GPU/display stack **advertising capabilities it cannot actually deliver**.
+
+**Attachments** live in [`nvidia-bug-attachments/`](nvidia-bug-attachments/). Staged: `vulkaninfo.txt`
+(device `apiVersion 1.4.329`, driver `595.78.0.0`, `NVIDIA Tegra Orin (nvgpu)`). Still to capture
+live before posting — see "Capture checklist" at the bottom: `dmesg` with the DCE flood, and a
+`PROTON_LOG` from a DX12 title.
 
 ## Environment
 
@@ -42,8 +46,9 @@ failures growing in `dmesg`.
 **Ask:** what is `cmd:0x731341` to the DCE, why does it return `NV_ERR_GENERIC`, and why does the
 composited-flip scanout drop to black? Is there a known DCE firmware fix?
 
-Attach: full `dmesg`, the compositor DRM log, two screenshots (composited buffer = correct art;
-simultaneous photo of the display = black). TODO: attach files.
+Attach: full `dmesg` (`nvidia-bug-attachments/dmesg-dce-flood.txt` — capture while flickering),
+the compositor DRM log, two screenshots (composited buffer = correct art; simultaneous photo of
+the display = black).
 
 ---
 
@@ -86,7 +91,8 @@ over-advertises.
 violation), so the `nodxr`/disable-extensions workaround isn't needed. A minimal repro
 (device-create enabling the full advertised feature set) can be provided.
 
-Attach: full `PROTON_LOG` with `VKD3D_DEBUG=warn`, `vulkaninfo` output. TODO: attach files.
+Attach: full `PROTON_LOG` with `VKD3D_DEBUG=warn` (`nvidia-bug-attachments/proton-vkd3d.log`),
+`vulkaninfo` output (`nvidia-bug-attachments/vulkaninfo.txt`, staged).
 
 ---
 
@@ -96,3 +102,22 @@ Both are the driver reporting a capability it cannot honour at the moment of use
 control call the DCE rejects during scanout, and a Vulkan feature set the driver accepts in query
 but rejects at device creation. A fix to the Orin display/Vulkan driver conformance would likely
 address both. Happy to test patched drivers / a newer JetPack on this unit.
+
+---
+
+## Capture checklist (before posting)
+
+These need a live session and are not grabbable headless:
+
+1. **`dmesg-dce-flood.txt`** — root-restricted (`dmesg_restrict=1`, no passwordless sudo) and the
+   flood only exists *while* the UI flickers. On the board: open Steam → Settings → trigger the
+   **test screensaver** so the flicker runs, then in another shell `sudo dmesg > /tmp/dmesg-dce-flood.txt`
+   and `scp` it into `nvidia-bug-attachments/`. Confirm it contains `rpcRmApiControl_dce` lines.
+2. **`proton-vkd3d.log`** — launch a DX12 title with `PROTON_LOG=1 VKD3D_DEBUG=warn` **and the
+   `VKD3D_CONFIG=nodxr…` workaround removed** so the failure reproduces; copy
+   `~/steam-<appid>.log` in. (With the workaround in place the game runs and there is no error to show.)
+3. Two screenshots: `gamescopectl screenshot` of the clean composited buffer + a phone photo of the
+   black display on the same frame.
+
+Posting is a manual step on the NVIDIA Jetson forum under the board owner's account — this repo
+only stages the write-up and evidence.
