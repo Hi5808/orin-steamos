@@ -93,6 +93,12 @@ systemctl mask iperf3.service saned.socket saned.service 2>/dev/null || true
 systemctl mask systemd-networkd-wait-online.service
 # netplan warns when its files are world-readable
 chmod 600 /etc/netplan/*.yaml 2>/dev/null || true
+# apport: Ubuntu's crash reporter pops a GTK "System program problem detected" dialog on the
+# next session for any crash file in /var/crash (e.g. a one-off gamescope crash), which is noise
+# on a console. overlay/etc/default/apport sets enabled=0; also disable the service and clear any
+# crash files baked/leftover in the image so a fresh flash never shows the dialog.
+systemctl disable apport.service 2>/dev/null || true
+rm -f /var/crash/*.crash /var/crash/*.upload* 2>/dev/null || true
 # Desktop extras that only cost RAM / boot time here
 if [[ ${PURGE_DESKTOP_EXTRAS:-1} == 1 ]]; then
   # xdg-desktop-portal-{gnome,gtk}: on a gamescope console XDG_CURRENT_DESKTOP is not GNOME,

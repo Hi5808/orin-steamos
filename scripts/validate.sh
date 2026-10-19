@@ -23,6 +23,7 @@ done
 chk "firstboot ordered after time-sync.target" grep -q '^After=.*time-sync.target' "$R/etc/systemd/system/steamos-orin-firstboot.service"
 chk "timesync clock file seeded (no 1970 boots)" test -e "$R/var/lib/systemd/timesync/clock"
 chk "nvfb-swapfile disabled + never-true condition drop-in" bash -c "! chroot '$R' systemctl is-enabled nvfb-swapfile.service 2>/dev/null | grep -qx enabled && grep -q enable-nvfb-swapfile '$R/etc/systemd/system/nvfb-swapfile.service.d/10-steamos-orin-disable.conf'"
+chk "apport disabled (no crash-report dialog over Game Mode)" bash -c "grep -qx 'enabled=0' '$R/etc/default/apport' && ! chroot '$R' systemctl is-enabled apport.service 2>/dev/null | grep -qx enabled"
 for u in iperf3.service saned.socket systemd-networkd-wait-online.service; do
   chk "masked: $u" bash -c "chroot '$R' systemctl is-enabled $u 2>/dev/null | grep -qx masked"
 done

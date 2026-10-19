@@ -1,0 +1,4 @@
+# orin-steamos: this is a game console, not a developer desktop. Disable Ubuntu's apport crash
+# reporter so a stray crash file in /var/crash never pops the GTK "System program problem
+# detected" dialog over Game Mode. (The service is also disabled in chroot-customize.sh.)
+enabled=0
