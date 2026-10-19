@@ -103,3 +103,32 @@ the game and **Steam Cloud** re-sync it to DirectX12 on launch, so lock it with
 
 Re-test the DXR path (drop `nodxr`) on JetPack updates; include the coopmat/optical-flow
 advertisement bug in the NVIDIA report (see `NVIDIA-BUG-REPORT.md`, `BLACK-SCREEN-LOG.md`).
+
+## gamescope aborts on session restart/switch (X0 socket collision) — fallback masks it
+
+**Status: open, root-caused 2026-10-18 (QA sweep). Not yet fixed.** Found via an Apport crash
+report (`/var/crash/_opt_gamescope_bin_gamescope.1000.crash`, SIGABRT) and the session log.
+
+**Symptom.** On a session **restart or desktop→Game-Mode switch**, gamescope aborts at startup:
+```
+[gamescope] Error wlserver: [xwayland/sockets.c:47] Failed to bind socket @/tmp/.X11-unix/X0: Address already in use
+[gamescope] Error xwm: X11 I/O error! This is fatal. Aborting...
+```
+accompanied by `drmModeRmFB failed: Bad file descriptor` and libseat `Could not close device:
+Connection timed out`. The crash trips the `GAMESCOPE_FALLBACK_WINDOW` path → X11 kiosk for that
+boot (seen live: gamescope died ~12:09 HST, X11 fallback engaged ~12:11, hence the stale
+`-cef-disable-gpu-compositing`/GLX errors in that window). The console **recovers**, so it is easy
+to miss, but gamescope is genuinely crashing on transitions.
+
+**Root cause.** Both the desktop session's real Xorg and gamescope's Xwayland (`--xwayland-count 2`)
+use display `:0`. When the previous X server's `/tmp/.X11-unix/X0` socket + `/tmp/.X0-lock` linger
+past SDDM teardown (or a prior gamescope exited without releasing them), the new gamescope's
+Xwayland cannot bind `:0` and aborts. The exit-segfault fix (`_exit(0)` after child reap, live
+change #14) **skips Xwayland teardown**, which makes gamescope more likely to leave the X0 socket
+behind — so the segfault fix and this restart-abort are linked.
+
+**Proposed fix (not yet applied — touches the boot-critical launcher, validate on a reflash).**
+In `steam-gamescope-session`, before launching gamescope: bounded-wait for `:0`/`:1` to be free,
+and remove only `/tmp/.X{0,1}-lock` + sockets whose owning PID is already dead (never kill a live
+X server). Alternatively, have gamescope's Xwayland avoid `:0`. Until fixed, the crash-loop
+fallback keeps the device usable.
