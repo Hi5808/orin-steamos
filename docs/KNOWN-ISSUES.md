@@ -170,22 +170,26 @@ enclosure removed, suspend/resume behaves normally.
 - `mem_sleep` is `s2idle [deep]` (deep selected) — note for any future, *actually-reproducible*
   suspend investigation, but not implicated here.
 
-## Game controller drivers absent from NVIDIA's kernel
+## Game controller drivers not in NVIDIA's kernel — built out-of-tree (resolved)
 
-**Status:** open, verified on hardware 2026-10-19. `/dev/uinput` does not exist and
-`hid-steam`, `hid-playstation`, `hid-nintendo`, `hid-sony` are neither builtin nor shipped as
-modules in NVIDIA's `6.8.12-tegra` kernel.
+**Status:** resolved. NVIDIA's `6.8.12-tegra` kernel ships with `CONFIG_INPUT_UINPUT`,
+`CONFIG_HID_STEAM`, `HID_PLAYSTATION`, `HID_NINTENDO` and `HID_SONY` all unset (confirmed in
+`/proc/config.gz`), so a stock flash has no `/dev/uinput` and only generic-HID gamepad support —
+which means **Steam Input (virtual controllers / remapping) does not work** and DualSense /
+Switch Pro / Steam Controller get buttons+axes only (no gyro / rumble / touchpad).
 
-**Consequences.**
-- **Steam Input is unavailable** — it needs `uinput` to create the virtual controller it remaps to.
-  Without it, per-game layouts / remapping / the Deck-style input stack do not function.
-- Advanced-HID controllers (DualSense/DualShock via `hid-playstation`, Switch Pro via
-  `hid-nintendo`, Steam Controller via `hid-steam`) fall back to **generic HID**: basic buttons/axes
-  only, no gyro / rumble / touchpad.
-- Plain Bluetooth/USB gamepads (e.g. 8BitDo in X-input mode) still work as generic HID.
+**Fix — no full kernel rebuild needed.** The build compiles these five drivers as *out-of-tree*
+modules from the matching upstream `linux-6.8.12` sources against NVIDIA's kernel headers
+(`scripts/chroot-build-modules.sh`, run by `build.sh` when `WITH_INPUT_MODULES=1`, the default),
+installs them to `/lib/modules/<krel>/updates/steamos-orin`, `depmod`s, and loads them via
+`overlay/etc/modules-load.d/steamos-orin.conf` (now lists `uinput` + the four `hid-*`). vermagic is
+checked against the running kernel at build time.
 
-**Fix (needs a kernel rebuild, not yet done).** Rebuild the Tegra kernel with at least
-`CONFIG_INPUT_UINPUT=m` and `CONFIG_HID_STEAM`/`HID_PLAYSTATION`/`HID_NINTENDO`/`HID_SONY=m`, ship
-the `.ko`s in the overlay, and `modules-load.d` them (`overlay/etc/modules-load.d/steamos-orin.conf`
-currently lists only `uinput` — which silently does nothing because the module isn't present — so
-add the `hid-*` names there too once the kernel actually builds them).
+**Verified on hardware 2026-10-19.** Built and loaded all five on the live board (which was flashed
+before this feature existed): `/dev/uinput` is present (with a udev ACL for the session user) and
+`lsmod` shows `uinput`, `hid_steam`, `hid_playstation`, `hid_nintendo`, `hid_sony`. Only images
+built *before* this feature lack them — rebuild, or build the modules on-device the same way.
+
+> Note: `xt_connmark` (Tailscale) genuinely cannot be fixed this way — it needs
+> `CONFIG_NF_CONNTRACK_MARK` inside the core `nf_conntrack` module, which an add-on module can't
+> change. That one does need a kernel rebuild.
