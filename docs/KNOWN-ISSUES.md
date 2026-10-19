@@ -195,3 +195,22 @@ built *before* this feature lack them — rebuild, or build the modules on-devic
 > Note: `xt_connmark` (Tailscale) genuinely cannot be fixed this way — it needs
 > `CONFIG_NF_CONNTRACK_MARK` inside the core `nf_conntrack` module, which an add-on module can't
 > change. That one does need a kernel rebuild.
+
+## Tailscale `xt_connmark` unavailable (needs a kernel rebuild — deferred)
+
+**Status:** open, low priority. NVIDIA's `6.8.12-tegra` kernel builds `nf_conntrack` without
+`CONFIG_NF_CONNTRACK_MARK`, so the `xt_connmark` netfilter match Tailscale wants is unavailable and
+`tailscale up` logs a warning. **Tailscale still works** (connectivity, SSH, MagicDNS) — the warning
+concerns advanced packet-marking paths (some exit-node / subnet-router marking).
+
+**Why it is not fixed like the controller modules.** `connmark` depends on a config inside the core
+`nf_conntrack` module; an out-of-tree add-on module cannot change how the already-built
+`nf_conntrack` was compiled. The only fix is to **rebuild the Tegra kernel** with
+`CONFIG_NF_CONNTRACK_MARK=y` (and `CONFIG_NETFILTER_XT_MATCH_CONNMARK`) and replace the kernel image
++ modules on the board.
+
+**Decision:** deferred. A full kernel rebuild + on-board kernel replacement is multi-hour and carries
+a real bricking risk on a single dev kit, for what is a cosmetic warning on an otherwise-working
+Tailscale. Revisit only if advanced Tailscale routing is actually needed, and pair it with the
+controller-driver configs (`CONFIG_INPUT_UINPUT`, `HID_*`) so one rebuild covers both and the
+out-of-tree module step can be dropped.

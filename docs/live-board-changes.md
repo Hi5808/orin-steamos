@@ -48,3 +48,34 @@ Net: after a reflash the only non-green item is the NVIDIA flicker. The **curren
 
 ## Deferred
 - VS-thumbnail-style wallpaper (ref: Valve+NVIDIA "SteamOS Is Coming"): v3 attempt looks amateur — hand-drawn logos in PIL. To do it right, composite the real official Steam/NVIDIA logo PNGs + a real lightning/ember element. Low priority. Default stays v2 (fluid).
+
+## Session 2026-10-19 (live board, same Oct-16 image)
+
+Follow-up fixes applied by hand to the running board and folded into the repo. The board had still
+not been reflashed, so several repo-only fixes from the 2026-10-18 sweep were applied live here.
+
+| # | Change on the board | In the repo |
+|---|---|---|
+| 17 | **apport disabled.** Ubuntu's crash reporter kept popping the GTK "System program problem detected" dialog from a stale `/var/crash` gamescope report. Cleared `/var/crash`, set `enabled=0` in `/etc/default/apport`, `systemctl disable apport.service`. | Fixed: `overlay/etc/default/apport` (enabled=0) + disable/clear in `chroot-customize.sh` + `validate.sh` check (commit 57d9932) |
+| 18 | **xdg-desktop-portal backends purged** live (`apt-get purge xdg-desktop-portal-gtk xdg-desktop-portal-gnome`). Base `xdg-desktop-portal` now starts clean; `systemctl --user is-system-running` = **running** (was `degraded`). | Already in repo (`chroot-customize.sh`, `PURGE_DESKTOP_EXTRAS=1`); this board predated it (commit 50670ed references) |
+| 19 | **Controller modules built + loaded live.** NVIDIA's `6.8.12-1021-tegra` kernel has `uinput`/`hid-steam`/`hid-playstation`/`hid-nintendo`/`hid-sony` unset. Built all five out-of-tree from upstream `linux-6.8.12` against the on-board kernel headers (same recipe as `chroot-build-modules.sh`), installed to `/lib/modules/.../updates/steamos-orin`, `depmod`, `modprobe`. `/dev/uinput` now present. | Fixed: `overlay/etc/modules-load.d/steamos-orin.conf` now lists the four `hid-*` too (they were built by the pipeline but never auto-loaded) (commit 72bd4c4) |
+| 20 | **NVIDIA bug report evidence captured.** `sudo dmesg` from a live session → `docs/nvidia-bug-attachments/dmesg-dce-flood.txt` (244 `rpcRmApiControl_dce cmd:0x731341` at boot). | Repo: attachment + report updated (commit 50670ed) |
+
+### Re-verification results (2026-10-19)
+
+| Item | Result |
+|---|---|
+| Game Mode stack (gamescope DRM + `steam -steamos3 -gamepadui` + steamwebhelper) | ✅ up and healthy |
+| Controller support / `/dev/uinput` + all 5 modules | ✅ built, loaded, present |
+| **Suspend / resume** | ✅ **works** — `rtcwake -m mem -s 30`: suspended and auto-resumed, uptime intact, gamescope/Steam/WiFi survived. The one earlier no-resume hang was a wedged RTL9210 USB-C NVMe enclosure (UAS timeouts) attached at suspend — **not** a suspend bug (commit c18b967, 148bc30) |
+| Audio | ✅ HDMI digital stereo sink, default, unmuted |
+| Networking (WiFi + Tailscale) | ✅ connected |
+| Bluetooth | ✅ active, Xbox Wireless Controller paired |
+| OOM protection (zram 3.7G + 4G swapfile, earlyoom) | ✅ active |
+| Session-switching infra + firstboot/reset services | ✅ present + enabled (interactive switch flow not exercised) |
+| Big-Picture flicker (DCE) | ⚠️ unchanged — NVIDIA driver bug, not fixable in-image |
+| `xt_connmark` (Tailscale) | ⚠️ unchanged — needs a kernel rebuild; deferred (see KNOWN-ISSUES) |
+
+Net: the live board is now **clean/green except the NVIDIA flicker**. Supersedes the 2026-10-18
+sweep's "must be reflashed" caveat for the uinput/portal items — those are now applied live too
+(a reflash still delivers them the supported way).

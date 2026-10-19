@@ -20,7 +20,7 @@ Working on real hardware (flashed 2026-10-17): boots to SDDM autologin → Steam
 | FEX / Proton (x86 games) with NVIDIA's Vulkan driver | works: DX11 (DXVK) and **DX12** (vkd3d-proton, needs `VKD3D_CONFIG=nodxr` — baked in; see docs/KNOWN-ISSUES.md). Ghosts 'n Goblins Resurrection runs. DXR ray-tracing unavailable on this driver |
 | Suspend / resume | **works** — verified on hardware 2026-10-19 (`rtcwake -m mem`): suspends and resumes cleanly, gamescope/Steam/WiFi all survive. An earlier one-off no-resume hang was traced to a **wedged USB-C NVMe enclosure** (RTL9210/UAS commands timing out) attached during suspend — the kernel couldn't quiesce the dead device. Not a suspend bug. See [docs/KNOWN-ISSUES.md](docs/KNOWN-ISSUES.md) |
 | OS updates (A/B, like SteamOS) | not implemented (`steamos-update` is a "no update" stub) |
-| Tailscale `xt_connmark` | not available in NVIDIA's kernel (`CONFIG_NF_CONNTRACK_MARK` off); Tailscale works, with a warning |
+| Tailscale `xt_connmark` | not available in NVIDIA's kernel (`CONFIG_NF_CONNTRACK_MARK` off); Tailscale works, with a warning. Fixing it needs a kernel rebuild — deferred, see [docs/KNOWN-ISSUES.md](docs/KNOWN-ISSUES.md) |
 
 ## Hardware / software
 - Jetson Orin Nano **8GB** Developer Kit (Super config, `jetson-orin-nano-devkit-super`), NVMe SSD ≥ 64 GB.
