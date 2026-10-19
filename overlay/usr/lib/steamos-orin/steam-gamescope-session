@@ -27,6 +27,30 @@ args=(--backend "${GAMESCOPE_BACKEND:-drm}" -f -e --xwayland-count 2)
 [[ -n ${GAMESCOPE_OUTPUT_W:-} && -n ${GAMESCOPE_OUTPUT_H:-} ]] && args+=(-W "$GAMESCOPE_OUTPUT_W" -H "$GAMESCOPE_OUTPUT_H")
 [[ -n ${GAMESCOPE_NESTED_W:-} && -n ${GAMESCOPE_NESTED_H:-} ]] && args+=(-w "$GAMESCOPE_NESTED_W" -h "$GAMESCOPE_NESTED_H")
 
+# --- Free display :0/:1 before gamescope's Xwayland binds them ----------------
+# Both the desktop Xorg and gamescope's Xwayland (--xwayland-count 2) use :0/:1.
+# On a restart or desktop->Game-Mode switch the previous X server's socket/lock can
+# linger past SDDM teardown, and gamescope then aborts at startup with
+#   wlserver: Failed to bind socket @/tmp/.X11-unix/X0: Address already in use
+#   xwm: X11 I/O error! This is fatal. Aborting...
+# Wait (bounded) for a still-live owner to exit; remove ONLY a lock whose owning PID
+# is already dead, plus an orphaned socket. Never signal a live X server.
+for d in 0 1; do
+    lock="/tmp/.X${d}-lock"; sock="/tmp/.X11-unix/X${d}"
+    for _ in $(seq 1 40); do          # up to ~10s
+        if [[ -e $lock ]]; then
+            pid=$(tr -cd 0-9 < "$lock" 2>/dev/null)
+            if [[ -n $pid ]] && kill -0 "$pid" 2>/dev/null; then
+                sleep 0.25; continue  # a live X server still owns :$d; wait it out
+            fi
+            echo "clearing stale X:$d lock (dead owner pid=${pid:-?})"
+            rm -f "$lock" "$sock" 2>/dev/null; break
+        fi
+        [[ -S $sock ]] && rm -f "$sock" 2>/dev/null   # socket with no lock = stale
+        break
+    done
+done
+
 start=$(date +%s)
 # shellcheck disable=SC2086  # GAMESCOPE_EXTRA_ARGS is intentionally word-split
 gamescope "${args[@]}" ${GAMESCOPE_EXTRA_ARGS:-} -- /usr/lib/steamos-orin/steam-gamescope-loop
