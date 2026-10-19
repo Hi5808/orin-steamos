@@ -49,6 +49,16 @@ failures growing in `dmesg`.
 **Ask:** what is `cmd:0x731341` to the DCE, why does it return `NV_ERR_GENERIC`, and why does the
 composited-flip scanout drop to black? Is there a known DCE firmware fix?
 
+**We traced it in the shipped firmware** (`display-t234-dce.bin`, R5 image; full RE in
+[`DCE-REVERSE-ENGINEERING.md`](DCE-REVERSE-ENGINEERING.md)). `cmd:0x731341` is an `NV0073`
+(`NV04_DISPLAY_COMMON`) control, dispatched to handler `FUN_4085f7a8` (table at `0x4007e430`). That
+handler has **exactly one** `return 0xffff` (= `NV_ERR_GENERIC`): when the request flag word
+`param[2] & 0x1800 == 0`, it is not the `(param[2]&1 && (param[3]&0x1f)==0)` special case, and the
+per-device capability byte at `ctx+0x14f8` is `0`, it rejects with the generic error rather than a
+specific one. Setting bit `0x800`/`0x1000` in that request flag word bypasses the branch entirely.
+Questions for NVIDIA: what capability does `ctx+0x14f8` gate, why is it false for this panel/mode,
+and should this branch return `NV_ERR_GENERIC` at all?
+
 Attach: full `dmesg` (`nvidia-bug-attachments/dmesg-dce-flood.txt` — capture while flickering),
 the compositor DRM log, two screenshots (composited buffer = correct art; simultaneous photo of
 the display = black).

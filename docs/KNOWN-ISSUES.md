@@ -52,6 +52,15 @@ further pointing at the display/mode driver.
 that corrupts gamescope's composited-output scanout to black during continuous updates. Not
 fixable from user space / our image.
 
+### Firmware RE (2026-10-19)
+
+Reverse-engineered the DCE firmware (`display-t234-dce.bin`) in Ghidra and localized the exact
+failure: `cmd:0x731341` is an `NV0073` display-common control whose handler (`FUN_4085f7a8`) returns
+`0xffff`/`NV_ERR_GENERIC` from a single branch when a per-device capability byte (`ctx+0x14f8`) is
+false. Full writeup + a (driver-side, untested) workaround lead in
+[`DCE-REVERSE-ENGINEERING.md`](DCE-REVERSE-ENGINEERING.md). The firmware is signed, so this can't be
+patched locally — it sharpens the NVIDIA report and points at a kernel-side experiment.
+
 ### Realistic next steps
 
 1. Re-test on the next JetPack / L4T release (display-engine/DCE firmware fix).
