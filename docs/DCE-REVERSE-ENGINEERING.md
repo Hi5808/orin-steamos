@@ -8,6 +8,12 @@ Goal: find what the kernel's flood means —
 cannot be rebuilt or reflashed by us. What the RE buys is (a) an exact, citable root cause for the
 NVIDIA bug report and (b) a testable workaround hypothesis.
 
+> Scope / legal: this is black-box analysis of a shipped firmware image for **interoperability and
+> defect reporting** (diagnosing a scanout failure to file with NVIDIA). **No NVIDIA firmware binary
+> is included in or redistributed by this repository** — reproduce these notes against your own copy
+> of `display-t234-dce.bin` from the Jetson Linux BSP. Addresses are for JetPack 7.2.1 / L4T
+> r39.2.1 and will differ on other releases.
+
 ## Target
 
 `Linux_for_Tegra/bootloader/display-t234-dce.bin` from Jetson Linux R39.2.1 (JetPack 7.2.1).
